@@ -2,20 +2,13 @@ package com.nonameyet.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.nonameyet.NoNameYet;
 
-public class GameScreen implements Screen {
-    private final NoNameYet context;
+public class GameScreen extends AbstractScreen {
 
-    public GameScreen(final NoNameYet context) {
-        this.context = context;
-    }
-
-    @Override
-    public void show() {
-
+    public GameScreen(NoNameYet context) {
+        super(context);
     }
 
     @Override
@@ -26,30 +19,5 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             context.setScreen(ScreenType.LOADING);
         }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }
