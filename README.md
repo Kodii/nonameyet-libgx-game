@@ -40,3 +40,14 @@
     
        fail(), clear(n) and exceptions() are just never called. Delete
        them.`
+       
+#### 2. resources
+
+    1. https://www.youtube.com/watch?v=a8MPxzkwBwo&list=PLZm85UZQLd2SXQzsF-a0-pPF6IWDDdrXt&index=1
+        super mario
+    
+    2. https://www.youtube.com/watch?v=0vOTrSD5lDA&list=PLTKHCDn5RKK-seXZveiSQuSXkLq3wBYn1&index=1
+        creating 2d game using box2d and ashley
+        
+    3. http://file.allitebooks.com/20160104/Mastering%20LibGDX%20Game%20Development.pdf
+        pdf Mastering LibGDX Game Development
