@@ -42,14 +42,10 @@ public class NoNameYet extends Game {
         world = new World(new Vector2(0, -9.81f), true);
         box2DDebugRenderer = new Box2DDebugRenderer();
 
-        screenViewport = new FitViewport(16, 9);
+
         screenCache = new EnumMap<>(ScreenType.class);
 
         setScreen(ScreenType.GAME);
-    }
-
-    public FitViewport getScreenViewport() {
-        return screenViewport;
     }
 
     public World getWorld() {
