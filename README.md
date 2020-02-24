@@ -51,3 +51,11 @@
         
     3. http://file.allitebooks.com/20160104/Mastering%20LibGDX%20Game%20Development.pdf
         pdf Mastering LibGDX Game Development
+        
+#### 3. helpers
+    
+    1. Gtx Texture Packer - A simple way to pack and manage texture atlases for LibGDX game framework.
+    https://github.com/crashinvaders/gdx-texture-packer-gui
+    
+    2. Tiled - level editor
+    https://www.mapeditor.org/
