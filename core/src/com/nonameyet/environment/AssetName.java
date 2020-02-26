@@ -2,7 +2,8 @@ package com.nonameyet.environment;
 
 public enum AssetName {
 
-    MAP_TMX("map/map.tmx");
+    MAP_TMX("map/map.tmx"),
+    PLAYER_PNG("hero.png");
 
     private String assetName;
 
