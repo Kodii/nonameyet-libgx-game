@@ -1,9 +1,17 @@
-package com.nonameyet;
+package com.nonameyet.tools;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
+import com.nonameyet.screens.GameScreen;
 
 public class WorldContactListener implements ContactListener {
+
+    private GameScreen screen;
+
+    public WorldContactListener(GameScreen screen) {
+        this.screen = screen;
+    }
+
     @Override
     public void beginContact(Contact contact) {
         final Fixture fixtureA = contact.getFixtureA();
@@ -11,6 +19,12 @@ public class WorldContactListener implements ContactListener {
 
         Gdx.app.debug("CONTACT", "BEGIN: " + fixtureA.getBody().getUserData() + " " + fixtureA.isSensor());
         Gdx.app.debug("CONTACT", "BEGIN: " + fixtureB.getBody().getUserData() + " " + fixtureB.isSensor());
+
+        if (fixtureA.getBody().getUserData().equals("PORTAL") || fixtureB.getBody().getUserData().equals("PORTAL")) {
+            Gdx.app.debug("TRIGGER", "BEGIN: " + fixtureA.getBody().getUserData() + " " + fixtureA.isSensor());
+            screen.isMapChanged = true;
+        }
+
 
     }
 
@@ -37,4 +51,5 @@ public class WorldContactListener implements ContactListener {
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
     }
+
 }

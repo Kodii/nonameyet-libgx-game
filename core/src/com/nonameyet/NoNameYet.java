@@ -12,8 +12,6 @@ import com.nonameyet.screens.ScreenType;
 
 import java.util.EnumMap;
 
-import static com.nonameyet.utils.Constants.FIXED_TIME_STEP;
-
 public class NoNameYet extends Game {
     private static final String TAG = NoNameYet.class.getSimpleName();
 
@@ -29,7 +27,6 @@ public class NoNameYet extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-
         assets = new Assets();
 
         screenCache = new EnumMap<>(ScreenType.class);
@@ -65,10 +62,10 @@ public class NoNameYet extends Game {
     public void render() {
         super.render();
 
-        accumulator += Math.min(0.25f, Gdx.graphics.getRawDeltaTime());
-        while (accumulator >= FIXED_TIME_STEP) {
-            accumulator -= FIXED_TIME_STEP;
-        }
+//        accumulator += Math.min(0.25f, Gdx.graphics.getRawDeltaTime());
+//        while (accumulator >= FIXED_TIME_STEP) {
+//            accumulator -= FIXED_TIME_STEP;
+//        }
 
         // final float alpha = accumulator / FIXED_TIME_STEP;
     }
