@@ -3,7 +3,6 @@ package com.nonameyet;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
@@ -22,11 +21,8 @@ public class NoNameYet extends Game {
 
     private Assets assets;
 
-    public SpriteBatch batch;
-
     @Override
     public void create() {
-        batch = new SpriteBatch();
         assets = new Assets();
 
         screenCache = new EnumMap<>(ScreenType.class);

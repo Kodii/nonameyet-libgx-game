@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
+import com.nonameyet.environment.AssetName;
 import com.nonameyet.screens.GameScreen;
 
 import static com.nonameyet.utils.Constants.PPM;
@@ -15,13 +16,14 @@ import static com.nonameyet.utils.Constants.PPM;
 public abstract class Map implements Disposable {
     private static final String TAG = Map.class.getSimpleName();
 
+
     private World _world;
 
     //Map layers
     protected final static String COLLISION_LAYER = "MAP_COLLISION_LAYER";
     protected final static String PORTAL_LAYER = "MAP_PORTAL_LAYER";
 
-    protected TiledMap _currentMap = null;
+    protected TiledMap _currentTiledMap = null;
 
     protected MapLayer _collisionLayer = null;
     protected MapLayer _portalLayer = null;
@@ -29,18 +31,18 @@ public abstract class Map implements Disposable {
     protected MapFactory.MapType _currentMapType;
 
 
-    public Map(GameScreen screen, MapFactory.MapType mapType) {
-        Gdx.app.debug(TAG, "Tworzenie nowej mapy!");
-        _currentMap = screen.getMap();
+    public Map(GameScreen screen, MapFactory.MapType mapType, AssetName mapTmx) {
+        Gdx.app.debug(TAG, "Create a new map: " + mapType);
 
+        _currentTiledMap = screen.game.getAssets().manager.get(mapTmx.getAssetName());
         _currentMapType = mapType;
         _world = screen.getWorld();
 
-        _collisionLayer = _currentMap.getLayers().get(COLLISION_LAYER);
+        _collisionLayer = _currentTiledMap.getLayers().get(COLLISION_LAYER);
         if (_collisionLayer == null) {
             Gdx.app.debug(TAG, "No collision layer!");
         }
-        _portalLayer = _currentMap.getLayers().get(PORTAL_LAYER);
+        _portalLayer = _currentTiledMap.getLayers().get(PORTAL_LAYER);
         if (_portalLayer == null) {
             Gdx.app.debug(TAG, "No portal layer!");
         }
@@ -96,8 +98,11 @@ public abstract class Map implements Disposable {
         }
     }
 
-
     abstract public void unloadMusic();
 
     abstract public void loadMusic();
+
+    public TiledMap getCurrentTiledMap() {
+        return _currentTiledMap;
+    }
 }

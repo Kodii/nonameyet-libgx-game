@@ -10,79 +10,69 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nonameyet.NoNameYet;
-import com.nonameyet.environment.AssetName;
-import com.nonameyet.environment.Assets;
 import com.nonameyet.maps.MapFactory;
+import com.nonameyet.maps.MapManager;
 import com.nonameyet.sprites.Player;
-import com.nonameyet.tools.WorldContactListener;
 
-import static com.nonameyet.utils.Constants.*;
+import static com.nonameyet.utils.Constants.FIXED_TIME_STEP;
+import static com.nonameyet.utils.Constants.PPM;
 
 public class GameScreen implements Screen {
     private static final String TAG = GameScreen.class.getSimpleName();
-    //Reference to our Game, used to set Screens
-    private final NoNameYet _game;
+    public final NoNameYet game;
 
-    //basic playscreen variables
-    private Viewport gamePort;
+    public static class VIEWPORT {
+        public static float viewportWidth;
+        public static float viewportHeight;
+        public static float virtualWidth;
+        public static float virtualHeight;
+        public static float physicalWidth;
+        public static float physicalHeight;
+        public static float aspectRatio;
+    }
 
-    //Tiled maps variables
-    private OrthogonalTiledMapRenderer _mapRenderer;
-    private OrthographicCamera _camera;
+    protected OrthogonalTiledMapRenderer _mapRenderer = null;
+    protected MapManager _mapMgr;
+    protected OrthographicCamera _camera = null;
 
     //Box2d variables
-    private World world;
-    private TiledMap map;
-    private Box2DDebugRenderer b2dr;
+    public World world = null;
+    private TiledMap _map;
+    private Box2DDebugRenderer _b2dr;
 
     //sprites
-    private Player player;
-
-    private WorldContactListener worldContactListener;
+    private Player _player;
 
     public boolean isMapChanged = false;
 
     public GameScreen(NoNameYet game) {
-        this._game = game;
+        this.game = game;
+        _mapMgr = new MapManager(this);
 
-        // create cam used to follow through cam world
+        //_camera setup
+        setupViewport(16, 9);
+
+        //get the current size
         _camera = new OrthographicCamera();
+        _camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
 
-        //create a FitViewport to maintain virtual aspect ratio despite screen size
-        this.gamePort = new FitViewport(V_WIDTH / PPM, V_HEIGHT / PPM, _camera);
+        _mapRenderer.setMap(_mapMgr.getCurrentTiledMap());
+        _mapMgr.loadMap(MapFactory.MapType.TOWN);
 
-        //Load our map and setup our map renderer
-        map = _game.getAssets().manager.get(AssetName.MAP_TOWN_TMX.getAssetName());
+        //allows for debug lines of our box2d _world.
+        _b2dr = new Box2DDebugRenderer();
 
-        //initially set our gamcam to be centered correctly at the start of of maps
-        _camera.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
-
-        //create our Box2D world, setting no gravity in X, 0 gravity in Y, and allow bodies to sleep
-        world = new World(new Vector2(0, 0), true);
-        //allows for debug lines of our box2d world.
-        b2dr = new Box2DDebugRenderer();
-
-        MapFactory.getMap(this, MapFactory.MapType.TOWN);
-
-        // create player in our game world
-        player = new Player(world, this.getAssets());
-    }
-
-    public Assets getAssets() {
-        return _game.getAssets();
+        // create _player in our game _world
+        _player = new Player(world, game.getAssets());
     }
 
     @Override
     public void show() {
 
-//         set contact listener
-        world.setContactListener(new WorldContactListener(this));
 
         if (_mapRenderer == null) {
-            _mapRenderer = new OrthogonalTiledMapRenderer(map, 1 / PPM);
+            _mapRenderer = new OrthogonalTiledMapRenderer(_map, 1 / PPM);
         }
 
     }
@@ -90,7 +80,7 @@ public class GameScreen implements Screen {
     public void handleInput(float delta) {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-            _game.setScreen(ScreenType.LOADING);
+            game.setScreen(ScreenType.LOADING);
         }
 
         // movement
@@ -105,12 +95,12 @@ public class GameScreen implements Screen {
         else if (Gdx.input.isKeyPressed(Input.Keys.W)) speedY = +3;
         else speedY = 0;
 
-        //control our player using immediate impulses
-        player.b2body.applyLinearImpulse(
-                (speedX - player.b2body.getLinearVelocity().x * player.b2body.getMass()),
-                (speedY - player.b2body.getLinearVelocity().y * player.b2body.getMass()),
-                player.b2body.getWorldCenter().x,
-                player.b2body.getWorldCenter().y,
+        //control our _player using immediate impulses
+        _player.b2body.applyLinearImpulse(
+                (speedX - _player.b2body.getLinearVelocity().x * _player.b2body.getMass()),
+                (speedY - _player.b2body.getLinearVelocity().y * _player.b2body.getMass()),
+                _player.b2body.getWorldCenter().x,
+                _player.b2body.getWorldCenter().y,
                 true
         );
     }
@@ -123,20 +113,28 @@ public class GameScreen implements Screen {
         world.step(FIXED_TIME_STEP, 6, 2);
 
 
-        if (isMapChanged) {
-            changeToWorldMap();
+        if (_mapMgr.isMapChanged()) {
+            if (world != null)
+                world.dispose();
+            world = new World(new Vector2(0, 0), true);
+
+
+            _mapRenderer.setMap(_mapMgr.getCurrentTiledMap());
+            _mapMgr.loadMap(MapFactory.MapType.TOWN);
+
+
         }
 
-        player.update(delta);
+        _player.update(delta);
 
         //attach our gamecam to our players.x coordinate
-        _camera.position.x = player.b2body.getPosition().x;
-        _camera.position.y = player.b2body.getPosition().y;
+        _camera.position.x = _player.b2body.getPosition().x;
+        _camera.position.y = _player.b2body.getPosition().y;
 
         // update our _camera with correct coordinates after changes
         _camera.update();
 
-        //tell our _mapRenderer to draw only what our _camera can see in our game world.
+        //tell our _mapRenderer to draw only what our _camera can see in our game _world.
         _mapRenderer.setView(_camera);
 
     }
@@ -155,20 +153,20 @@ public class GameScreen implements Screen {
         _mapRenderer.render();
 
         //_mapRenderer our Box2DDebugLines
-        b2dr.render(world, _camera.combined);
+        _b2dr.render(world, _camera.combined);
 
-        _game.batch.setProjectionMatrix(_camera.combined);
-        _game.batch.begin();
+        _mapRenderer.getBatch().setProjectionMatrix(_camera.combined);
+        _mapRenderer.getBatch().begin();
         Gdx.graphics.setTitle("NoNameYet | fps: " + Gdx.graphics.getFramesPerSecond());
-        player.draw(_game.batch);
-        _game.batch.end();
+        _player.draw(_mapRenderer.getBatch());
+        _mapRenderer.getBatch().end();
 
     }
 
     @Override
     public void resize(int width, int height) {
-        // updated our game viewport
-        gamePort.update(width, height);
+        setupViewport(16, 9);
+        _camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
     }
 
     @Override
@@ -194,32 +192,42 @@ public class GameScreen implements Screen {
             _mapRenderer.dispose();
         }
         world.dispose();
-        b2dr.dispose();
+        _b2dr.dispose();
     }
 
-    public void changeToWorldMap() {
-        isMapChanged = false;
+    private void setupViewport(int width, int height) {
+        //Make the viewport a percentage of the total display area
+        VIEWPORT.virtualWidth = width;
+        VIEWPORT.virtualHeight = height;
 
-        world.dispose();
-        world = new World(new Vector2(0, 0), true);
+        //Current viewport dimensions
+        VIEWPORT.viewportWidth = VIEWPORT.virtualWidth;
+        VIEWPORT.viewportHeight = VIEWPORT.virtualHeight;
 
-        map = _game.getAssets().manager.get(AssetName.MAP_TOP_WORLD_TMX.getAssetName());
-        _mapRenderer.setMap(map);
-        MapFactory.getMap(this, MapFactory.MapType.TOP_WORLD);
+        //pixel dimensions of display
+        VIEWPORT.physicalWidth = Gdx.graphics.getWidth();
+        VIEWPORT.physicalHeight = Gdx.graphics.getHeight();
 
-        // create player in our game world
-        player = new Player(world, this.getAssets());
+        //aspect ratio for current viewport
+        VIEWPORT.aspectRatio = (VIEWPORT.virtualWidth / VIEWPORT.virtualHeight);
 
-        //         set contact listener
-        world.setContactListener(new WorldContactListener(this));
+        //update viewport if there could be skewing
+        if (VIEWPORT.physicalWidth / VIEWPORT.physicalHeight >= VIEWPORT.aspectRatio) {
+            //Letterbox left and right
+            VIEWPORT.viewportWidth = VIEWPORT.viewportHeight * (VIEWPORT.physicalWidth / VIEWPORT.physicalHeight);
+            VIEWPORT.viewportHeight = VIEWPORT.virtualHeight;
+        } else {
+            //letterbox above and below
+            VIEWPORT.viewportWidth = VIEWPORT.virtualWidth;
+            VIEWPORT.viewportHeight = VIEWPORT.viewportWidth * (VIEWPORT.physicalHeight / VIEWPORT.physicalWidth);
+        }
 
+        Gdx.app.debug(TAG, "WorldRenderer: virtual: (" + VIEWPORT.virtualWidth + "," + VIEWPORT.virtualHeight + ")");
+        Gdx.app.debug(TAG, "WorldRenderer: viewport: (" + VIEWPORT.viewportWidth + "," + VIEWPORT.viewportHeight + ")");
+        Gdx.app.debug(TAG, "WorldRenderer: physical: (" + VIEWPORT.physicalWidth + "," + VIEWPORT.physicalHeight + ")");
     }
 
     public World getWorld() {
         return world;
-    }
-
-    public TiledMap getMap() {
-        return map;
     }
 }
