@@ -3,8 +3,9 @@ package com.nonameyet.screens;
 import com.badlogic.gdx.Screen;
 
 public enum ScreenType {
-    GAME(GameScreen.class),
-    LOADING(LoadingScreen.class);
+    LOADING(LoadingScreen.class),
+    MAIN_MENU(MainMenuScreen.class),
+    GAME(GameScreen.class);
 
     private final Class<? extends Screen> screenClass;
 

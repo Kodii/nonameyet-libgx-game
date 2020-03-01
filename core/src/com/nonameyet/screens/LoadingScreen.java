@@ -8,15 +8,15 @@ import com.nonameyet.environment.Assets;
 
 public class LoadingScreen implements Screen {
     private static final String TAG = LoadingScreen.class.getSimpleName();
-    private final NoNameYet game;
+    private final NoNameYet _game;
 
-    private final Assets assets;
+    private final Assets _assets;
 
     public LoadingScreen(NoNameYet game) {
-        this.game = game;
+        this._game = game;
 
-        assets = game.getAssets();
-        assets.load();
+        _assets = _game.getAssets();
+        _assets.load();
 
     }
 
@@ -27,11 +27,11 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void render(final float delta) {
-        Gdx.gl.glClearColor(0, 0.3f, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (assets.manager.update()) {
-            game.setScreen(ScreenType.GAME);
+        if (_assets.manager.update()) {
+            _game.setScreen(ScreenType.MAIN_MENU);
         }
 
     }

@@ -1,7 +1,13 @@
 package com.nonameyet.environment;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Disposable;
@@ -16,6 +22,8 @@ public class Assets implements Disposable {
     }
 
     public void load() {
+        manager.load(AssetName.MAIN_MENU_BACKGROUND.getAssetName(), Texture.class);
+
         manager.load(AssetName.MAP_TOWN_TMX.getAssetName(), TiledMap.class);
         manager.load(AssetName.MAP_TOP_WORLD_TMX.getAssetName(), TiledMap.class);
         manager.load(AssetName.PLAYER_PNG.getAssetName(), Texture.class);

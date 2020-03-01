@@ -1,6 +1,7 @@
 package com.nonameyet.sprites;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -8,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.nonameyet.environment.AssetName;
-import com.nonameyet.environment.Assets;
+import com.nonameyet.screens.GameScreen;
 
 import static com.nonameyet.utils.Constants.PPM;
 
@@ -46,9 +47,9 @@ public class Player extends Sprite {
 
     private float stateTimer = 0;
 
-    public Player(World world, Assets assets) {
-        super((Texture) assets.manager.get(AssetName.PLAYER_PNG.getAssetName()));
-        this.world = world;
+    public Player(GameScreen screen) {
+        super((Texture) screen.game.getAssets().manager.get(AssetName.PLAYER_PNG.getAssetName()));
+        this.world = screen.getWorld();
 
         createStand();
         createRunAnimation();
@@ -74,7 +75,7 @@ public class Player extends Sprite {
     private void createRunAnimation() {
         int frameWidth = getTexture().getWidth() / FRAME_COLS;
         int frameHeight = getTexture().getHeight() / FRAME_ROWS;
-        float frameDuration = 0.2f;
+        float frameDuration = 0.25f;
 
         TextureRegion[][] temp = TextureRegion.split(getTexture(), frameWidth, frameHeight);
 
@@ -107,7 +108,30 @@ public class Player extends Sprite {
 
     }
 
-    public TextureRegion getFrame(float dt) {
+    public void input() {
+        // movement
+        final float speedX;
+        final float speedY;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) speedX = -2;
+        else if (Gdx.input.isKeyPressed(Input.Keys.D)) speedX = +2;
+        else speedX = 0;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) speedY = -2;
+        else if (Gdx.input.isKeyPressed(Input.Keys.W)) speedY = +2;
+        else speedY = 0;
+
+        //control our _player using immediate impulses
+        b2body.applyLinearImpulse(
+                (speedX - b2body.getLinearVelocity().x * b2body.getMass()),
+                (speedY - b2body.getLinearVelocity().y * b2body.getMass()),
+                b2body.getWorldCenter().x,
+                b2body.getWorldCenter().y,
+                true
+        );
+    }
+
+    private TextureRegion getFrame(float dt) {
         currentState = getState();
         TextureRegion region;
         switch (currentState) {
@@ -176,7 +200,7 @@ public class Player extends Sprite {
             return State.STANDING_DOWN;
     }
 
-    public void definePlayer() {
+    private void definePlayer() {
         BodyDef bdef = new BodyDef();
         bdef.position.set(320 / PPM, 320 / PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
@@ -190,24 +214,6 @@ public class Player extends Sprite {
         fdef.shape = shape;
         b2body.createFixture(fdef);
 
-//        // create player
-//        bdef.position.set(32 / PPM, 32 / PPM);
-////        bodyDef.gravityScale = 1;
-//        bodyDef.type = BodyDef.BodyType.DynamicBody;
-//        b2body = world.createBody(bodyDef);
-//        b2body.setUserData("PLAYER");
-//
-//        fixtureDef.density = 1;
-//        fixtureDef.isSensor = false;
-//        fixtureDef.restitution = 0;
-//        fixtureDef.friction = 0.2f;
-//        fixtureDef.filter.categoryBits = BIT_PLAYER;
-//        fixtureDef.filter.maskBits = BIT_GROUND;
-//        final PolygonShape pShape = new PolygonShape();
-//        pShape.setAsBox(0.20f, 0.25f);
-//        fixtureDef.shape = pShape;
-//        b2body.createFixture(fixtureDef);
-//        pShape.dispose();
-
+        shape.dispose();
     }
 }

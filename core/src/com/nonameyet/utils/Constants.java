@@ -5,9 +5,6 @@ package com.nonameyet.utils;
  */
 public class Constants {
 
-    public static final int V_WIDTH = 426;
-    public static final int V_HEIGHT = 240;
-
     // fixed timestep
     public static final float FIXED_TIME_STEP = 1 / 60f;
 

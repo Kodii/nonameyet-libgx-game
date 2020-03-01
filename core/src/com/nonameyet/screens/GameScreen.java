@@ -5,13 +5,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.nonameyet.NoNameYet;
-import com.nonameyet.maps.MapFactory;
 import com.nonameyet.maps.MapManager;
 import com.nonameyet.sprites.Player;
 
@@ -23,28 +20,25 @@ public class GameScreen implements Screen {
     public final NoNameYet game;
 
     public static class VIEWPORT {
-        public static float viewportWidth;
-        public static float viewportHeight;
-        public static float virtualWidth;
-        public static float virtualHeight;
-        public static float physicalWidth;
-        public static float physicalHeight;
-        public static float aspectRatio;
+        static float viewportWidth;
+        static float viewportHeight;
+        static float virtualWidth;
+        static float virtualHeight;
+        static float physicalWidth;
+        static float physicalHeight;
+        static float aspectRatio;
     }
 
-    protected OrthogonalTiledMapRenderer _mapRenderer = null;
-    protected MapManager _mapMgr;
-    protected OrthographicCamera _camera = null;
+    private OrthogonalTiledMapRenderer _mapRenderer;
+    private MapManager _mapMgr;
+    private OrthographicCamera _camera;
 
     //Box2d variables
-    public World world = null;
-    private TiledMap _map;
+    private World _world;
     private Box2DDebugRenderer _b2dr;
 
     //sprites
     private Player _player;
-
-    public boolean isMapChanged = false;
 
     public GameScreen(NoNameYet game) {
         this.game = game;
@@ -57,24 +51,20 @@ public class GameScreen implements Screen {
         _camera = new OrthographicCamera();
         _camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
 
-        _mapRenderer.setMap(_mapMgr.getCurrentTiledMap());
-        _mapMgr.loadMap(MapFactory.MapType.TOWN);
-
-        //allows for debug lines of our box2d _world.
-        _b2dr = new Box2DDebugRenderer();
-
-        // create _player in our game _world
-        _player = new Player(world, game.getAssets());
     }
 
     @Override
     public void show() {
 
-
         if (_mapRenderer == null) {
-            _mapRenderer = new OrthogonalTiledMapRenderer(_map, 1 / PPM);
+            _mapRenderer = new OrthogonalTiledMapRenderer(_mapMgr.getCurrentTiledMap(), 1 / PPM);
         }
 
+        //allows for debug lines of our box2d _world.
+        _b2dr = new Box2DDebugRenderer();
+
+        // create _player in our game _world
+        _player = new Player(this);
     }
 
     public void handleInput(float delta) {
@@ -83,26 +73,7 @@ public class GameScreen implements Screen {
             game.setScreen(ScreenType.LOADING);
         }
 
-        // movement
-        final float speedX;
-        final float speedY;
-
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) speedX = -3;
-        else if (Gdx.input.isKeyPressed(Input.Keys.D)) speedX = +3;
-        else speedX = 0;
-
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) speedY = -3;
-        else if (Gdx.input.isKeyPressed(Input.Keys.W)) speedY = +3;
-        else speedY = 0;
-
-        //control our _player using immediate impulses
-        _player.b2body.applyLinearImpulse(
-                (speedX - _player.b2body.getLinearVelocity().x * _player.b2body.getMass()),
-                (speedY - _player.b2body.getLinearVelocity().y * _player.b2body.getMass()),
-                _player.b2body.getWorldCenter().x,
-                _player.b2body.getWorldCenter().y,
-                true
-        );
+        _player.input();
     }
 
     public void update(float delta) {
@@ -110,19 +81,13 @@ public class GameScreen implements Screen {
         handleInput(delta);
 
         //takes 1 step in the physics simulation(60 times per second)
-        world.step(FIXED_TIME_STEP, 6, 2);
-
+        _world.step(FIXED_TIME_STEP, 6, 2);
 
         if (_mapMgr.isMapChanged()) {
-            if (world != null)
-                world.dispose();
-            world = new World(new Vector2(0, 0), true);
-
-
+            _mapMgr.loadMap(_mapMgr.getCurrentMapType());
             _mapRenderer.setMap(_mapMgr.getCurrentTiledMap());
-            _mapMgr.loadMap(MapFactory.MapType.TOWN);
 
-
+            _player = new Player(this);
         }
 
         _player.update(delta);
@@ -145,15 +110,17 @@ public class GameScreen implements Screen {
         update(delta);
 
         // Clear the game screen
-        Gdx.gl.glClearColor(0.4f, 0, 0, 1);
+        Gdx.gl.glClearColor(0.15f, 0.15f, 0.15f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        _mapRenderer.getBatch().enableBlending();
+        _mapRenderer.getBatch().setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
         //render our game maps
         _mapRenderer.render();
 
         //_mapRenderer our Box2DDebugLines
-        _b2dr.render(world, _camera.combined);
+        _b2dr.render(_world, _camera.combined);
 
         _mapRenderer.getBatch().setProjectionMatrix(_camera.combined);
         _mapRenderer.getBatch().begin();
@@ -191,7 +158,7 @@ public class GameScreen implements Screen {
         if (_mapRenderer != null) {
             _mapRenderer.dispose();
         }
-        world.dispose();
+        _world.dispose();
         _b2dr.dispose();
     }
 
@@ -227,7 +194,16 @@ public class GameScreen implements Screen {
         Gdx.app.debug(TAG, "WorldRenderer: physical: (" + VIEWPORT.physicalWidth + "," + VIEWPORT.physicalHeight + ")");
     }
 
+
+    public MapManager getMapMgr() {
+        return _mapMgr;
+    }
+
     public World getWorld() {
-        return world;
+        return _world;
+    }
+
+    public void setWorld(World world) {
+        this._world = world;
     }
 }

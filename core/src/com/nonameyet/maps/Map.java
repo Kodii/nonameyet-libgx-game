@@ -102,7 +102,7 @@ public abstract class Map implements Disposable {
 
     abstract public void loadMusic();
 
-    public TiledMap getCurrentTiledMap() {
+    TiledMap getCurrentTiledMap() {
         return _currentTiledMap;
     }
 }

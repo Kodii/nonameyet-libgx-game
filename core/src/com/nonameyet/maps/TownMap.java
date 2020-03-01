@@ -4,7 +4,7 @@ import com.nonameyet.environment.AssetName;
 import com.nonameyet.screens.GameScreen;
 
 public class TownMap extends Map {
-
+    private static final String TAG = TownMap.class.getSimpleName();
 
     public TownMap(GameScreen screen) {
         super(screen, MapFactory.MapType.TOWN, AssetName.MAP_TOWN_TMX);

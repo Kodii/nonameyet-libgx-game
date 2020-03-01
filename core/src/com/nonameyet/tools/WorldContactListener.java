@@ -2,14 +2,16 @@ package com.nonameyet.tools;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
+import com.nonameyet.maps.MapFactory;
+import com.nonameyet.maps.MapManager;
 import com.nonameyet.screens.GameScreen;
 
 public class WorldContactListener implements ContactListener {
 
-    private GameScreen screen;
+    private MapManager _mapMgr;
 
     public WorldContactListener(GameScreen screen) {
-        this.screen = screen;
+        this._mapMgr = screen.getMapMgr();
     }
 
     @Override
@@ -22,9 +24,13 @@ public class WorldContactListener implements ContactListener {
 
         if (fixtureA.getBody().getUserData().equals("PORTAL") || fixtureB.getBody().getUserData().equals("PORTAL")) {
             Gdx.app.debug("TRIGGER", "BEGIN: " + fixtureA.getBody().getUserData() + " " + fixtureA.isSensor());
-            screen.isMapChanged = true;
-        }
 
+            if (_mapMgr.getCurrentMapType() == MapFactory.MapType.TOWN)
+                _mapMgr.setCurrentMapType(MapFactory.MapType.TOP_WORLD);
+            else _mapMgr.setCurrentMapType(MapFactory.MapType.TOWN);
+
+            _mapMgr.setMapChanged(true);
+        }
 
     }
 
