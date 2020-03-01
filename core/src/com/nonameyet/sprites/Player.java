@@ -109,16 +109,18 @@ public class Player extends Sprite {
     }
 
     public void input() {
+        final float speed = 8;
+
         // movement
         final float speedX;
         final float speedY;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) speedX = -2;
-        else if (Gdx.input.isKeyPressed(Input.Keys.D)) speedX = +2;
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) speedX = -speed;
+        else if (Gdx.input.isKeyPressed(Input.Keys.D)) speedX = +speed;
         else speedX = 0;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) speedY = -2;
-        else if (Gdx.input.isKeyPressed(Input.Keys.W)) speedY = +2;
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) speedY = -speed;
+        else if (Gdx.input.isKeyPressed(Input.Keys.W)) speedY = +speed;
         else speedY = 0;
 
         //control our _player using immediate impulses
