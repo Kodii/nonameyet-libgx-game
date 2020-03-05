@@ -99,22 +99,22 @@ public class GameScreen implements Screen {
 
         int mapWidth = prop.get("width", Integer.class);
         int mapHeight = prop.get("height", Integer.class);
-//        int tilePixelWidth = prop.get("tilewidth", Integer.class);
-//        int tilePixelHeight = prop.get("tileheight", Integer.class);
+        int tilePixelWidth = prop.get("tilewidth", Integer.class);
+        int tilePixelHeight = prop.get("tileheight", Integer.class);
 
-//        int mapPixelWidth = mapWidth * tilePixelWidth;
-//        int mapPixelHeight = mapHeight * tilePixelHeight;
+        int mapPixelWidth = mapWidth * tilePixelWidth;
+        int mapPixelHeight = mapHeight * tilePixelHeight;
 
 
         // These values likely need to be scaled according to your world coordinates.
         // The left boundary of the map (x)
         int mapLeft = 0;
         // The right boundary of the map (x + width)
-        int mapRight = 0 + mapWidth;
+        int mapRight = (int) (0 + (mapWidth / PPM));
         // The bottom boundary of the map (y)
         int mapBottom = 0;
         // The top boundary of the map (y + height)
-        int mapTop = 0 + mapHeight;
+        int mapTop = (int) (0 + (mapHeight / PPM));
         // The camera dimensions, halved
         float cameraHalfWidth = _camera.viewportWidth * .5f;
         float cameraHalfHeight = _camera.viewportHeight * .5f;

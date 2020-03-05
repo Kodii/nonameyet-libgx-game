@@ -109,7 +109,7 @@ public class Player extends Sprite {
     }
 
     public void input() {
-        final float speed = 8;
+        final float speed = 3;
 
         // movement
         final float speedX;
@@ -204,7 +204,7 @@ public class Player extends Sprite {
 
     private void definePlayer() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(320 / PPM, 320 / PPM);
+        bdef.position.set(12.52f, 5.78f);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
         b2body.setUserData("PLAYER");

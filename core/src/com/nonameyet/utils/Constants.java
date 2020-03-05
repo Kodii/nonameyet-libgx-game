@@ -14,6 +14,6 @@ public class Constants {
 
     // 1 unit is 32 pixels
 //    public static final float UNIT_SCALE = 1 / 32f;
-    public static final float PPM = 16;
+    public static final float PPM = 32;
 
 }

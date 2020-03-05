@@ -51,7 +51,7 @@ public class MapManager {
 
     public TiledMap getCurrentTiledMap() {
         if (_currentMap == null) {
-            loadMap(MapFactory.MapType.TOWN);
+            loadMap(MapFactory.MapType.SPAWN);
         }
         return _currentMap.getCurrentTiledMap();
     }

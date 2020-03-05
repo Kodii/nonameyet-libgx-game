@@ -8,6 +8,7 @@ public enum AssetName {
 
     MAP_TOWN_TMX("maps/town.tmx"),
     MAP_TOP_WORLD_TMX("maps/topworld.tmx"),
+    MAP_SPAWN_TMX("maps/spawn/spawn.tmx"),
     PLAYER_PNG("sprites/characters/Rogue.png");
 
     private String assetName;
