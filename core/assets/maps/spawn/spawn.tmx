@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-up" compressionlevel="-1" width="800" height="600" tilewidth="1" tileheight="1" infinite="0" nextlayerid="5" nextobjectid="28">
+ <imagelayer id="2" name="background">
+  <image source="spawn.png" width="800" height="600"/>
+ </imagelayer>
+ <objectgroup id="3" name="MAP_COLLISION_LAYER">
+  <object id="2" x="178.364" y="290.545" width="5.45455" height="254.727"/>
+  <object id="3" x="180.182" y="288.727" width="177.818" height="5.45455"/>
+  <object id="6" x="355.091" y="207.455" width="15.6364" height="18.7273"/>
+  <object id="7" x="429.273" y="203.455" width="16" height="21.8182"/>
+  <object id="8" x="357.636" y="225.273" width="9.63636" height="75.4545"/>
+  <object id="9" x="432.545" y="224.545" width="9.81818" height="76.3636"/>
+  <object id="10" x="442.182" y="286.727" width="185.818" height="6.54545"/>
+  <object id="11" x="615" y="291.75" width="6.75" height="247"/>
+  <object id="12" x="178.75" y="532.75" width="444" height="11.25"/>
+  <object id="13" x="440.909" y="221.818" width="308.545" height="7.27273"/>
+  <object id="15" x="742.909" y="39.6364" width="7.09091" height="182.909"/>
+  <object id="16" x="444.727" y="39.4545" width="299.455" height="8.18182"/>
+  <object id="17" x="49.8182" y="39.2727" width="305.455" height="8.90909"/>
+  <object id="19" x="49.2727" y="47.0909" width="7.63636" height="180.364"/>
+  <object id="21" x="53.8182" y="220.909" width="301.455" height="6.54545"/>
+  <object id="22" x="354.636" y="31.7273" width="16" height="18.4545"/>
+  <object id="23" x="430.091" y="28.1818" width="15.3636" height="21.6364"/>
+  <object id="24" x="358.818" y="-0.363636" width="7.90909" height="33.2727"/>
+  <object id="25" x="433.727" y="-0.363636" width="7.81818" height="29.5455"/>
+  <object id="26" x="364" y="-1.875" width="71.625" height="4.625"/>
+ </objectgroup>
+ <objectgroup id="4" name="MAP_PORTAL_LAYER">
+  <object id="27" x="367" y="3.36364" width="66.8182" height="14.0909"/>
+ </objectgroup>
+</map>
