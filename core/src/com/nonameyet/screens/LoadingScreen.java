@@ -1,27 +1,20 @@
 package com.nonameyet.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.nonameyet.NoNameYet;
 import com.nonameyet.environment.Assets;
 
-public class LoadingScreen implements Screen {
+public class LoadingScreen extends AbstractScreen {
     private static final String TAG = LoadingScreen.class.getSimpleName();
-    private final NoNameYet _game;
 
     private final Assets _assets;
 
-    public LoadingScreen(NoNameYet game) {
-        this._game = game;
+    public LoadingScreen(final NoNameYet game) {
+        super(game);
 
-        _assets = _game.getAssets();
+        _assets = game.getAssets();
         _assets.load();
-
-    }
-
-    @Override
-    public void show() {
 
     }
 
@@ -31,33 +24,8 @@ public class LoadingScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (_assets.manager.update()) {
-            _game.setScreen(ScreenType.MAIN_MENU);
+            game.setScreen(ScreenType.MAIN_MENU);
         }
-
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
 
     }
 }

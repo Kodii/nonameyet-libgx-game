@@ -1,7 +1,6 @@
 package com.nonameyet.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,17 +16,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nonameyet.NoNameYet;
 import com.nonameyet.environment.AssetName;
 
-public class MainMenuScreen implements Screen {
+public class MainMenuScreen extends AbstractScreen {
     private static final String TAG = MainMenuScreen.class.getSimpleName();
-    private final NoNameYet _game;
 
     private Stage _stage;
-    private Image _backgroundImage;
 
     private TextButton.TextButtonStyle _textButtonStyle;
 
     public MainMenuScreen(NoNameYet game) {
-        this._game = game;
+        super(game);
 
         //creation
         _stage = new Stage();
@@ -56,7 +53,7 @@ public class MainMenuScreen implements Screen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                _game.setScreen(ScreenType.GAME);
+                MainMenuScreen.this.game.setScreen(ScreenType.GAME);
             }
         });
 
@@ -92,13 +89,13 @@ public class MainMenuScreen implements Screen {
     }
 
     private void renderBackground() {
-        Texture texture = _game.getAssets().manager.get(AssetName.MAIN_MENU_BACKGROUND.getAssetName());
+        Texture texture = game.getAssets().manager.get(AssetName.MAIN_MENU_BACKGROUND.getAssetName());
         TextureRegion textureRegion = new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight());
 
-        _backgroundImage = new Image(textureRegion);
-        _backgroundImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Image backgroundImage = new Image(textureRegion);
+        backgroundImage.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        _stage.addActor(_backgroundImage);
+        _stage.addActor(backgroundImage);
     }
 
 
@@ -119,16 +116,6 @@ public class MainMenuScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         _stage.getViewport().setScreenSize(width, height);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
     }
 
     @Override
