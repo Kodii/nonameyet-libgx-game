@@ -41,6 +41,7 @@ public class GameScreen extends AbstractScreen {
         //get the current size
         _camera = new OrthographicCamera();
         _camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
+        Gdx.app.log(TAG, "Camera width = " + _camera.viewportWidth + ", camera height = " + _camera.viewportHeight);
 
         if (_mapRenderer == null) {
             _mapRenderer = new OrthogonalTiledMapRenderer(_mapMgr.getCurrentTiledMap(), 1 / PPM);
