@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.nonameyet.NoNameYet;
 import com.nonameyet.maps.MapManager;
 import com.nonameyet.sprites.Player;
+import com.nonameyet.ui.PlayerHUD;
 
 import static com.nonameyet.utils.Constants.FIXED_TIME_STEP;
 import static com.nonameyet.utils.Constants.PPM;
@@ -17,31 +18,37 @@ import static com.nonameyet.utils.Constants.PPM;
 public class GameScreen extends AbstractScreen {
     private static final String TAG = GameScreen.class.getSimpleName();
 
-    private OrthogonalTiledMapRenderer _mapRenderer;
+    private OrthogonalTiledMapRenderer _mapRenderer = null;
     private MapManager _mapMgr;
-    private OrthographicCamera _camera;
+    private OrthographicCamera _camera = null;
+    protected OrthographicCamera _hudCamera = null;
 
-    //Box2d variables
+    //Box2d
     private World _world;
     private Box2DDebugRenderer _b2dr;
 
-    //sprites
     private Player _player;
+    private PlayerHUD _playerHUD;
 
     public GameScreen(NoNameYet game) {
         super(game);
         _mapMgr = new MapManager(this);
+
+
     }
 
     @Override
     public void show() {
+
         //_camera setup
         setupViewport(16, 9, TAG);
 
         //get the current size
         _camera = new OrthographicCamera();
         _camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
-        Gdx.app.log(TAG, "Camera width = " + _camera.viewportWidth + ", camera height = " + _camera.viewportHeight);
+
+        _hudCamera = new OrthographicCamera();
+        _hudCamera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
 
         if (_mapRenderer == null) {
             _mapRenderer = new OrthogonalTiledMapRenderer(_mapMgr.getCurrentTiledMap(), 1 / PPM);
@@ -52,6 +59,7 @@ public class GameScreen extends AbstractScreen {
 
         // create _player in our game _world
         _player = new Player(this);
+        _playerHUD = new PlayerHUD(_hudCamera, game);
     }
 
     @Override
@@ -78,6 +86,8 @@ public class GameScreen extends AbstractScreen {
         _player.draw(_mapRenderer.getBatch());
         _mapRenderer.getBatch().end();
 
+        _playerHUD.render(delta);
+
     }
 
     private void update(float delta) {
@@ -103,7 +113,6 @@ public class GameScreen extends AbstractScreen {
 
         //tell our _mapRenderer to draw only what our _camera can see in our game _world.
         _mapRenderer.setView(_camera);
-
     }
 
     /**
@@ -169,6 +178,7 @@ public class GameScreen extends AbstractScreen {
     public void resize(int width, int height) {
         setupViewport(16, 9, TAG);
         _camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
+        _playerHUD.resize((int) VIEWPORT.physicalWidth, (int) VIEWPORT.physicalHeight);
     }
 
     @Override

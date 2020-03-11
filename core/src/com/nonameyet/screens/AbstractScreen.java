@@ -7,14 +7,14 @@ import com.nonameyet.NoNameYet;
 public class AbstractScreen implements Screen {
     public final NoNameYet game;
 
-    static class VIEWPORT {
-        static float viewportWidth;
-        static float viewportHeight;
-        static float virtualWidth;
-        static float virtualHeight;
-        static float physicalWidth;
-        static float physicalHeight;
-        static float aspectRatio;
+    public static class VIEWPORT {
+        public static float viewportWidth;
+        public static float viewportHeight;
+        public static float virtualWidth;
+        public static float virtualHeight;
+        public static float physicalWidth;
+        public static float physicalHeight;
+        public static float aspectRatio;
     }
 
 
