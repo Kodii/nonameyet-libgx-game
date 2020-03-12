@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nonameyet.NoNameYet;
 import com.nonameyet.environment.AssetName;
+import com.nonameyet.environment.Assets;
 
 public class MainMenuScreen extends AbstractScreen {
     private static final String TAG = MainMenuScreen.class.getSimpleName();
@@ -89,7 +90,7 @@ public class MainMenuScreen extends AbstractScreen {
     }
 
     private void renderBackground() {
-        Texture texture = game.getAssets().manager.get(AssetName.MAIN_MENU_BACKGROUND.getAssetName());
+        Texture texture = Assets.manager.get(AssetName.MAIN_MENU_BACKGROUND.getAssetName());
         TextureRegion textureRegion = new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight());
 
         Image backgroundImage = new Image(textureRegion);

@@ -59,7 +59,7 @@ public class GameScreen extends AbstractScreen {
 
         // create _player in our game _world
         _player = new Player(this);
-        _playerHUD = new PlayerHUD(_hudCamera, game);
+        _playerHUD = new PlayerHUD(_hudCamera);
     }
 
     @Override

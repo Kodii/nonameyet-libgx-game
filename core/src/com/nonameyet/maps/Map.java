@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.environment.AssetName;
+import com.nonameyet.environment.Assets;
 import com.nonameyet.screens.GameScreen;
 
 import static com.nonameyet.utils.Constants.PPM;
@@ -34,7 +35,7 @@ public abstract class Map implements Disposable {
     public Map(GameScreen screen, MapFactory.MapType mapType, AssetName mapTmx) {
         Gdx.app.debug(TAG, "Create a new map: " + mapType);
 
-        _currentTiledMap = screen.game.getAssets().manager.get(mapTmx.getAssetName());
+        _currentTiledMap = Assets.manager.get(mapTmx.getAssetName());
         _currentMapType = mapType;
         _world = screen.getWorld();
 

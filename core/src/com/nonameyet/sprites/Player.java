@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.nonameyet.environment.AssetName;
+import com.nonameyet.environment.Assets;
 import com.nonameyet.screens.GameScreen;
 
 import static com.nonameyet.utils.Constants.PPM;
@@ -48,7 +49,7 @@ public class Player extends Sprite {
     private float stateTimer = 0;
 
     public Player(GameScreen screen) {
-        super((Texture) screen.game.getAssets().manager.get(AssetName.PLAYER_PNG.getAssetName()));
+        super((Texture) Assets.manager.get(AssetName.PLAYER_PNG.getAssetName()));
         this.world = screen.getWorld();
 
         createStand();

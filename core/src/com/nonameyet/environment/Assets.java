@@ -8,14 +8,14 @@ import com.badlogic.gdx.utils.Disposable;
 
 public class Assets implements Disposable {
 
-    public final AssetManager manager;
+    public static AssetManager manager;
 
-    public Assets() {
+    static {
         manager = new AssetManager();
         manager.setLoader(TiledMap.class, new TmxMapLoader(manager.getFileHandleResolver()));
     }
 
-    public void load() {
+    public static void load() {
         manager.load(AssetName.MAIN_MENU_BACKGROUND.getAssetName(), Texture.class);
 
         manager.load(AssetName.MAP_TOWN_TMX.getAssetName(), TiledMap.class);
@@ -25,6 +25,7 @@ public class Assets implements Disposable {
 
         // hud
         manager.load(AssetName.CAMERA_FRAME.getAssetName(), Texture.class);
+        manager.load(AssetName.LIFE.getAssetName(), Texture.class);
     }
 
     @Override
