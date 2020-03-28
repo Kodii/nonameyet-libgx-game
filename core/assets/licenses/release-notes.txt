@@ -1,0 +1,12 @@
+
+Version 0.0.1
+What's New:
+* Add Simple menus - main, options, release notes, credits
+* Added HUD  Player lifes
+* Added simple HUD frame
+* Added First Map (HUB)
+* Added Camera follow by Player
+* Added Player Movement
+
+Bug Fixes:
+* Everything is fine. (We hope)

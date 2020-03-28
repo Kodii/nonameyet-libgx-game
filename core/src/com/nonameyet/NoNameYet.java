@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
+import com.nonameyet.preferences.OptionsPref;
 import com.nonameyet.screens.ScreenType;
 
 import java.util.EnumMap;
@@ -20,6 +21,9 @@ public class NoNameYet extends Game {
 
     @Override
     public void create() {
+        Gdx.graphics.setWindowedMode(OptionsPref.getResolutionWidth(), OptionsPref.getResolutionHeight());
+        Gdx.graphics.setVSync(OptionsPref.isVsync());
+
         screenCache = new EnumMap<>(ScreenType.class);
 
         setScreen(ScreenType.LOADING);

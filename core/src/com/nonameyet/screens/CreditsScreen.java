@@ -1,14 +1,21 @@
 package com.nonameyet.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.nonameyet.NoNameYet;
 
 public class CreditsScreen extends AbstractMenuScreen {
     private static final String TAG = CreditsScreen.class.getSimpleName();
+    private static String CREDITS_PATH = "licenses/credits.txt";
+
+    private ScrollPane scrollPane;
 
     public CreditsScreen(NoNameYet game) {
         super(game);
@@ -31,20 +38,32 @@ public class CreditsScreen extends AbstractMenuScreen {
         });
     }
 
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+
+        scrollPane.setScrollY(scrollPane.getScrollY() + delta * 20);
+    }
+
     private void credits() {
+        //Get text
+        FileHandle file = Gdx.files.internal(CREDITS_PATH);
+        String textString = file.readString();
+
+        Label text = new Label(textString, labelStyle);
+        text.setAlignment(Align.top | Align.center);
+        text.setWrap(true);
+
+        scrollPane = new ScrollPane(text);
+        scrollPane.setSmoothScrolling(true);
+
         Table table = new Table();
         table.setFillParent(true);
         table.setDebug(false); // turn on all debug lines (table, cell, and widget)
 
-        Label creators = new Label("Creators:", labelStyle);
-        creators.setFontScale(1.5f, 1.5f);
-        Label daniel = new Label("Daniel Dedek", labelStyle);
-        Label kordian = new Label("Kordian Stryczek", labelStyle);
-
-
-        table.add(creators).colspan(2).spaceBottom(30).row();
-        table.add(daniel).padRight(20);
-        table.add(kordian).padLeft(20);
+        table.defaults().height(Gdx.graphics.getHeight() / 2f);
+        table.defaults().width(Gdx.graphics.getWidth());
+        table.add(scrollPane);
 
         stage.addActor(table);
     }
