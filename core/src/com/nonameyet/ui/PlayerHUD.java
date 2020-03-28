@@ -12,25 +12,29 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nonameyet.environment.AssetName;
 import com.nonameyet.environment.Assets;
 
-public class PlayerHUD implements Screen {
+public class PlayerHUD implements Screen, StatusListener {
     private static final String TAG = PlayerHUD.class.getSimpleName();
 
-    private Stage _stage;
-    private Viewport _viewport;
-    private Camera _camera;
+    private Stage stage;
+    private Viewport viewport;
+    private Camera camera;
 
-    private LifeUI _lifeUI;
+    private LifeUI lifeUI;
 
     public PlayerHUD(Camera camera) {
-        _camera = camera;
+        this.camera = camera;
+
 
         //setup the HUD viewport using a new camera seperate from gamecam
-        _viewport = new ScreenViewport(_camera);
-        _stage = new Stage(_viewport);
+        viewport = new ScreenViewport(this.camera);
+        stage = new Stage(viewport);
 
-        _lifeUI = new LifeUI(_stage);
+        lifeUI = new LifeUI(stage);
 
         cameraFrame();
+
+        // listeners
+        lifeUI.attachListener(this);
 
     }
 
@@ -42,7 +46,7 @@ public class PlayerHUD implements Screen {
         Image cameraFrame = new Image(textureRegion);
         cameraFrame.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        _stage.addActor(cameraFrame);
+        stage.addActor(cameraFrame);
     }
 
     @Override
@@ -51,17 +55,17 @@ public class PlayerHUD implements Screen {
 
     @Override
     public void render(float delta) {
-        _lifeUI.handleInput(delta);
+        lifeUI.handleInput(delta);
 
-        _lifeUI.renderLife();
+        lifeUI.renderLifes();
 
-        _stage.act(delta);
-        _stage.draw();
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-        _stage.getViewport().update(width, height, true);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
@@ -81,6 +85,28 @@ public class PlayerHUD implements Screen {
 
     @Override
     public void dispose() {
-        _stage.dispose();
+        lifeUI.detachListener(this);
+        stage.dispose();
+    }
+
+    @Override
+    public void update(StatusEvent event) {
+        switch (event) {
+            case ADD_HP:
+                Gdx.app.log(TAG, "event: ADD_HP");
+                break;
+
+            case REMOVE_HP:
+                Gdx.app.log(TAG, "event: REMOVE_HP");
+                break;
+
+            case HEAL_HP:
+                Gdx.app.log(TAG, "event: HEAL_HP");
+                break;
+
+            case UPGRADE_HP:
+                Gdx.app.log(TAG, "event: UPGRADE_HP");
+                break;
+        }
     }
 }

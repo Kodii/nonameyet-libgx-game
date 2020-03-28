@@ -14,7 +14,7 @@ import com.nonameyet.environment.Assets;
 import com.nonameyet.screens.AbstractScreen;
 import com.nonameyet.utils.Constants;
 
-class LifeUI implements Disposable {
+class LifeUI implements Disposable, StatusSubject {
     private static final String TAG = LifeUI.class.getSimpleName();
 
     private static final String LIFE_FULL = "FULL";
@@ -28,6 +28,8 @@ class LifeUI implements Disposable {
     private int _hpVal = 3;
     private int _hpCurrentMax = 4;
 
+    // events
+    private Array<StatusListener> listeners = new Array<>();
 
     LifeUI(Stage stage) {
         this._stage = stage;
@@ -61,23 +63,39 @@ class LifeUI implements Disposable {
 
 
     void handleInput(float dt) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.PLUS)) {
+            if (_hpVal < _hpCurrentMax) {
+                _hpVal += 1;
+                Gdx.app.log(TAG, " ADD_HP = _hpVal: " + _hpVal);
+                notify(StatusListener.StatusEvent.ADD_HP);
+            }
+        }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) {
-            if (_hpVal > 0) _hpVal -= 1;
+            if (_hpVal > 0) {
+                _hpVal -= 1;
+                Gdx.app.log(TAG, " REMOVE_HP = _hpVal: " + _hpVal);
+                notify(StatusListener.StatusEvent.REMOVE_HP);
+            }
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.PLUS)) {
-            if (_hpVal < _hpCurrentMax) _hpVal += 1;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
+            _hpVal = _hpCurrentMax;
+            Gdx.app.log(TAG, " HEAL_HP = _hpVal: " + _hpVal);
+            notify(StatusListener.StatusEvent.HEAL_HP);
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
             _hpCurrentMax += 1;
             _hpVal = _hpCurrentMax;
+            Gdx.app.log(TAG, " UPGRADE_HP = _hpVal: " + _hpVal);
+            Gdx.app.log(TAG, " UPGRADE_HP = _hpCurrentMax: " + _hpCurrentMax);
+            notify(StatusListener.StatusEvent.UPGRADE_HP);
         }
 
     }
 
-    void renderLife() {
+    void renderLifes() {
         Array<Actor> actors = _stage.getActors();
 
         float ppi_width = AbstractScreen.VIEWPORT.physicalWidth / Constants.CAMERA_PIXELS_WIDTH;
@@ -124,5 +142,22 @@ class LifeUI implements Disposable {
     @Override
     public void dispose() {
         _stage.dispose();
+    }
+
+
+    @Override
+    public void attachListener(StatusListener listener) {
+        listeners.add(listener);
+    }
+
+    @Override
+    public void detachListener(StatusListener listener) {
+        listeners.removeValue(listener, true);
+    }
+
+    @Override
+    public void notify(StatusListener.StatusEvent event) {
+
+        for (StatusListener listener : listeners) listener.update(event);
     }
 }
