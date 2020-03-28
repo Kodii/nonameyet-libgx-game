@@ -3,8 +3,8 @@ package com.nonameyet.environment;
 public enum AssetName {
 
     // main menu
-    MAIN_MENU_BACKGROUND("menu/ws_Old_Paper_Texture_1920x1080.jpg"),
-    OLD_NEWSPAPER_FONT("fonts/Old_Newspaper_Font.ttf"),
+    MAIN_MENU_BACKGROUND("menu/background.png"),
+    PIXEL_FONT("fonts/DisposableDroidBB.ttf"),
 
     MAP_TOWN_TMX("from_web/maps/town.tmx"),
     MAP_TOP_WORLD_TMX("from_web/maps/topworld.tmx"),
