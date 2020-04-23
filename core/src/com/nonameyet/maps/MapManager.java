@@ -5,7 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.nonameyet.screens.GameScreen;
-import com.nonameyet.tools.WorldContactListener;
+import com.nonameyet.worldcontact.WorldContactListener;
 
 public class MapManager {
     private static final String TAG = MapManager.class.getSimpleName();

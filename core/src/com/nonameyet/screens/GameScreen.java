@@ -18,21 +18,21 @@ import static com.nonameyet.utils.Constants.PPM;
 public class GameScreen extends AbstractScreen {
     private static final String TAG = GameScreen.class.getSimpleName();
 
-    private OrthogonalTiledMapRenderer _mapRenderer = null;
-    private MapManager _mapMgr;
-    private OrthographicCamera _camera = null;
-    protected OrthographicCamera _hudCamera = null;
+    private OrthogonalTiledMapRenderer mapRenderer = null;
+    private MapManager mapMgr;
+    private OrthographicCamera camera = null;
+    protected OrthographicCamera hudCamera = null;
 
     //Box2d
-    private World _world;
+    private World world;
     private Box2DDebugRenderer _b2dr;
 
-    private Player _player;
-    private PlayerHUD _playerHUD;
+    private Player player;
+    private PlayerHUD playerHUD;
 
     public GameScreen(NoNameYet game) {
         super(game);
-        _mapMgr = new MapManager(this);
+        mapMgr = new MapManager(this);
 
 
     }
@@ -44,22 +44,22 @@ public class GameScreen extends AbstractScreen {
         setupViewport(16, 9, TAG);
 
         //get the current size
-        _camera = new OrthographicCamera();
-        _camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
 
-        _hudCamera = new OrthographicCamera();
-        _hudCamera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
+        hudCamera = new OrthographicCamera();
+        hudCamera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
 
-        if (_mapRenderer == null) {
-            _mapRenderer = new OrthogonalTiledMapRenderer(_mapMgr.getCurrentTiledMap(), 1 / PPM);
+        if (mapRenderer == null) {
+            mapRenderer = new OrthogonalTiledMapRenderer(mapMgr.getCurrentTiledMap(), 1 / PPM);
         }
 
         //allows for debug lines of our box2d _world.
         _b2dr = new Box2DDebugRenderer();
 
         // create _player in our game _world
-        _player = new Player(this);
-        _playerHUD = new PlayerHUD(_hudCamera);
+        player = new Player(this);
+        playerHUD = new PlayerHUD(hudCamera);
     }
 
     @Override
@@ -71,55 +71,55 @@ public class GameScreen extends AbstractScreen {
         Gdx.gl.glClearColor(0.15f, 0.15f, 0.15f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        _mapRenderer.getBatch().enableBlending();
-        _mapRenderer.getBatch().setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        mapRenderer.getBatch().enableBlending();
+        mapRenderer.getBatch().setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
         //render our game maps
-        _mapRenderer.render();
+        mapRenderer.render();
 
         //_mapRenderer our Box2DDebugLines
-        _b2dr.render(_world, _camera.combined);
+        _b2dr.render(world, camera.combined);
 
-        _mapRenderer.getBatch().setProjectionMatrix(_camera.combined);
-        _mapRenderer.getBatch().begin();
+        mapRenderer.getBatch().setProjectionMatrix(camera.combined);
+        mapRenderer.getBatch().begin();
         Gdx.graphics.setTitle("NoNameYet | fps: " + Gdx.graphics.getFramesPerSecond());
-        _player.draw(_mapRenderer.getBatch());
-        _mapRenderer.getBatch().end();
+        player.draw(mapRenderer.getBatch());
+        mapRenderer.getBatch().end();
 
-        _playerHUD.render(delta);
+        playerHUD.render(delta);
 
     }
 
     private void update(float delta) {
         // handle user input first
-        _player.input();
+        player.input();
 
         //takes 1 step in the physics simulation(60 times per second)
-        _world.step(FIXED_TIME_STEP, 6, 2);
+        world.step(FIXED_TIME_STEP, 6, 2);
 
-        if (_mapMgr.isMapChanged()) {
-            _mapMgr.loadMap(_mapMgr.getCurrentMapType());
-            _mapRenderer.setMap(_mapMgr.getCurrentTiledMap());
+        if (mapMgr.isMapChanged()) {
+            mapMgr.loadMap(mapMgr.getCurrentMapType());
+            mapRenderer.setMap(mapMgr.getCurrentTiledMap());
 
-            _player = new Player(this);
+            player = new Player(this);
         }
 
-        _player.update(delta);
+        player.update(delta);
 
         fixBounds();
 
         // update our _camera with correct coordinates after changes
-        _camera.update();
+        camera.update();
 
         //tell our _mapRenderer to draw only what our _camera can see in our game _world.
-        _mapRenderer.setView(_camera);
+        mapRenderer.setView(camera);
     }
 
     /**
      * keep camera within bounds of TiledMap
      */
     private void fixBounds() {
-        MapProperties prop = _mapRenderer.getMap().getProperties();
+        MapProperties prop = mapRenderer.getMap().getProperties();
 
         int mapWidth = prop.get("width", Integer.class);
         int mapHeight = prop.get("height", Integer.class);
@@ -140,68 +140,72 @@ public class GameScreen extends AbstractScreen {
         // The top boundary of the map (y + height)
         int mapTop = (int) (0 + (mapHeight / PPM));
         // The camera dimensions, halved
-        float cameraHalfWidth = _camera.viewportWidth * .5f;
-        float cameraHalfHeight = _camera.viewportHeight * .5f;
+        float cameraHalfWidth = camera.viewportWidth * .5f;
+        float cameraHalfHeight = camera.viewportHeight * .5f;
 
         // Move camera after player as normal
         //attach our gamecam to our players.x coordinate
-        _camera.position.x = _player.b2body.getPosition().x;
-        _camera.position.y = _player.b2body.getPosition().y;
+        camera.position.x = player.b2body.getPosition().x;
+        camera.position.y = player.b2body.getPosition().y;
 
-        float cameraLeft = _camera.position.x - cameraHalfWidth;
-        float cameraRight = _camera.position.x + cameraHalfWidth;
-        float cameraBottom = _camera.position.y - cameraHalfHeight;
-        float cameraTop = _camera.position.y + cameraHalfHeight;
+        float cameraLeft = camera.position.x - cameraHalfWidth;
+        float cameraRight = camera.position.x + cameraHalfWidth;
+        float cameraBottom = camera.position.y - cameraHalfHeight;
+        float cameraTop = camera.position.y + cameraHalfHeight;
 
         // Horizontal axis
-        if (_mapRenderer.getViewBounds().getWidth() < _camera.viewportWidth) {
-            _camera.position.x = mapRight / 2;
+        if (mapRenderer.getViewBounds().getWidth() < camera.viewportWidth) {
+            camera.position.x = mapRight / 2;
         } else if (cameraLeft <= mapLeft) {
-            _camera.position.x = mapRight / 2;
-            _camera.position.x = mapLeft + cameraHalfWidth;
+            camera.position.x = mapRight / 2;
+            camera.position.x = mapLeft + cameraHalfWidth;
         } else if (cameraRight >= mapRight) {
-            _camera.position.x = mapRight / 2;
-            _camera.position.x = mapRight - cameraHalfWidth;
+            camera.position.x = mapRight / 2;
+            camera.position.x = mapRight - cameraHalfWidth;
         }
 
         // Vertical axis
-        if (_mapRenderer.getViewBounds().getHeight() < _camera.viewportHeight) {
-            _camera.position.y = mapTop / 2;
+        if (mapRenderer.getViewBounds().getHeight() < camera.viewportHeight) {
+            camera.position.y = mapTop / 2;
         } else if (cameraBottom <= mapBottom) {
-            _camera.position.y = mapBottom + cameraHalfHeight;
+            camera.position.y = mapBottom + cameraHalfHeight;
         } else if (cameraTop >= mapTop) {
-            _camera.position.y = mapTop - cameraHalfHeight;
+            camera.position.y = mapTop - cameraHalfHeight;
         }
     }
 
     @Override
     public void resize(int width, int height) {
         setupViewport(16, 9, TAG);
-        _camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
-        _playerHUD.resize((int) VIEWPORT.physicalWidth, (int) VIEWPORT.physicalHeight);
+        camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
+        playerHUD.resize((int) VIEWPORT.physicalWidth, (int) VIEWPORT.physicalHeight);
     }
 
     @Override
     public void dispose() {
         //dispose of all our opened resources
 
-        if (_mapRenderer != null) {
-            _mapRenderer.dispose();
+        if (mapRenderer != null) {
+            mapRenderer.dispose();
         }
-        _world.dispose();
+        world.dispose();
         _b2dr.dispose();
     }
 
 
     public MapManager getMapMgr() {
-        return _mapMgr;
+        return mapMgr;
     }
 
     public World getWorld() {
-        return _world;
+        return world;
     }
 
     public void setWorld(World world) {
-        this._world = world;
+        this.world = world;
+    }
+
+    public PlayerHUD getPlayerHUD() {
+        return playerHUD;
     }
 }

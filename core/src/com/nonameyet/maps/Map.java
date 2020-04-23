@@ -1,6 +1,7 @@
 package com.nonameyet.maps;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.maps.MapGroupLayer;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -17,7 +18,7 @@ import static com.nonameyet.utils.Constants.PPM;
 public abstract class Map implements Disposable {
     private static final String TAG = Map.class.getSimpleName();
 
-    private World _world;
+    private World world;
 
     protected TiledMap currentTiledMap = null;
 
@@ -27,19 +28,15 @@ public abstract class Map implements Disposable {
     protected final static String PLAYER_SPAWN_LAYER = "PLAYER_SPAWN_LAYER";
 
     // Chests layers
-    protected final static String CHEST_LAYER = "CHEST_LAYER";
-    protected final static String CHEST_CLOSE_LAYER = "CHEST_CLOSE_LAYER";
+    //    protected final static String CHEST_CLOSE_LAYER = "CHEST_CLOSE_LAYER";
     protected final static String CHEST_COLLISION_LAYER = "CHEST_COLLISION_LAYER";
-    protected final static String CHEST_TRIGGER_LAYER = "CHEST_TRIGGER_LAYER";
 
     protected MapLayer collisionLayer = null;
     protected MapLayer portalLayer = null;
     protected MapLayer playerSpawnLayer = null;
 
-//    protected TiledMapTileLayer chestLayer = null;
-//    protected TiledMapTileLayer  chestCloseLayer = null;
-//    protected MapLayer chestCollisionLayer = null;
-//    protected MapLayer chestTriggerLayer = null;
+    //    protected MapLayer chestCloseLayer = null;
+    protected MapLayer chestCollisionLayer = null;
 
     protected MapFactory.MapType currentMapType;
 
@@ -48,7 +45,7 @@ public abstract class Map implements Disposable {
 
         currentTiledMap = Assets.manager.get(mapTmx.getAssetName());
         currentMapType = mapType;
-        _world = screen.getWorld();
+        world = screen.getWorld();
 
         collisionLayer = currentTiledMap.getLayers().get(COLLISION_LAYER);
         if (collisionLayer == null) {
@@ -63,40 +60,19 @@ public abstract class Map implements Disposable {
         if (playerSpawnLayer == null) {
             Gdx.app.debug(TAG, "No player spawn layer!");
         }
-
-//        chestLayer = (TiledMapTileLayer) currentTiledMap.getLayers().get(CHEST_LAYER);
-//        if (chestLayer == null) {
-//            Gdx.app.debug(TAG, "No chest layer!");
-//        }
-//
 //        chestCloseLayer = (TiledMapTileLayer) currentTiledMap.getLayers().get(CHEST_CLOSE_LAYER);
 //        if (chestCloseLayer == null) {
 //            Gdx.app.debug(TAG, "No chest close layer!");
 //        }
-//
-//        chestCollisionLayer = currentTiledMap.getLayers().get(CHEST_COLLISION_LAYER);
-//        if (chestCollisionLayer == null) {
-//            Gdx.app.debug(TAG, "No chest collision layer!");
-//        }
-//
-//        chestTriggerLayer = currentTiledMap.getLayers().get(CHEST_TRIGGER_LAYER);
-//        if (chestTriggerLayer == null) {
-//            Gdx.app.debug(TAG, "No chest trigger layer!");
-//        }
+
+        chestCollisionLayer = ((MapGroupLayer) currentTiledMap.getLayers().get("chest")).getLayers().get(CHEST_COLLISION_LAYER);
+        if (chestCollisionLayer == null) {
+            Gdx.app.debug(TAG, "No chest collision layer!");
+        }
 
         create();
+        createChest();
     }
-
-//    private void createChestSpawnPosition() {
-//
-//        //create body and fixture variables
-//        BodyDef bdef = new BodyDef();
-//        FixtureDef fdef = new FixtureDef();
-//        Body body;
-//
-//        for (MapObject object : chestLayer.getObjects().getByType())
-//
-//    }
 
     private void create() {
 
@@ -112,7 +88,7 @@ public abstract class Map implements Disposable {
             bdef.type = BodyDef.BodyType.StaticBody;
             bdef.position.set((rect.getX() + rect.getWidth() / 2) / PPM, (rect.getY() + rect.getHeight() / 2) / PPM);
 
-            body = _world.createBody(bdef);
+            body = world.createBody(bdef);
             body.setUserData("COLLISION");
 
             PolygonShape shape = new PolygonShape();
@@ -131,10 +107,36 @@ public abstract class Map implements Disposable {
             bdef.type = BodyDef.BodyType.StaticBody;
             bdef.position.set((rect.getX() + rect.getWidth() / 2) / PPM, (rect.getY() + rect.getHeight() / 2) / PPM);
 
-            body = _world.createBody(bdef);
+            body = world.createBody(bdef);
             body.setUserData("PORTAL");
 
             fdef.isSensor = true;
+
+            PolygonShape shape = new PolygonShape();
+            shape.setAsBox(rect.getWidth() / 2 / PPM, rect.getHeight() / 2 / PPM);
+            fdef.shape = shape;
+            body.createFixture(fdef);
+
+            shape.dispose();
+        }
+    }
+
+    private void createChest() {
+
+        //create body and fixture variables
+        BodyDef bdef = new BodyDef();
+        FixtureDef fdef = new FixtureDef();
+        Body body;
+
+        //        create bodies/fixtures for CHEST_COLLISION_LAYER
+        for (MapObject object : chestCollisionLayer.getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / PPM, (rect.getY() + rect.getHeight() / 2) / PPM);
+
+            body = world.createBody(bdef);
+            body.setUserData("CHEST_COLLISION");
 
             PolygonShape shape = new PolygonShape();
             shape.setAsBox(rect.getWidth() / 2 / PPM, rect.getHeight() / 2 / PPM);

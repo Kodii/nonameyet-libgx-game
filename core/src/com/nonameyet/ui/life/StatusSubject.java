@@ -1,4 +1,4 @@
-package com.nonameyet.ui;
+package com.nonameyet.ui.life;
 
 public interface StatusSubject {
 

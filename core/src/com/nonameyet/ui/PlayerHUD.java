@@ -11,6 +11,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
+import com.nonameyet.ui.chest.ChestInventoryUI;
+import com.nonameyet.ui.life.LifeUI;
+import com.nonameyet.ui.life.StatusListener;
 
 public class PlayerHUD implements Screen, StatusListener {
     private static final String TAG = PlayerHUD.class.getSimpleName();
@@ -20,6 +23,7 @@ public class PlayerHUD implements Screen, StatusListener {
     private Camera camera;
 
     private LifeUI lifeUI;
+    private ChestInventoryUI chestInventoryUI;
 
     public PlayerHUD(Camera camera) {
         this.camera = camera;
@@ -30,6 +34,7 @@ public class PlayerHUD implements Screen, StatusListener {
         stage = new Stage(viewport);
 
         lifeUI = new LifeUI(stage);
+        chestInventoryUI = new ChestInventoryUI(stage);
 
         cameraFrame();
 
@@ -58,6 +63,7 @@ public class PlayerHUD implements Screen, StatusListener {
         lifeUI.handleInput(delta);
 
         lifeUI.renderLifes();
+        chestInventoryUI.renderChestWindow();
 
         stage.act(delta);
         stage.draw();
@@ -108,5 +114,9 @@ public class PlayerHUD implements Screen, StatusListener {
                 Gdx.app.log(TAG, "event: UPGRADE_HP");
                 break;
         }
+    }
+
+    public ChestInventoryUI getChestInventoryUI() {
+        return chestInventoryUI;
     }
 }
