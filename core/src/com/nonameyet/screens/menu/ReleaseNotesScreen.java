@@ -1,4 +1,4 @@
-package com.nonameyet.screens;
+package com.nonameyet.screens.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -10,19 +10,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.nonameyet.NoNameYet;
+import com.nonameyet.screens.ScreenType;
 
-public class CreditsScreen extends AbstractMenuScreen {
-    private static final String TAG = CreditsScreen.class.getSimpleName();
-    private static String CREDITS_PATH = "licenses/credits.txt";
+public class ReleaseNotesScreen extends AbstractMenuScreen {
+    private static final String TAG = ReleaseNotesScreen.class.getSimpleName();
+    private static String RELEASE_NOTES_PATH = "licenses/release-notes.txt";
 
     private ScrollPane scrollPane;
 
-    public CreditsScreen(NoNameYet game) {
+    public ReleaseNotesScreen(NoNameYet game) {
         super(game);
 
-        title("Credits");
+        title("Release Notes");
         TextButton backButton = backButton();
-        credits();
+        releaseNotes();
 
         //Listeners
         backButton.addListener(new ClickListener() {
@@ -33,21 +34,14 @@ public class CreditsScreen extends AbstractMenuScreen {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                CreditsScreen.this.game.setScreen(ScreenType.MAIN_MENU);
+                ReleaseNotesScreen.this.game.setScreen(ScreenType.MAIN_MENU);
             }
         });
     }
 
-    @Override
-    public void render(float delta) {
-        super.render(delta);
-
-        scrollPane.setScrollY(scrollPane.getScrollY() + delta * 20);
-    }
-
-    private void credits() {
+    private void releaseNotes() {
         //Get text
-        FileHandle file = Gdx.files.internal(CREDITS_PATH);
+        FileHandle file = Gdx.files.internal(RELEASE_NOTES_PATH);
         String textString = file.readString();
 
         Label text = new Label(textString, labelStyle);
@@ -67,4 +61,5 @@ public class CreditsScreen extends AbstractMenuScreen {
 
         stage.addActor(table);
     }
+
 }

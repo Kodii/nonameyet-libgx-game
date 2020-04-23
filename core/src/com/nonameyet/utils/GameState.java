@@ -1,6 +1,5 @@
 package com.nonameyet.utils;
 
-import com.sun.istack.internal.Nullable;
 
 import java.util.HashMap;
 
@@ -15,8 +14,8 @@ public enum GameState {
         }
     }
 
-    @Nullable
-    public static GameState resolve(@Nullable String state) {
+
+    public static GameState resolve(String state) {
         return state != null ? mappings.get(state) : null;
     }
 }

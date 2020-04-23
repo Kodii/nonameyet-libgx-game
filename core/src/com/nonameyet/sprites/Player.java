@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
-import com.nonameyet.environment.AssetName;
-import com.nonameyet.environment.Assets;
+import com.nonameyet.assets.AssetName;
+import com.nonameyet.assets.Assets;
 import com.nonameyet.screens.GameScreen;
 
 import static com.nonameyet.utils.Constants.PPM;

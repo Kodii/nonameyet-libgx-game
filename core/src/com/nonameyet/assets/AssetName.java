@@ -1,4 +1,4 @@
-package com.nonameyet.environment;
+package com.nonameyet.assets;
 
 public enum AssetName {
 

@@ -18,7 +18,7 @@ public class AbstractScreen implements Screen {
     }
 
 
-    AbstractScreen(NoNameYet game) {
+    public AbstractScreen(NoNameYet game) {
         this.game = game;
     }
 

@@ -1,4 +1,4 @@
-package com.nonameyet.screens;
+package com.nonameyet.screens.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -12,8 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.nonameyet.NoNameYet;
-import com.nonameyet.environment.AssetName;
-import com.nonameyet.environment.Assets;
+import com.nonameyet.assets.AssetName;
+import com.nonameyet.assets.Assets;
+import com.nonameyet.screens.AbstractScreen;
 
 public class AbstractMenuScreen extends AbstractScreen {
     private static final String TAG = AbstractMenuScreen.class.getSimpleName();
@@ -67,7 +68,7 @@ public class AbstractMenuScreen extends AbstractScreen {
 
     TextButton backButton() {
         final TextButton backButton = new TextButton("Back", textButtonStyle);
-        backButton.setBounds(Gdx.graphics.getWidth() / 16, Gdx.graphics.getHeight() / 10, backButton.getWidth(), backButton.getWidth());
+        backButton.setBounds(Gdx.graphics.getWidth() / 16, Gdx.graphics.getHeight() / 10, backButton.getWidth(), backButton.getHeight());
 
         stage.addActor(backButton);
 
@@ -77,7 +78,7 @@ public class AbstractMenuScreen extends AbstractScreen {
     void title(String title) {
 
         Label titleLabel = new Label(title, labelStyle);
-        titleLabel.setBounds((Gdx.graphics.getWidth() / 2f) - (titleLabel.getWidth()), Gdx.graphics.getHeight() - (Gdx.graphics.getHeight() / 5), titleLabel.getWidth(), titleLabel.getWidth());
+        titleLabel.setBounds((Gdx.graphics.getWidth() / 2f) - (titleLabel.getWidth()), Gdx.graphics.getHeight() - (Gdx.graphics.getHeight() / 5), titleLabel.getWidth(), titleLabel.getHeight());
         titleLabel.setFontScale(2f, 2f);
 
         stage.addActor(titleLabel);

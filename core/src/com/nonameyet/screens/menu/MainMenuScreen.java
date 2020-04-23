@@ -1,4 +1,4 @@
-package com.nonameyet.screens;
+package com.nonameyet.screens.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.nonameyet.NoNameYet;
+import com.nonameyet.screens.ScreenType;
 
 public class MainMenuScreen extends AbstractMenuScreen {
     private static final String TAG = MainMenuScreen.class.getSimpleName();

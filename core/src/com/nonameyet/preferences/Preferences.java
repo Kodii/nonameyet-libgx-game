@@ -1,11 +1,10 @@
 package com.nonameyet.preferences;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 
 
-public class OptionsPref {
-    private static final String PREFS_NAME = "nonameyet.options";
+public class Preferences {
+    private static final String PREFS_NAME = "preferences";
 
     private static final String PREF_MUSIC_VOLUME = "music.volume";
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
@@ -18,7 +17,7 @@ public class OptionsPref {
 
     private static final String PREF_VSYNC = "vsync";
 
-    static Preferences getPrefs() {
+    static com.badlogic.gdx.Preferences getPrefs() {
         return Gdx.app.getPreferences(PREFS_NAME);
     }
 

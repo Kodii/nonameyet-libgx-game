@@ -9,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.nonameyet.environment.AssetName;
-import com.nonameyet.environment.Assets;
+import com.nonameyet.assets.AssetName;
+import com.nonameyet.assets.Assets;
 
 public class PlayerHUD implements Screen, StatusListener {
     private static final String TAG = PlayerHUD.class.getSimpleName();

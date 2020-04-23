@@ -9,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.nonameyet.environment.AssetName;
-import com.nonameyet.environment.Assets;
+import com.nonameyet.assets.AssetName;
+import com.nonameyet.assets.Assets;
 import com.nonameyet.screens.AbstractScreen;
 import com.nonameyet.utils.Constants;
 

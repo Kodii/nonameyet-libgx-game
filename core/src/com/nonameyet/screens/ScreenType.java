@@ -1,6 +1,11 @@
 package com.nonameyet.screens;
 
 import com.badlogic.gdx.Screen;
+import com.nonameyet.screens.loading.LoadingScreen;
+import com.nonameyet.screens.menu.CreditsScreen;
+import com.nonameyet.screens.menu.MainMenuScreen;
+import com.nonameyet.screens.menu.OptionsMenuScreen;
+import com.nonameyet.screens.menu.ReleaseNotesScreen;
 
 public enum ScreenType {
     LOADING(LoadingScreen.class),

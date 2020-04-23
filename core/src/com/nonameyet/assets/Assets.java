@@ -1,4 +1,4 @@
-package com.nonameyet.environment;
+package com.nonameyet.assets;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;

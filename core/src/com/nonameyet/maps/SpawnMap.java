@@ -1,6 +1,6 @@
 package com.nonameyet.maps;
 
-import com.nonameyet.environment.AssetName;
+import com.nonameyet.assets.AssetName;
 import com.nonameyet.screens.GameScreen;
 
 public class SpawnMap extends Map {
