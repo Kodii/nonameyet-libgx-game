@@ -1,73 +1,45 @@
 package com.nonameyet.ui.chest;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
 import com.nonameyet.screens.AbstractScreen;
 import com.nonameyet.utils.Constants;
 
-public class ChestInventoryUI implements Disposable {
+public class ChestInventoryUI extends Window {
     private static final String TAG = ChestInventoryUI.class.getSimpleName();
 
-    private final Stage stage;
-    Image chestWindow;
+    private static final WindowStyle windowStyle;
 
-    ChestWindowEvent chestWindowEvent;
+    static {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(AssetName.PIXEL_FONT.getAssetName()));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 32;
+        BitmapFont bitmapFont = generator.generateFont(parameter);
+        generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
-    public ChestInventoryUI(Stage stage) {
-        this.stage = stage;
-        chestWindowEvent = ChestWindowEvent.CHEST_CLOSED;
-        createChestWindow();
-    }
-
-    private void createChestWindow() {
         Texture texture = Assets.manager.get(AssetName.CHEST_WINDOW.getAssetName());
-
-        TextureRegion textureRegion = new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight());
-
-        chestWindow = new Image(textureRegion);
-        chestWindow.setSize(textureRegion.getRegionWidth() * (AbstractScreen.VIEWPORT.physicalWidth / Constants.CAMERA_PIXELS_WIDTH),
-                textureRegion.getRegionHeight() * (AbstractScreen.VIEWPORT.physicalHeight / Constants.CAMERA_PIXELS_HEIGHT));
-
-        chestWindow.setPosition((AbstractScreen.VIEWPORT.physicalWidth / 2) - chestWindow.getWidth() / 2, (AbstractScreen.VIEWPORT.physicalHeight / 2) - chestWindow.getHeight() / 2);
+        windowStyle = new WindowStyle(bitmapFont, Color.WHITE, new TextureRegionDrawable(texture));
 
     }
 
-    public void update(ChestWindowEvent event) {
+    public ChestInventoryUI() {
+        super("Chest Inventory", windowStyle);
 
-        switch (event) {
-            case CHEST_OPENED:
-                Gdx.app.debug(TAG, event.toString() + " otwórz sie");
-                chestWindowEvent = event;
-                break;
-            case CHEST_CLOSED:
-                Gdx.app.debug(TAG, event.toString() + " zamknij się");
-                chestWindowEvent = event;
-                break;
-        }
-    }
+        this.setSize(this.getWidth() * (AbstractScreen.VIEWPORT.physicalWidth / Constants.CAMERA_PIXELS_WIDTH),
+                this.getHeight() * (AbstractScreen.VIEWPORT.physicalHeight / Constants.CAMERA_PIXELS_HEIGHT));
+        this.setVisible(false);
+        this.setMovable(true);
+        this.setDebug(true);
+        this.setPosition((AbstractScreen.VIEWPORT.physicalWidth / 2) - this.getWidth() / 2, (AbstractScreen.VIEWPORT.physicalHeight / 2) - this.getHeight() / 2);
 
-    public void renderChestWindow() {
-        switch (chestWindowEvent) {
-
-            case CHEST_OPENED:
-//                Gdx.app.debug(TAG, "otwarcie skrzyni");
-                stage.addActor(chestWindow);
-                break;
-            case CHEST_CLOSED:
-//                Gdx.app.debug(TAG, "zamknięcie skrzyni");
-                stage.clear();
-                break;
-        }
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
+        this.padLeft(30);
+        this.padTop(70);
     }
 }

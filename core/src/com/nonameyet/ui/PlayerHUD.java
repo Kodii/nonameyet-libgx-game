@@ -1,6 +1,7 @@
 package com.nonameyet.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,10 +13,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
 import com.nonameyet.ui.chest.ChestInventoryUI;
+import com.nonameyet.ui.chest.ChestWindowEvent;
 import com.nonameyet.ui.life.LifeUI;
 import com.nonameyet.ui.life.StatusListener;
 
-public class PlayerHUD implements Screen, StatusListener {
+public class PlayerHUD implements Screen, StatusListener, InputProcessor {
     private static final String TAG = PlayerHUD.class.getSimpleName();
 
     private Stage stage;
@@ -34,13 +36,14 @@ public class PlayerHUD implements Screen, StatusListener {
         stage = new Stage(viewport);
 
         lifeUI = new LifeUI(stage);
-        chestInventoryUI = new ChestInventoryUI(stage);
 
         cameraFrame();
 
+        chestInventoryUI = new ChestInventoryUI();
+        stage.addActor(chestInventoryUI);
+
         // listeners
         lifeUI.attachListener(this);
-
     }
 
     private void cameraFrame() {
@@ -56,6 +59,7 @@ public class PlayerHUD implements Screen, StatusListener {
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -63,10 +67,23 @@ public class PlayerHUD implements Screen, StatusListener {
         lifeUI.handleInput(delta);
 
         lifeUI.renderLifes();
-        chestInventoryUI.renderChestWindow();
 
         stage.act(delta);
         stage.draw();
+    }
+
+    public void update(ChestWindowEvent event) {
+
+        switch (event) {
+            case CHEST_OPENED:
+                Gdx.app.debug(TAG, event.toString() + " otwórz sie");
+                chestInventoryUI.setVisible(true);
+                break;
+            case CHEST_CLOSED:
+                Gdx.app.debug(TAG, event.toString() + " zamknij się");
+                chestInventoryUI.setVisible(false);
+                break;
+        }
     }
 
     @Override
@@ -86,7 +103,7 @@ public class PlayerHUD implements Screen, StatusListener {
 
     @Override
     public void hide() {
-
+        Gdx.input.setInputProcessor(null);
     }
 
     @Override
@@ -118,5 +135,45 @@ public class PlayerHUD implements Screen, StatusListener {
 
     public ChestInventoryUI getChestInventoryUI() {
         return chestInventoryUI;
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }
