@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
 import com.nonameyet.screens.GameScreen;
@@ -20,7 +21,7 @@ import java.beans.PropertyChangeListener;
 
 import static com.nonameyet.utils.Constants.PPM;
 
-public class Chest extends Sprite implements PropertyChangeListener {
+public class Chest extends Sprite implements Disposable, PropertyChangeListener {
     private final String TAG = this.getClass().getSimpleName();
     private GameScreen screen;
 
@@ -155,6 +156,11 @@ public class Chest extends Sprite implements PropertyChangeListener {
     private Vector2 chestPosition() {
         Rectangle playerPositionPoint = screen.getMapMgr().getChestSpawnLayer().getObjects().getByType(RectangleMapObject.class).get(0).getRectangle();
         return new Vector2(playerPositionPoint.getX() / PPM, playerPositionPoint.getY() / PPM);
+    }
+
+    @Override
+    public void dispose() {
+        screen.getMapMgr().getWorldContactListener().removePropertyChangeListener(this);
     }
 
 }

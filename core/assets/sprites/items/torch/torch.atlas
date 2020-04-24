@@ -1,0 +1,34 @@
+
+torch.png
+size: 24,15
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+torch
+  rotate: false
+  xy: 0, 0
+  size: 6, 15
+  orig: 6, 15
+  offset: 0, 0
+  index: 0
+torch
+  rotate: false
+  xy: 6, 0
+  size: 6, 15
+  orig: 6, 15
+  offset: 0, 0
+  index: 1
+torch
+  rotate: false
+  xy: 12, 0
+  size: 6, 15
+  orig: 6, 15
+  offset: 0, 0
+  index: 2
+torch
+  rotate: false
+  xy: 18, 0
+  size: 6, 15
+  orig: 6, 15
+  offset: 0, 0
+  index: 3

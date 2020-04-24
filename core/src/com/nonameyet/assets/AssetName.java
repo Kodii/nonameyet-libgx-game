@@ -13,6 +13,7 @@ public enum AssetName {
     // sprites
     PLAYER_PNG("from_web/sprites/characters/Rogue.png"),
     CHEST_ATLAS("sprites/items/chests/chest_grass.atlas"),
+    TORCH_ATLAS("sprites/items/torch/torch.atlas"),
 
     // hud
     CAMERA_FRAME("sprites/hud/camera_frame/camera_frame.png"),
@@ -23,7 +24,10 @@ public enum AssetName {
 
     // sound effects
     CHEST_OPEN_EFFECT("sound/effects/chest/chest-open.ogg"),
-    CHEST_CLOSE_EFFECT("sound/effects/chest/chest-close.ogg");
+    CHEST_CLOSE_EFFECT("sound/effects/chest/chest-close.ogg"),
+    // music
+    TOWN_NIGHT_MUSIC("sound/music/town-night.mp3"),
+    TOWN_DAY_MUSIC("sound/music/town-day.mp3");
 
 
     private String assetName;

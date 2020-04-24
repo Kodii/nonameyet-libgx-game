@@ -28,15 +28,15 @@ abstract class Map implements Disposable {
     protected final static String PLAYER_SPAWN_LAYER = "PLAYER_SPAWN_LAYER";
 
     // Chests layers
-    //    protected final static String CHEST_CLOSE_LAYER = "CHEST_CLOSE_LAYER";
     protected final static String CHEST_SPAWN_LAYER = "CHEST_SPAWN_LAYER";
+    protected final static String TORCHES_SPAWN_LAYER = "TORCHES_SPAWN_LAYER";
 
     protected MapLayer collisionLayer = null;
     protected MapLayer portalLayer = null;
     protected MapLayer playerSpawnLayer = null;
 
-    //    protected MapLayer chestCloseLayer = null;
     protected MapLayer chestSpawnLayer = null;
+    protected MapLayer torchesSpawnLayer = null;
 
     protected MapFactory.MapType currentMapType;
 
@@ -73,6 +73,18 @@ abstract class Map implements Disposable {
         } else {
             Gdx.app.debug(TAG, "No chest group, skip!");
         }
+
+        MapGroupLayer lightsGroup = (MapGroupLayer) currentTiledMap.getLayers().get("lights");
+        if (lightsGroup != null) {
+
+            torchesSpawnLayer = lightsGroup.getLayers().get(TORCHES_SPAWN_LAYER);
+            if (torchesSpawnLayer == null) {
+                Gdx.app.debug(TAG, "No torches spawn layer!");
+            }
+        } else {
+            Gdx.app.debug(TAG, "No lights group, skip!");
+        }
+
 
     }
 
@@ -122,32 +134,6 @@ abstract class Map implements Disposable {
             shape.dispose();
         }
     }
-
-//    private void createChest() {
-//
-//        //create body and fixture variables
-//        BodyDef bdef = new BodyDef();
-//        FixtureDef fdef = new FixtureDef();
-//        Body body;
-//
-//        //        create bodies/fixtures for CHEST_COLLISION_LAYER
-//        for (MapObject object : chestCollisionLayer.getObjects().getByType(RectangleMapObject.class)) {
-//            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-//
-//            bdef.type = BodyDef.BodyType.StaticBody;
-//            bdef.position.set((rect.getX() + rect.getWidth() / 2) / PPM, (rect.getY() + rect.getHeight() / 2) / PPM);
-//
-//            body = world.createBody(bdef);
-//            body.setUserData("CHEST_COLLISION");
-//
-//            PolygonShape shape = new PolygonShape();
-//            shape.setAsBox(rect.getWidth() / 2 / PPM, rect.getHeight() / 2 / PPM);
-//            fdef.shape = shape;
-//            body.createFixture(fdef);
-//
-//            shape.dispose();
-//        }
-//    }
 
     abstract public void unloadMusic();
 

@@ -1,6 +1,7 @@
 package com.nonameyet.assets;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -27,6 +28,7 @@ public class Assets implements Disposable {
         // sprites
         manager.load(AssetName.PLAYER_PNG.getAssetName(), Texture.class);
         manager.load(AssetName.CHEST_ATLAS.getAssetName(), TextureAtlas.class);
+        manager.load(AssetName.TORCH_ATLAS.getAssetName(), TextureAtlas.class);
 
         // hud
         manager.load(AssetName.CAMERA_FRAME.getAssetName(), Texture.class);
@@ -36,6 +38,9 @@ public class Assets implements Disposable {
         // sound effects
         manager.load(AssetName.CHEST_OPEN_EFFECT.getAssetName(), Sound.class);
         manager.load(AssetName.CHEST_CLOSE_EFFECT.getAssetName(), Sound.class);
+        // music
+        manager.load(AssetName.TOWN_NIGHT_MUSIC.getAssetName(), Music.class);
+        manager.load(AssetName.TOWN_DAY_MUSIC.getAssetName(), Music.class);
     }
 
     @Override
