@@ -12,9 +12,11 @@ public class MapManager {
 
     private GameScreen _screen;
 
-    private boolean _mapChanged = false;
-    private Map _currentMap;
-    private MapFactory.MapType _currentMapType;
+    private boolean mapChanged = false;
+    private Map currentMap;
+    private MapFactory.MapType currentMapType;
+
+    private WorldContactListener worldContactListener;
 
     public MapManager(GameScreen screen) {
         this._screen = screen;
@@ -33,36 +35,38 @@ public class MapManager {
             return;
         }
 
-        _currentMapType = mapType;
-        _currentMap = map;
+        currentMapType = mapType;
+        currentMap = map;
+        worldContactListener = new WorldContactListener(_screen);
+        _screen.getWorld().setContactListener(worldContactListener);
 
-        _screen.getWorld().setContactListener(new WorldContactListener(_screen));
-
-        _mapChanged = false;
+        mapChanged = false;
     }
 
     public MapFactory.MapType getCurrentMapType() {
-        return _currentMapType;
+        return currentMapType;
     }
 
     public void setCurrentMapType(MapFactory.MapType currentMapType) {
-        this._currentMapType = currentMapType;
+        this.currentMapType = currentMapType;
     }
 
     public TiledMap getCurrentTiledMap() {
-        if (_currentMap == null) {
+        if (currentMap == null) {
             loadMap(MapFactory.MapType.SPAWN);
         }
-        return _currentMap.getCurrentTiledMap();
+        return currentMap.getCurrentTiledMap();
     }
 
     public boolean isMapChanged() {
-        return _mapChanged;
+        return mapChanged;
     }
 
     public void setMapChanged(boolean mapChanged) {
-        this._mapChanged = mapChanged;
+        this.mapChanged = mapChanged;
     }
 
-
+    public WorldContactListener getWorldContactListener() {
+        return worldContactListener;
+    }
 }

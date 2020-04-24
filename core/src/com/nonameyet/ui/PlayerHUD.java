@@ -11,13 +11,18 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
+import com.nonameyet.screens.GameScreen;
 import com.nonameyet.ui.chest.ChestInventoryUI;
 import com.nonameyet.ui.chest.ChestWindowEvent;
 import com.nonameyet.ui.life.LifeUI;
 import com.nonameyet.ui.life.StatusListener;
 
-public class PlayerHUD implements Screen, StatusListener {
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+public class PlayerHUD implements Screen, StatusListener, PropertyChangeListener {
     private static final String TAG = PlayerHUD.class.getSimpleName();
+    private GameScreen screen;
 
     private Stage stage;
     private Viewport viewport;
@@ -26,9 +31,9 @@ public class PlayerHUD implements Screen, StatusListener {
     private LifeUI lifeUI;
     private ChestInventoryUI chestInventoryUI;
 
-    public PlayerHUD(Camera camera) {
+    public PlayerHUD(Camera camera, GameScreen screen) {
         this.camera = camera;
-
+        this.screen = screen;
 
         //setup the HUD viewport using a new camera seperate from gamecam
         viewport = new ScreenViewport(this.camera);
@@ -43,6 +48,9 @@ public class PlayerHUD implements Screen, StatusListener {
 
         // listeners
         lifeUI.attachListener(this);
+
+        screen.getMapMgr().getWorldContactListener().addPropertyChangeListener(this);
+
     }
 
     private void cameraFrame() {
@@ -68,18 +76,6 @@ public class PlayerHUD implements Screen, StatusListener {
 
         stage.act(delta);
         stage.draw();
-    }
-
-    public void chestOpenClose(ChestWindowEvent event) {
-
-        switch (event) {
-            case CHEST_OPENED:
-                chestInventoryUI.setVisible(true);
-                break;
-            case CHEST_CLOSED:
-                chestInventoryUI.setVisible(false);
-                break;
-        }
     }
 
     @Override
@@ -124,6 +120,27 @@ public class PlayerHUD implements Screen, StatusListener {
 
             case UPGRADE_HP:
                 Gdx.app.log(TAG, "event: UPGRADE_HP");
+                break;
+        }
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        Gdx.app.debug(TAG, "GUI --> propertyChange(): " + evt.getPropertyName());
+
+        if (evt.getPropertyName().equals(ChestWindowEvent.class.getName())) {
+            chestOpenClose((ChestWindowEvent) evt.getNewValue());
+        }
+    }
+
+    public void chestOpenClose(ChestWindowEvent event) {
+
+        switch (event) {
+            case CHEST_OPENED:
+                chestInventoryUI.setVisible(true);
+                break;
+            case CHEST_CLOSED:
+                chestInventoryUI.setVisible(false);
                 break;
         }
     }

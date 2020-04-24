@@ -35,8 +35,6 @@ public class GameScreen extends AbstractScreen {
     public GameScreen(NoNameYet game) {
         super(game);
         mapMgr = new MapManager(this);
-
-
     }
 
     @Override
@@ -61,7 +59,7 @@ public class GameScreen extends AbstractScreen {
 
         // create _player in our game _world
         player = new Player(this);
-        playerHUD = new PlayerHUD(hudCamera);
+        playerHUD = new PlayerHUD(hudCamera, this);
 
         multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(playerHUD.getStage());
