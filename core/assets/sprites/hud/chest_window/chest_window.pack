@@ -1,0 +1,11 @@
+chest_window.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+chest_window
+  rotate: false
+  xy: 1, 1
+  size: 133, 143
+  orig: 133, 143
+  offset: 0, 0
+  index: -1

@@ -1,6 +1,7 @@
 package com.nonameyet.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapProperties;
@@ -17,6 +18,7 @@ import static com.nonameyet.utils.Constants.PPM;
 
 public class GameScreen extends AbstractScreen {
     private static final String TAG = GameScreen.class.getSimpleName();
+    private InputMultiplexer multiplexer;
 
     private OrthogonalTiledMapRenderer mapRenderer = null;
     private MapManager mapMgr;
@@ -60,6 +62,10 @@ public class GameScreen extends AbstractScreen {
         // create _player in our game _world
         player = new Player(this);
         playerHUD = new PlayerHUD(hudCamera);
+
+        multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(playerHUD.getStage());
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override

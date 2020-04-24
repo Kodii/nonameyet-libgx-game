@@ -1,7 +1,6 @@
 package com.nonameyet.ui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,7 +16,7 @@ import com.nonameyet.ui.chest.ChestWindowEvent;
 import com.nonameyet.ui.life.LifeUI;
 import com.nonameyet.ui.life.StatusListener;
 
-public class PlayerHUD implements Screen, StatusListener, InputProcessor {
+public class PlayerHUD implements Screen, StatusListener {
     private static final String TAG = PlayerHUD.class.getSimpleName();
 
     private Stage stage;
@@ -59,7 +58,6 @@ public class PlayerHUD implements Screen, StatusListener, InputProcessor {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -72,15 +70,13 @@ public class PlayerHUD implements Screen, StatusListener, InputProcessor {
         stage.draw();
     }
 
-    public void update(ChestWindowEvent event) {
+    public void chestOpenClose(ChestWindowEvent event) {
 
         switch (event) {
             case CHEST_OPENED:
-                Gdx.app.debug(TAG, event.toString() + " otwórz sie");
                 chestInventoryUI.setVisible(true);
                 break;
             case CHEST_CLOSED:
-                Gdx.app.debug(TAG, event.toString() + " zamknij się");
                 chestInventoryUI.setVisible(false);
                 break;
         }
@@ -103,7 +99,6 @@ public class PlayerHUD implements Screen, StatusListener, InputProcessor {
 
     @Override
     public void hide() {
-        Gdx.input.setInputProcessor(null);
     }
 
     @Override
@@ -133,47 +128,7 @@ public class PlayerHUD implements Screen, StatusListener, InputProcessor {
         }
     }
 
-    public ChestInventoryUI getChestInventoryUI() {
-        return chestInventoryUI;
-    }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
+    public Stage getStage() {
+        return stage;
     }
 }
