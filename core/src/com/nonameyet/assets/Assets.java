@@ -1,6 +1,7 @@
 package com.nonameyet.assets;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -30,6 +31,10 @@ public class Assets implements Disposable {
         manager.load(AssetName.CAMERA_FRAME.getAssetName(), Texture.class);
         manager.load(AssetName.CHEST_WINDOW.getAssetName(), Texture.class);
         manager.load(AssetName.LIFE.getAssetName(), Texture.class);
+
+        // sound effects
+        manager.load(AssetName.CHEST_OPEN_EFFECT.getAssetName(), Sound.class);
+        manager.load(AssetName.CHEST_CLOSE_EFFECT.getAssetName(), Sound.class);
     }
 
     @Override

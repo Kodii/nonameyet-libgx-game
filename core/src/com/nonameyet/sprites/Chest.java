@@ -77,7 +77,7 @@ public class Chest extends Sprite implements PropertyChangeListener {
     private void createAnimation() {
         int frameWidth = getTexture().getWidth() / FRAME_COLS;
         int frameHeight = getTexture().getHeight() / FRAME_ROWS;
-        float frameDuration = 0.2f;
+        float frameDuration = 0.20f;
 
         TextureRegion[][] temp = TextureRegion.split(getTexture(), frameWidth, frameHeight);
 

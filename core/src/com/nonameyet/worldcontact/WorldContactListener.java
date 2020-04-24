@@ -2,6 +2,8 @@ package com.nonameyet.worldcontact;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Disposable;
+import com.nonameyet.audio.AudioManager;
 import com.nonameyet.maps.MapFactory;
 import com.nonameyet.maps.MapManager;
 import com.nonameyet.screens.GameScreen;
@@ -10,7 +12,7 @@ import com.nonameyet.ui.chest.ChestWindowEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public class WorldContactListener implements ContactListener {
+public class WorldContactListener implements Disposable, ContactListener {
     private final String TAG = this.getClass().getSimpleName();
 
     private MapManager mapMgr;
@@ -20,6 +22,8 @@ public class WorldContactListener implements ContactListener {
 
     public WorldContactListener(GameScreen screen) {
         this.mapMgr = screen.getMapMgr();
+
+        addPropertyChangeListener(AudioManager.getInstance());
     }
 
     @Override
@@ -93,5 +97,11 @@ public class WorldContactListener implements ContactListener {
     public void removePropertyChangeListener(
             PropertyChangeListener p) {
         changes.removePropertyChangeListener(p);
+    }
+
+
+    @Override
+    public void dispose() {
+        removePropertyChangeListener(AudioManager.getInstance());
     }
 }

@@ -19,7 +19,11 @@ public enum AssetName {
     CHEST_WINDOW("sprites/hud/chest_window/chest_window.png"),
     LIFE("sprites/hud/life/life.png"),
     SLOT("sprites/hud/slot/slot.png"),
-    SLOT_HIGHLIGHT("sprites/hud/slot/slot_highlight.png");
+    SLOT_HIGHLIGHT("sprites/hud/slot/slot_highlight.png"),
+
+    // sound effects
+    CHEST_OPEN_EFFECT("sound/effects/chest/chest-open.ogg"),
+    CHEST_CLOSE_EFFECT("sound/effects/chest/chest-close.ogg");
 
 
     private String assetName;
