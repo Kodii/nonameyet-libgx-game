@@ -54,7 +54,6 @@ public class MapManager {
     public void updateEntities(float dt) {
         chest.update(dt);
     }
-
     public void drawEntities(Batch batch) {
         chest.draw(batch);
     }
@@ -93,4 +92,6 @@ public class MapManager {
     public WorldContactListener getWorldContactListener() {
         return worldContactListener;
     }
+
+
 }
