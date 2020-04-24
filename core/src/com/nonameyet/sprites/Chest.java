@@ -2,15 +2,14 @@ package com.nonameyet.sprites;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
 import com.nonameyet.screens.GameScreen;
@@ -24,8 +23,6 @@ import static com.nonameyet.utils.Constants.PPM;
 public class Chest extends Sprite implements PropertyChangeListener {
     private final String TAG = this.getClass().getSimpleName();
     private GameScreen screen;
-
-    private static final int FRAME_COLS = 3, FRAME_ROWS = 1;
 
     public enum State {
         CHEST_CLOSE_IDLE,
@@ -44,20 +41,21 @@ public class Chest extends Sprite implements PropertyChangeListener {
     private TextureRegion closeIdle;
     private Animation<TextureRegion> openAnimation;
     private Animation<TextureRegion> closeAnimation;
-    private float stateTimer = 0;
+    private float stateTime = 0;
 
+    private static TextureAtlas textureAtlas = Assets.manager.get(AssetName.CHEST_ATLAS.getAssetName());
 
     public Chest(GameScreen screen) {
-        super((Texture) Assets.manager.get(AssetName.CHEST_PNG.getAssetName()));
+        super(textureAtlas.findRegion("chest_grass"));
         this.screen = screen;
         this.world = screen.getWorld();
 
-        createIdle();
+        closeIdle = new TextureRegion(getTexture(), 0, 0, 19, 16);
+        openIdle = new TextureRegion(getTexture(), 38, 0, 19, 16);
+        setBounds(0, 0, 19 / PPM, 16 / PPM);
+        setRegion(openIdle);
         createAnimation();
-
         defineChest();
-        setBounds(0, 0, (getTexture().getWidth() / FRAME_COLS) / PPM, (getTexture().getHeight() / FRAME_ROWS) / PPM);
-        setRegion(closeIdle);
 
         // listeners
         screen.getMapMgr().getWorldContactListener().addPropertyChangeListener(this);
@@ -65,32 +63,9 @@ public class Chest extends Sprite implements PropertyChangeListener {
         Gdx.app.debug(TAG, "Chest was created");
     }
 
-    private void createIdle() {
-        int frameWidth = getTexture().getWidth() / FRAME_COLS;
-        int frameHeight = getTexture().getHeight() / FRAME_ROWS;
-
-        TextureRegion[][] temp = TextureRegion.split(getTexture(), frameWidth, frameHeight);
-        closeIdle = new TextureRegion(getTexture(), temp[0][0].getRegionX(), temp[0][0].getRegionY(), frameWidth, frameHeight);
-        openIdle = new TextureRegion(getTexture(), temp[0][2].getRegionX(), temp[0][2].getRegionY(), frameWidth, frameHeight);
-    }
-
     private void createAnimation() {
-        int frameWidth = getTexture().getWidth() / FRAME_COLS;
-        int frameHeight = getTexture().getHeight() / FRAME_ROWS;
-        float frameDuration = 0.20f;
-
-        TextureRegion[][] temp = TextureRegion.split(getTexture(), frameWidth, frameHeight);
-
-        Array<TextureRegion> frames = new Array<>();
-        for (int c = 1; c < FRAME_COLS; c++)
-            frames.add(temp[0][c]);
-        openAnimation = new Animation<>(frameDuration, frames, Animation.PlayMode.NORMAL);
-        frames.clear();
-
-        for (int c = 0; c < FRAME_COLS - 1; c++)
-            frames.add(temp[0][c]);
-        closeAnimation = new Animation<>(frameDuration, frames, Animation.PlayMode.REVERSED);
-        frames.clear();
+        openAnimation = new Animation<TextureRegion>(0.15f, textureAtlas.findRegions("chest_grass"));
+        closeAnimation = new Animation<TextureRegion>(0.15f, textureAtlas.findRegions("chest_grass"), Animation.PlayMode.REVERSED);
     }
 
     public void update(float dt) {
@@ -135,19 +110,23 @@ public class Chest extends Sprite implements PropertyChangeListener {
 
     private TextureRegion getFrame(float dt) {
         TextureRegion region;
+
+        stateTime = currentState == previousState ? stateTime + dt : 0;
+        previousState = currentState;
+
         switch (currentState) {
             case CHEST_OPEN:
-                region = openAnimation.getKeyFrame(stateTimer);
+                region = openAnimation.getKeyFrame(stateTime);
                 break;
             case CHEST_CLOSE:
-                region = closeAnimation.getKeyFrame(stateTimer);
+                region = closeAnimation.getKeyFrame(stateTime);
                 break;
+            case CHEST_OPEN_IDLE:
+            case CHEST_CLOSE_IDLE:
             default:
                 region = closeIdle;
                 break;
         }
-        stateTimer = currentState == previousState ? (stateTimer + dt) % 5 : 0;
-        previousState = currentState;
 
         return region;
     }
@@ -175,8 +154,7 @@ public class Chest extends Sprite implements PropertyChangeListener {
 
     private Vector2 chestPosition() {
         Rectangle playerPositionPoint = screen.getMapMgr().getChestSpawnLayer().getObjects().getByType(RectangleMapObject.class).get(0).getRectangle();
-        Vector2 vector2 = new Vector2(playerPositionPoint.getX() / PPM, playerPositionPoint.getY() / PPM);
-        return vector2;
+        return new Vector2(playerPositionPoint.getX() / PPM, playerPositionPoint.getY() / PPM);
     }
 
 }

@@ -3,6 +3,7 @@ package com.nonameyet.assets;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Disposable;
@@ -25,7 +26,7 @@ public class Assets implements Disposable {
 
         // sprites
         manager.load(AssetName.PLAYER_PNG.getAssetName(), Texture.class);
-        manager.load(AssetName.CHEST_PNG.getAssetName(), Texture.class);
+        manager.load(AssetName.CHEST_ATLAS.getAssetName(), TextureAtlas.class);
 
         // hud
         manager.load(AssetName.CAMERA_FRAME.getAssetName(), Texture.class);

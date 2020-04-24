@@ -1,26 +1,26 @@
 
 chest_grass.png
-size: 128,32
+size: 57,16
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 chest_grass
   rotate: false
-  xy: 2, 2
+  xy: 0, 0
   size: 19, 16
   orig: 19, 16
   offset: 0, 0
   index: 1
 chest_grass
   rotate: false
-  xy: 23, 2
+  xy: 19, 0
   size: 19, 16
   orig: 19, 16
   offset: 0, 0
   index: 2
 chest_grass
   rotate: false
-  xy: 44, 2
+  xy: 38, 0
   size: 19, 16
   orig: 19, 16
   offset: 0, 0

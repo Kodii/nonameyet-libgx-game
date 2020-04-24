@@ -12,7 +12,7 @@ public enum AssetName {
 
     // sprites
     PLAYER_PNG("from_web/sprites/characters/Rogue.png"),
-    CHEST_PNG("sprites/items/chests/chest_grass.png"),
+    CHEST_ATLAS("sprites/items/chests/chest_grass.atlas"),
 
     // hud
     CAMERA_FRAME("sprites/hud/camera_frame/camera_frame.png"),

@@ -87,9 +87,8 @@ public class GameScreen extends AbstractScreen {
         mapRenderer.getBatch().setProjectionMatrix(camera.combined);
         mapRenderer.getBatch().begin();
         Gdx.graphics.setTitle("NoNameYet | fps: " + Gdx.graphics.getFramesPerSecond());
-        player.draw(mapRenderer.getBatch());
         getMapMgr().drawEntities(mapRenderer.getBatch());
-
+        player.draw(mapRenderer.getBatch());
         mapRenderer.getBatch().end();
 
         playerHUD.render(delta);
