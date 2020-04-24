@@ -48,7 +48,7 @@ public class WorldContactListener implements ContactListener {
     }
 
     private void beginChestContact(Fixture fixtureA, Fixture fixtureB) {
-        if (fixtureA.getBody().getUserData().equals("CHEST_COLLISION") || fixtureB.getBody().getUserData().equals("CHEST_COLLISION")) {
+        if (fixtureA.getBody().getUserData().equals("CHEST") || fixtureB.getBody().getUserData().equals("CHEST")) {
             changes.firePropertyChange(ChestWindowEvent.class.getSimpleName(), null, ChestWindowEvent.CHEST_OPENED);
         }
     }
@@ -65,7 +65,7 @@ public class WorldContactListener implements ContactListener {
     }
 
     private void beginEndContact(Fixture fixtureA, Fixture fixtureB) {
-        if (fixtureA.getBody().getUserData().equals("CHEST_COLLISION") || fixtureB.getBody().getUserData().equals("CHEST_COLLISION")) {
+        if (fixtureA.getBody().getUserData().equals("CHEST") || fixtureB.getBody().getUserData().equals("CHEST")) {
             changes.firePropertyChange(ChestWindowEvent.class.getSimpleName(), null, ChestWindowEvent.CHEST_CLOSED);
         }
     }

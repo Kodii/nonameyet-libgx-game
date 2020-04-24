@@ -1,6 +1,7 @@
 package com.nonameyet.maps;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
@@ -42,9 +43,7 @@ public class MapManager {
         currentMap = map;
         worldContactListener = new WorldContactListener(screen);
         screen.getWorld().setContactListener(worldContactListener);
-
         createEntities();
-
         mapChanged = false;
     }
 
@@ -54,6 +53,10 @@ public class MapManager {
 
     public void updateEntities(float dt) {
         chest.update(dt);
+    }
+
+    public void drawEntities(Batch batch) {
+        chest.draw(batch);
     }
 
     public MapFactory.MapType getCurrentMapType() {

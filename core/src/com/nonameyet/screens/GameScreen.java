@@ -82,12 +82,14 @@ public class GameScreen extends AbstractScreen {
         mapRenderer.render();
 
         //_mapRenderer our Box2DDebugLines
-        _b2dr.render(world, camera.combined);
+//        _b2dr.render(world, camera.combined);
 
         mapRenderer.getBatch().setProjectionMatrix(camera.combined);
         mapRenderer.getBatch().begin();
         Gdx.graphics.setTitle("NoNameYet | fps: " + Gdx.graphics.getFramesPerSecond());
         player.draw(mapRenderer.getBatch());
+        getMapMgr().drawEntities(mapRenderer.getBatch());
+
         mapRenderer.getBatch().end();
 
         playerHUD.render(delta);
