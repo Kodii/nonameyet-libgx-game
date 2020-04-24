@@ -52,6 +52,9 @@
     3. http://file.allitebooks.com/20160104/Mastering%20LibGDX%20Game%20Development.pdf
         pdf Mastering LibGDX Game Development
         
+    4. https://www.youtube.com/watch?v=p024Ix0I8W0
+        2d lights     
+        
 #### 3. helpers
     
     1. Gtx Texture Packer - A simple way to pack and manage texture atlases for LibGDX game framework.

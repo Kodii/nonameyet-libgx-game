@@ -1,5 +1,6 @@
 package com.nonameyet.screens;
 
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
@@ -30,6 +31,9 @@ public class GameScreen extends AbstractScreen {
     private World world;
     private Box2DDebugRenderer _b2dr;
 
+    // Lights2d
+    RayHandler rayHandler;
+
     private PlayerHUD playerHUD;
 
     public GameScreen(NoNameYet game) {
@@ -51,6 +55,9 @@ public class GameScreen extends AbstractScreen {
 
         //allows for debug lines of our box2d _world.
         _b2dr = new Box2DDebugRenderer();
+
+        rayHandler = new RayHandler(world);
+        rayHandler.setAmbientLight(.7f);
     }
 
     private void createCameras() {
@@ -86,9 +93,9 @@ public class GameScreen extends AbstractScreen {
 
         //_mapRenderer our Box2DDebugLines
         _b2dr.render(world, camera.combined);
-
         batchRender(delta);
 
+        rayHandler.render();
     }
 
     private void update(float delta) {
@@ -97,6 +104,7 @@ public class GameScreen extends AbstractScreen {
 
         //takes 1 step in the physics simulation(60 times per second)
         world.step(FIXED_TIME_STEP, 6, 2);
+        rayHandler.update();
 
         if (mapMgr.isMapChanged()) {
             mapMgr.loadMap(mapMgr.getCurrentMapType());
@@ -150,6 +158,7 @@ public class GameScreen extends AbstractScreen {
         }
         world.dispose();
         _b2dr.dispose();
+        rayHandler.dispose();
     }
 
 
