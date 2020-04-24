@@ -15,10 +15,10 @@ import java.beans.PropertyChangeSupport;
 public class WorldContactListener implements Disposable, ContactListener {
     private final String TAG = this.getClass().getSimpleName();
 
-    private MapManager mapMgr;
+    private final MapManager mapMgr;
 
     // events
-    private PropertyChangeSupport changes = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
     public WorldContactListener(GameScreen screen) {
         this.mapMgr = screen.getMapMgr();
@@ -65,10 +65,10 @@ public class WorldContactListener implements Disposable, ContactListener {
         Gdx.app.debug("CONTACT", "END: " + fixtureA.getBody().getUserData() + " " + fixtureA.isSensor());
         Gdx.app.debug("CONTACT", "END: " + fixtureB.getBody().getUserData() + " " + fixtureB.isSensor());
 
-        beginEndContact(fixtureA, fixtureB);
+        endChestContact(fixtureA, fixtureB);
     }
 
-    private void beginEndContact(Fixture fixtureA, Fixture fixtureB) {
+    private void endChestContact(Fixture fixtureA, Fixture fixtureB) {
         if (fixtureA.getBody().getUserData().equals("CHEST") || fixtureB.getBody().getUserData().equals("CHEST")) {
             changes.firePropertyChange(ChestWindowEvent.class.getSimpleName(), null, ChestWindowEvent.CHEST_CLOSED);
         }

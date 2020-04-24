@@ -15,6 +15,7 @@ import com.nonameyet.audio.AudioManager;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.sprites.Chest;
 import com.nonameyet.sprites.LightsEvent;
+import com.nonameyet.sprites.Player;
 import com.nonameyet.sprites.Torch;
 import com.nonameyet.worldcontact.WorldContactListener;
 
@@ -24,15 +25,16 @@ import java.beans.PropertyChangeSupport;
 import static com.nonameyet.utils.Constants.PPM;
 
 public class MapManager {
-    private static final String TAG = MapManager.class.getSimpleName();
-    private GameScreen screen;
+    private final String TAG = this.getClass().getSimpleName();
+    private final GameScreen screen;
 
-    private boolean mapChanged = false;
     private Map currentMap;
     private MapFactory.MapType currentMapType;
+    private boolean mapChanged = false;
 
     private WorldContactListener worldContactListener;
 
+    private Player player;
     private Chest chest;
     private final Array<Torch> torches = new Array<>(20);
 
@@ -60,12 +62,18 @@ public class MapManager {
 
         currentMapType = mapType;
         currentMap = map;
+
         worldContactListener = new WorldContactListener(screen);
         screen.getWorld().setContactListener(worldContactListener);
 
+        createPlayer();
         createEntities();
 
         mapChanged = false;
+    }
+
+    private void createPlayer() {
+        player = new Player(screen);
     }
 
     public void createEntities() {
@@ -80,7 +88,7 @@ public class MapManager {
     }
 
     public void updateEntities(float dt) {
-        input();
+        inputTestToRemove();
 
         chest.update(dt);
 
@@ -97,7 +105,7 @@ public class MapManager {
         }
     }
 
-    public void input() {
+    public void inputTestToRemove() {
         if (Gdx.input.isKeyPressed(Input.Keys.NUM_3)) {
             changes.firePropertyChange(LightsEvent.class.getSimpleName(), null, LightsEvent.ON);
         }
@@ -105,6 +113,20 @@ public class MapManager {
         if (Gdx.input.isKeyPressed(Input.Keys.NUM_4)) {
             changes.firePropertyChange(LightsEvent.class.getSimpleName(), null, LightsEvent.OFF);
         }
+    }
+
+    public WorldContactListener getWorldContactListener() {
+        return worldContactListener;
+    }
+
+    public void addPropertyChangeListener(
+            PropertyChangeListener p) {
+        changes.addPropertyChangeListener(p);
+    }
+
+    public void removePropertyChangeListener(
+            PropertyChangeListener p) {
+        changes.removePropertyChangeListener(p);
     }
 
     public MapFactory.MapType getCurrentMapType() {
@@ -142,18 +164,7 @@ public class MapManager {
         this.mapChanged = mapChanged;
     }
 
-    public WorldContactListener getWorldContactListener() {
-        return worldContactListener;
+    public Player getPlayer() {
+        return player;
     }
-
-    public void addPropertyChangeListener(
-            PropertyChangeListener p) {
-        changes.addPropertyChangeListener(p);
-    }
-
-    public void removePropertyChangeListener(
-            PropertyChangeListener p) {
-        changes.removePropertyChangeListener(p);
-    }
-
 }

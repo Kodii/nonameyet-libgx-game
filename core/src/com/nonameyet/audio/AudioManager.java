@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
+import com.nonameyet.preferences.Preferences;
 import com.nonameyet.sprites.LightsEvent;
 import com.nonameyet.ui.chest.ChestWindowEvent;
 
@@ -66,10 +67,14 @@ public class AudioManager implements PropertyChangeListener {
     }
 
     private Music playMusic(boolean isLooping, Music music) {
+        Gdx.app.debug(TAG, "isMusicEnabled: " + Preferences.isMusicEnabled());
+        if (!Preferences.isMusicEnabled())
+            return null;
+
         if (music != null) {
             music.setLooping(isLooping);
             music.play();
-            music.setVolume(0.05f);
+            music.setVolume(Preferences.getMusicVolume());
         } else {
             Gdx.app.debug(TAG, "Music not loaded");
             return null;
@@ -78,9 +83,13 @@ public class AudioManager implements PropertyChangeListener {
     }
 
     private Sound playSound(Sound sound) {
+        Gdx.app.debug(TAG, "isSoundEnabled: " + Preferences.isSoundEnabled());
+        if (!Preferences.isSoundEnabled())
+            return null;
+
         if (sound != null) {
             long soundId = sound.play();
-            sound.setVolume(soundId, 0.1f);
+            sound.setVolume(soundId, Preferences.getSoundVolume());
         } else {
             Gdx.app.debug(TAG, "Sound not loaded");
             return null;

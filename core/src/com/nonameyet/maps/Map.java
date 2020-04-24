@@ -16,17 +16,12 @@ import com.nonameyet.screens.GameScreen;
 import static com.nonameyet.utils.Constants.PPM;
 
 abstract class Map implements Disposable {
-    private static final String TAG = Map.class.getSimpleName();
-
-    private World world;
-
-    protected TiledMap currentTiledMap = null;
+    private final String TAG = this.getClass().getSimpleName();
 
     //Map layers
     protected final static String COLLISION_LAYER = "MAP_COLLISION_LAYER";
     protected final static String PORTAL_LAYER = "MAP_PORTAL_LAYER";
     protected final static String PLAYER_SPAWN_LAYER = "PLAYER_SPAWN_LAYER";
-
     // Chests layers
     protected final static String CHEST_SPAWN_LAYER = "CHEST_SPAWN_LAYER";
     protected final static String TORCHES_SPAWN_LAYER = "TORCHES_SPAWN_LAYER";
@@ -38,7 +33,10 @@ abstract class Map implements Disposable {
     protected MapLayer chestSpawnLayer = null;
     protected MapLayer torchesSpawnLayer = null;
 
+    protected TiledMap currentTiledMap = null;
     protected MapFactory.MapType currentMapType;
+
+    private final World world;
 
     public Map(GameScreen screen, MapFactory.MapType mapType, AssetName mapTmx) {
         Gdx.app.debug(TAG, "Create a new map: " + mapType);
@@ -84,37 +82,19 @@ abstract class Map implements Disposable {
         } else {
             Gdx.app.debug(TAG, "No lights group, skip!");
         }
-
-
     }
 
     private void create() {
-
-        //create body and fixture variables
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
+
+        createBodiesForCollision(bdef, fdef);
+
+        createBodiesForPortal(bdef, fdef);
+    }
+
+    private void createBodiesForPortal(BodyDef bdef, FixtureDef fdef) {
         Body body;
-
-//        create bodies/fixtures for MAP_COLLISION_LAYER
-        for (MapObject object : collisionLayer.getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / PPM, (rect.getY() + rect.getHeight() / 2) / PPM);
-
-            body = world.createBody(bdef);
-            body.setUserData("COLLISION");
-
-            PolygonShape shape = new PolygonShape();
-            shape.setAsBox(rect.getWidth() / 2 / PPM, rect.getHeight() / 2 / PPM);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-
-            shape.dispose();
-
-        }
-
-        //create bodies/fixtures for MAP_PORTAL_LAYER
         for (MapObject object : portalLayer.getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
@@ -135,9 +115,26 @@ abstract class Map implements Disposable {
         }
     }
 
-    abstract public void unloadMusic();
+    private void createBodiesForCollision(BodyDef bdef, FixtureDef fdef) {
+        Body body;
+        for (MapObject object : collisionLayer.getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-    abstract public void loadMusic();
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2) / PPM, (rect.getY() + rect.getHeight() / 2) / PPM);
+
+            body = world.createBody(bdef);
+            body.setUserData("COLLISION");
+
+            PolygonShape shape = new PolygonShape();
+            shape.setAsBox(rect.getWidth() / 2 / PPM, rect.getHeight() / 2 / PPM);
+            fdef.shape = shape;
+            body.createFixture(fdef);
+
+            shape.dispose();
+
+        }
+    }
 
     TiledMap getCurrentTiledMap() {
         return currentTiledMap;
