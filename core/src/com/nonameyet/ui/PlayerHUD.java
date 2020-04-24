@@ -15,12 +15,12 @@ import com.nonameyet.screens.GameScreen;
 import com.nonameyet.ui.chest.ChestInventoryUI;
 import com.nonameyet.ui.chest.ChestWindowEvent;
 import com.nonameyet.ui.life.LifeUI;
-import com.nonameyet.ui.life.StatusListener;
+import com.nonameyet.ui.life.StatusEvent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-public class PlayerHUD implements Screen, StatusListener, PropertyChangeListener {
+public class PlayerHUD implements Screen, PropertyChangeListener {
     private static final String TAG = PlayerHUD.class.getSimpleName();
     private GameScreen screen;
 
@@ -47,8 +47,7 @@ public class PlayerHUD implements Screen, StatusListener, PropertyChangeListener
         stage.addActor(chestInventoryUI);
 
         // listeners
-        lifeUI.attachListener(this);
-
+        lifeUI.addPropertyChangeListener(this);
         screen.getMapMgr().getWorldContactListener().addPropertyChangeListener(this);
 
     }
@@ -99,41 +98,24 @@ public class PlayerHUD implements Screen, StatusListener, PropertyChangeListener
 
     @Override
     public void dispose() {
-        lifeUI.detachListener(this);
+        lifeUI.removePropertyChangeListener(this);
+        screen.getMapMgr().getWorldContactListener().removePropertyChangeListener(this);
         stage.dispose();
     }
 
-    @Override
-    public void update(StatusEvent event) {
-        switch (event) {
-            case ADD_HP:
-                Gdx.app.log(TAG, "event: ADD_HP");
-                break;
-
-            case REMOVE_HP:
-                Gdx.app.log(TAG, "event: REMOVE_HP");
-                break;
-
-            case HEAL_HP:
-                Gdx.app.log(TAG, "event: HEAL_HP");
-                break;
-
-            case UPGRADE_HP:
-                Gdx.app.log(TAG, "event: UPGRADE_HP");
-                break;
-        }
-    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         Gdx.app.debug(TAG, "GUI --> propertyChange(): " + evt.getPropertyName());
 
-        if (evt.getPropertyName().equals(ChestWindowEvent.class.getName())) {
-            chestOpenClose((ChestWindowEvent) evt.getNewValue());
+        if (evt.getPropertyName().equals(ChestWindowEvent.class.getSimpleName())) {
+            chestWindowEvent((ChestWindowEvent) evt.getNewValue());
+        } else if (evt.getPropertyName().equals(StatusEvent.class.getSimpleName())) {
+            statusEvent((StatusEvent) evt.getNewValue());
         }
     }
 
-    public void chestOpenClose(ChestWindowEvent event) {
+    public void chestWindowEvent(ChestWindowEvent event) {
 
         switch (event) {
             case CHEST_OPENED:
@@ -141,6 +123,22 @@ public class PlayerHUD implements Screen, StatusListener, PropertyChangeListener
                 break;
             case CHEST_CLOSED:
                 chestInventoryUI.setVisible(false);
+                break;
+        }
+    }
+
+    public void statusEvent(StatusEvent event) {
+        switch (event) {
+            case ADD_HP:
+                break;
+
+            case REMOVE_HP:
+                break;
+
+            case HEAL_HP:
+                break;
+
+            case UPGRADE_HP:
                 break;
         }
     }

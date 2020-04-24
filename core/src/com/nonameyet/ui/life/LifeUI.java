@@ -14,7 +14,10 @@ import com.nonameyet.assets.Assets;
 import com.nonameyet.screens.AbstractScreen;
 import com.nonameyet.utils.Constants;
 
-public class LifeUI implements Disposable, StatusSubject {
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
+public class LifeUI implements Disposable {
     private static final String TAG = LifeUI.class.getSimpleName();
 
     private static final String LIFE_FULL = "FULL";
@@ -29,12 +32,14 @@ public class LifeUI implements Disposable, StatusSubject {
     private int hpCurrentMax = 4;
 
     // events
-    private Array<StatusListener> listeners = new Array<>();
+    private PropertyChangeSupport changes;
 
     public LifeUI(Stage stage) {
         this.stage = stage;
 
         addLife();
+
+        changes = new PropertyChangeSupport(this);
     }
 
     private void addLife() {
@@ -66,31 +71,26 @@ public class LifeUI implements Disposable, StatusSubject {
         if (Gdx.input.isKeyJustPressed(Input.Keys.PLUS)) {
             if (hpVal < hpCurrentMax) {
                 hpVal += 1;
-                Gdx.app.log(TAG, " ADD_HP = _hpVal: " + hpVal);
-                notify(StatusListener.StatusEvent.ADD_HP);
+                changes.firePropertyChange(StatusEvent.class.getSimpleName(), null, StatusEvent.ADD_HP);
             }
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) {
             if (hpVal > 0) {
                 hpVal -= 1;
-                Gdx.app.log(TAG, " REMOVE_HP = _hpVal: " + hpVal);
-                notify(StatusListener.StatusEvent.REMOVE_HP);
+                changes.firePropertyChange(StatusEvent.class.getSimpleName(), null, StatusEvent.REMOVE_HP);
             }
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
             hpVal = hpCurrentMax;
-            Gdx.app.log(TAG, " HEAL_HP = _hpVal: " + hpVal);
-            notify(StatusListener.StatusEvent.HEAL_HP);
+            changes.firePropertyChange(StatusEvent.class.getSimpleName(), null, StatusEvent.HEAL_HP);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
             hpCurrentMax += 1;
             hpVal = hpCurrentMax;
-            Gdx.app.log(TAG, " UPGRADE_HP = _hpVal: " + hpVal);
-            Gdx.app.log(TAG, " UPGRADE_HP = _hpCurrentMax: " + hpCurrentMax);
-            notify(StatusListener.StatusEvent.UPGRADE_HP);
+            changes.firePropertyChange(StatusEvent.class.getSimpleName(), null, StatusEvent.UPGRADE_HP);
         }
 
     }
@@ -145,19 +145,15 @@ public class LifeUI implements Disposable, StatusSubject {
     }
 
 
-    @Override
-    public void attachListener(StatusListener listener) {
-        listeners.add(listener);
+    public void addPropertyChangeListener(
+            PropertyChangeListener p) {
+        changes.addPropertyChangeListener(p);
     }
 
-    @Override
-    public void detachListener(StatusListener listener) {
-        listeners.removeValue(listener, true);
+    public void removePropertyChangeListener(
+            PropertyChangeListener p) {
+        changes.removePropertyChangeListener(p);
     }
 
-    @Override
-    public void notify(StatusListener.StatusEvent event) {
 
-        for (StatusListener listener : listeners) listener.update(event);
-    }
 }

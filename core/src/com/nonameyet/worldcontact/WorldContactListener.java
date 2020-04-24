@@ -12,13 +12,12 @@ import java.beans.PropertyChangeSupport;
 
 public class WorldContactListener implements ContactListener {
 
-    private GameScreen screen;
     private MapManager mapMgr;
 
+    // events
     private PropertyChangeSupport changes;
 
     public WorldContactListener(GameScreen screen) {
-        this.screen = screen;
         this.mapMgr = screen.getMapMgr();
 
         changes = new PropertyChangeSupport(this);
@@ -51,10 +50,7 @@ public class WorldContactListener implements ContactListener {
 
     private void beginChestContact(Fixture fixtureA, Fixture fixtureB) {
         if (fixtureA.getBody().getUserData().equals("CHEST_COLLISION") || fixtureB.getBody().getUserData().equals("CHEST_COLLISION")) {
-            Gdx.app.debug("CHEST", "OPEN");
-            changes.firePropertyChange(ChestWindowEvent.class.getName(), null, ChestWindowEvent.CHEST_OPENED);
-//            screen.getPlayerHUD().chestOpenClose(ChestWindowEvent.CHEST_OPENED);
-
+            changes.firePropertyChange(ChestWindowEvent.class.getSimpleName(), null, ChestWindowEvent.CHEST_OPENED);
         }
     }
 
@@ -71,9 +67,7 @@ public class WorldContactListener implements ContactListener {
 
     private void beginEndContact(Fixture fixtureA, Fixture fixtureB) {
         if (fixtureA.getBody().getUserData().equals("CHEST_COLLISION") || fixtureB.getBody().getUserData().equals("CHEST_COLLISION")) {
-            Gdx.app.debug("CHEST", "CLOSE");
-            changes.firePropertyChange(ChestWindowEvent.class.getName(), null, ChestWindowEvent.CHEST_CLOSED);
-//            screen.getPlayerHUD().chestOpenClose(ChestWindowEvent.CHEST_CLOSED);
+            changes.firePropertyChange(ChestWindowEvent.class.getSimpleName(), null, ChestWindowEvent.CHEST_CLOSED);
         }
     }
 
