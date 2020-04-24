@@ -12,7 +12,7 @@ import com.nonameyet.screens.ScreenType;
 import java.util.EnumMap;
 
 public class NoNameYet extends Game {
-    private static final String TAG = NoNameYet.class.getSimpleName();
+    private final String TAG = this.getClass().getSimpleName();
 
     // fixed timestep
     private float accumulator;

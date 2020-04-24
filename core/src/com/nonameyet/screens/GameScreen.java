@@ -17,7 +17,7 @@ import static com.nonameyet.utils.Constants.FIXED_TIME_STEP;
 import static com.nonameyet.utils.Constants.PPM;
 
 public class GameScreen extends AbstractScreen {
-    private static final String TAG = GameScreen.class.getSimpleName();
+    private final String TAG = this.getClass().getSimpleName();
     private InputMultiplexer multiplexer;
 
     private OrthogonalTiledMapRenderer mapRenderer = null;
@@ -106,9 +106,11 @@ public class GameScreen extends AbstractScreen {
             mapRenderer.setMap(mapMgr.getCurrentTiledMap());
 
             player = new Player(this);
+            getMapMgr().createEntities();
         }
 
         player.update(delta);
+        getMapMgr().updateEntities(delta);
 
         fixBounds();
 

@@ -14,7 +14,6 @@ public enum GameState {
         }
     }
 
-
     public static GameState resolve(String state) {
         return state != null ? mappings.get(state) : null;
     }

@@ -3,7 +3,7 @@ package com.nonameyet.maps;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.screens.GameScreen;
 
-public class SpawnMap extends Map {
+class SpawnMap extends Map {
     private static final String TAG = SpawnMap.class.getSimpleName();
 
     public SpawnMap(GameScreen screen) {

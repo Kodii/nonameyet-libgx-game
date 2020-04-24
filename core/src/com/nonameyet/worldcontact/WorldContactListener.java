@@ -11,16 +11,15 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 public class WorldContactListener implements ContactListener {
+    private final String TAG = this.getClass().getSimpleName();
 
     private MapManager mapMgr;
 
     // events
-    private PropertyChangeSupport changes;
+    private PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
     public WorldContactListener(GameScreen screen) {
         this.mapMgr = screen.getMapMgr();
-
-        changes = new PropertyChangeSupport(this);
     }
 
     @Override

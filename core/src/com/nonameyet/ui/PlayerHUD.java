@@ -21,7 +21,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class PlayerHUD implements Screen, PropertyChangeListener {
-    private static final String TAG = PlayerHUD.class.getSimpleName();
+    private final String TAG = this.getClass().getSimpleName();
     private GameScreen screen;
 
     private Stage stage;
@@ -106,7 +106,7 @@ public class PlayerHUD implements Screen, PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        Gdx.app.debug(TAG, "GUI --> propertyChange(): " + evt.getPropertyName());
+        Gdx.app.debug(TAG, "GUI --> propertyChange(): " + evt.getPropertyName() + ", getNewValue(): " + evt.getNewValue());
 
         if (evt.getPropertyName().equals(ChestWindowEvent.class.getSimpleName())) {
             chestWindowEvent((ChestWindowEvent) evt.getNewValue());

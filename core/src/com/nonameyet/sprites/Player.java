@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.nonameyet.assets.AssetName;
@@ -15,7 +18,8 @@ import com.nonameyet.screens.GameScreen;
 import static com.nonameyet.utils.Constants.PPM;
 
 public class Player extends Sprite {
-    private static final String TAG = Player.class.getSimpleName();
+    private final String TAG = this.getClass().getSimpleName();
+    private GameScreen screen;
 
     private static final int FRAME_COLS = 4, FRAME_ROWS = 4;
 
@@ -50,6 +54,7 @@ public class Player extends Sprite {
 
     public Player(GameScreen screen) {
         super((Texture) Assets.manager.get(AssetName.PLAYER_PNG.getAssetName()));
+        this.screen = screen;
         this.world = screen.getWorld();
 
         createStand();
@@ -105,7 +110,7 @@ public class Player extends Sprite {
 
     public void update(float dt) {
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-        setRegion(getFrame(dt));
+//        setRegion(getFrame(dt));
 
     }
 
@@ -205,7 +210,8 @@ public class Player extends Sprite {
 
     private void definePlayer() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(12.52f, 5.78f);
+        bdef.position.set(playerPosition());
+
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
         b2body.setUserData("PLAYER");
@@ -218,5 +224,10 @@ public class Player extends Sprite {
         b2body.createFixture(fdef);
 
         shape.dispose();
+    }
+
+    private Vector2 playerPosition() {
+        Rectangle playerPositionPoint = screen.getMapMgr().getPlayerSpawnLayer().getObjects().getByType(RectangleMapObject.class).get(0).getRectangle();
+        return new Vector2(playerPositionPoint.getX() / PPM, playerPositionPoint.getY() / PPM);
     }
 }

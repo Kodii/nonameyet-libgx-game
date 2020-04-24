@@ -3,7 +3,7 @@ package com.nonameyet.maps;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.screens.GameScreen;
 
-public class TownMap extends Map {
+class TownMap extends Map {
     private static final String TAG = TownMap.class.getSimpleName();
 
     public TownMap(GameScreen screen) {

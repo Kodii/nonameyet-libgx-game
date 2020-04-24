@@ -18,7 +18,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 public class LifeUI implements Disposable {
-    private static final String TAG = LifeUI.class.getSimpleName();
+    private final String TAG = this.getClass().getSimpleName();
 
     private static final String LIFE_FULL = "FULL";
     private static final String LIFE_EMPTY = "EMPTY";
@@ -32,14 +32,11 @@ public class LifeUI implements Disposable {
     private int hpCurrentMax = 4;
 
     // events
-    private PropertyChangeSupport changes;
+    private PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
     public LifeUI(Stage stage) {
         this.stage = stage;
-
         addLife();
-
-        changes = new PropertyChangeSupport(this);
     }
 
     private void addLife() {
@@ -107,20 +104,20 @@ public class LifeUI implements Disposable {
 
             // add full lifes
             if (i < hpVal) {
-                positionLife(ppi_width, ppi_height, i, lifeFull, lifeFull.getPrefHeight(), LIFE_FULL);
+                lifePosition(ppi_width, ppi_height, i, lifeFull, lifeFull.getPrefHeight(), LIFE_FULL);
                 compareLifeActors(actors, lifeFull);
             }
 
             // add empty lifes
             if (i >= hpVal && i <= hpCurrentMax) {
-                positionLife(ppi_width, ppi_height, i, lifeEmpty, lifeFull.getPrefHeight(), LIFE_EMPTY);
+                lifePosition(ppi_width, ppi_height, i, lifeEmpty, lifeFull.getPrefHeight(), LIFE_EMPTY);
                 compareLifeActors(actors, lifeEmpty);
             }
         }
 
     }
 
-    private void positionLife(float ppi_width, float ppi_height, int i, Image lifeFull, float prefHeight, String lifeFull2) {
+    private void lifePosition(float ppi_width, float ppi_height, int i, Image lifeFull, float prefHeight, String lifeFull2) {
         lifeFull.setPosition((7 * ppi_width) + i * (prefHeight * ppi_width) + (i > 0 ? (i * (2 * ppi_width)) : 0),
                 AbstractScreen.VIEWPORT.physicalHeight - (prefHeight * ppi_height) - (7 * ppi_width));
         lifeFull.setName(lifeFull2 + i);

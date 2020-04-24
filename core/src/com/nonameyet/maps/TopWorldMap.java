@@ -3,7 +3,7 @@ package com.nonameyet.maps;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.screens.GameScreen;
 
-public class TopWorldMap extends Map {
+class TopWorldMap extends Map {
     private static final String TAG = TopWorldMap.class.getSimpleName();
 
     public TopWorldMap(GameScreen screen) {

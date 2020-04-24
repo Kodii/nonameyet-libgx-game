@@ -21,7 +21,10 @@ public class Assets implements Disposable {
         manager.load(AssetName.MAP_TOWN_TMX.getAssetName(), TiledMap.class);
         manager.load(AssetName.MAP_TOP_WORLD_TMX.getAssetName(), TiledMap.class);
         manager.load(AssetName.MAP_SPAWN_TMX.getAssetName(), TiledMap.class);
+
+        // sprites
         manager.load(AssetName.PLAYER_PNG.getAssetName(), Texture.class);
+        manager.load(AssetName.CHEST_PNG.getAssetName(), Texture.class);
 
         // hud
         manager.load(AssetName.CAMERA_FRAME.getAssetName(), Texture.class);

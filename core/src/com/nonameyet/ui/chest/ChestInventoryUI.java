@@ -13,7 +13,7 @@ import com.nonameyet.screens.AbstractScreen;
 import com.nonameyet.utils.Constants;
 
 public class ChestInventoryUI extends Window {
-    private static final String TAG = ChestInventoryUI.class.getSimpleName();
+    private final String TAG = this.getClass().getSimpleName();
     private static final WindowStyle windowStyle;
     private static final BitmapFont bitmapFont;
 

@@ -15,7 +15,7 @@ import com.nonameyet.screens.GameScreen;
 
 import static com.nonameyet.utils.Constants.PPM;
 
-public abstract class Map implements Disposable {
+abstract class Map implements Disposable {
     private static final String TAG = Map.class.getSimpleName();
 
     private World world;
@@ -29,14 +29,14 @@ public abstract class Map implements Disposable {
 
     // Chests layers
     //    protected final static String CHEST_CLOSE_LAYER = "CHEST_CLOSE_LAYER";
-    protected final static String CHEST_COLLISION_LAYER = "CHEST_COLLISION_LAYER";
+    protected final static String CHEST_SPAWN_LAYER = "CHEST_SPAWN_LAYER";
 
     protected MapLayer collisionLayer = null;
     protected MapLayer portalLayer = null;
     protected MapLayer playerSpawnLayer = null;
 
     //    protected MapLayer chestCloseLayer = null;
-    protected MapLayer chestCollisionLayer = null;
+    protected MapLayer chestSpawnLayer = null;
 
     protected MapFactory.MapType currentMapType;
 
@@ -60,18 +60,20 @@ public abstract class Map implements Disposable {
         if (playerSpawnLayer == null) {
             Gdx.app.debug(TAG, "No player spawn layer!");
         }
-//        chestCloseLayer = (TiledMapTileLayer) currentTiledMap.getLayers().get(CHEST_CLOSE_LAYER);
-//        if (chestCloseLayer == null) {
-//            Gdx.app.debug(TAG, "No chest close layer!");
-//        }
-
-        chestCollisionLayer = ((MapGroupLayer) currentTiledMap.getLayers().get("chest")).getLayers().get(CHEST_COLLISION_LAYER);
-        if (chestCollisionLayer == null) {
-            Gdx.app.debug(TAG, "No chest collision layer!");
-        }
 
         create();
-        createChest();
+
+        MapGroupLayer chestGroup = (MapGroupLayer) currentTiledMap.getLayers().get("chest");
+        if (chestGroup != null) {
+
+            chestSpawnLayer = chestGroup.getLayers().get(CHEST_SPAWN_LAYER);
+            if (chestSpawnLayer == null) {
+                Gdx.app.debug(TAG, "No chest spawn layer!");
+            }
+        } else {
+            Gdx.app.debug(TAG, "No chest group, skip!");
+        }
+
     }
 
     private void create() {
@@ -121,31 +123,31 @@ public abstract class Map implements Disposable {
         }
     }
 
-    private void createChest() {
-
-        //create body and fixture variables
-        BodyDef bdef = new BodyDef();
-        FixtureDef fdef = new FixtureDef();
-        Body body;
-
-        //        create bodies/fixtures for CHEST_COLLISION_LAYER
-        for (MapObject object : chestCollisionLayer.getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / PPM, (rect.getY() + rect.getHeight() / 2) / PPM);
-
-            body = world.createBody(bdef);
-            body.setUserData("CHEST_COLLISION");
-
-            PolygonShape shape = new PolygonShape();
-            shape.setAsBox(rect.getWidth() / 2 / PPM, rect.getHeight() / 2 / PPM);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-
-            shape.dispose();
-        }
-    }
+//    private void createChest() {
+//
+//        //create body and fixture variables
+//        BodyDef bdef = new BodyDef();
+//        FixtureDef fdef = new FixtureDef();
+//        Body body;
+//
+//        //        create bodies/fixtures for CHEST_COLLISION_LAYER
+//        for (MapObject object : chestCollisionLayer.getObjects().getByType(RectangleMapObject.class)) {
+//            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+//
+//            bdef.type = BodyDef.BodyType.StaticBody;
+//            bdef.position.set((rect.getX() + rect.getWidth() / 2) / PPM, (rect.getY() + rect.getHeight() / 2) / PPM);
+//
+//            body = world.createBody(bdef);
+//            body.setUserData("CHEST_COLLISION");
+//
+//            PolygonShape shape = new PolygonShape();
+//            shape.setAsBox(rect.getWidth() / 2 / PPM, rect.getHeight() / 2 / PPM);
+//            fdef.shape = shape;
+//            body.createFixture(fdef);
+//
+//            shape.dispose();
+//        }
+//    }
 
     abstract public void unloadMusic();
 

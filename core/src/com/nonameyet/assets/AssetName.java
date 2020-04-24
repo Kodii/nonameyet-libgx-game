@@ -9,7 +9,10 @@ public enum AssetName {
     MAP_TOWN_TMX("from_web/maps/town.tmx"),
     MAP_TOP_WORLD_TMX("from_web/maps/topworld.tmx"),
     MAP_SPAWN_TMX("maps/spawn/spawn.tmx"),
+
+    // sprites
     PLAYER_PNG("from_web/sprites/characters/Rogue.png"),
+    CHEST_PNG("sprites/items/chests/chest_grass.png"),
 
     // hud
     CAMERA_FRAME("sprites/hud/camera_frame/camera_frame.png"),
