@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
 import com.nonameyet.screens.GameScreen;
+import com.nonameyet.utils.Collision;
 
 import static com.nonameyet.utils.Constants.PPM;
 
@@ -129,6 +130,9 @@ abstract class Map implements Disposable {
             PolygonShape shape = new PolygonShape();
             shape.setAsBox(rect.getWidth() / 2 / PPM, rect.getHeight() / 2 / PPM);
             fdef.shape = shape;
+
+            fdef.filter.categoryBits = Collision.OBSTACLE;
+
             body.createFixture(fdef);
 
             shape.dispose();

@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
 import com.nonameyet.screens.GameScreen;
+import com.nonameyet.utils.Collision;
 
 import static com.nonameyet.utils.Constants.PPM;
 
@@ -219,6 +220,8 @@ public class Player extends Sprite {
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(6 / PPM, 8 / PPM);
+
+        fdef.filter.categoryBits = Collision.PLAYER;
 
         fdef.shape = shape;
         b2body.createFixture(fdef);

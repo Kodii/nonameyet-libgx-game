@@ -2,6 +2,7 @@ package com.nonameyet.screens;
 
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -36,6 +37,8 @@ public class GameScreen extends AbstractScreen {
 
     private PlayerHUD playerHUD;
 
+    public float testFloatAmbient = 1f;
+
     public GameScreen(NoNameYet game) {
         super(game);
         mapMgr = new MapManager(this);
@@ -55,9 +58,6 @@ public class GameScreen extends AbstractScreen {
 
         //allows for debug lines of our box2d _world.
         _b2dr = new Box2DDebugRenderer();
-
-        rayHandler = new RayHandler(world);
-        rayHandler.setAmbientLight(.7f);
     }
 
     private void createCameras() {
@@ -92,15 +92,18 @@ public class GameScreen extends AbstractScreen {
         mapRenderer.render();
 
         //_mapRenderer our Box2DDebugLines
-        _b2dr.render(world, camera.combined);
+//        _b2dr.render(world, camera.combined);
         batchRender(delta);
 
         rayHandler.render();
+
+        playerHUD.render(delta);
     }
 
     private void update(float delta) {
         // handle user input first
         mapMgr.getPlayer().input();
+        testInputLights();
 
         //takes 1 step in the physics simulation(60 times per second)
         world.step(FIXED_TIME_STEP, 6, 2);
@@ -120,6 +123,21 @@ public class GameScreen extends AbstractScreen {
 
         //tell our _mapRenderer to draw only what our _camera can see in our game _world.
         mapRenderer.setView(camera);
+
+        mapRenderer.getBatch().setProjectionMatrix(camera.combined);
+        rayHandler.setCombinedMatrix(camera);
+    }
+
+    private void testInputLights() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) {
+
+            testFloatAmbient -= .1f;
+            rayHandler.setAmbientLight(testFloatAmbient);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) {
+            testFloatAmbient += .1f;
+            rayHandler.setAmbientLight(testFloatAmbient);
+        }
     }
 
     private void clearGameScreen() {
@@ -132,14 +150,13 @@ public class GameScreen extends AbstractScreen {
     }
 
     private void batchRender(float delta) {
-        mapRenderer.getBatch().setProjectionMatrix(camera.combined);
         mapRenderer.getBatch().begin();
+
         Gdx.graphics.setTitle("NoNameYet | fps: " + Gdx.graphics.getFramesPerSecond());
         mapMgr.drawEntities(mapRenderer.getBatch());
         mapMgr.getPlayer().draw(mapRenderer.getBatch());
-        mapRenderer.getBatch().end();
 
-        playerHUD.render(delta);
+        mapRenderer.getBatch().end();
     }
 
     @Override
@@ -180,5 +197,17 @@ public class GameScreen extends AbstractScreen {
 
     public OrthographicCamera getCamera() {
         return camera;
+    }
+
+    public RayHandler getRayHandler() {
+        return rayHandler;
+    }
+
+    public void setRayHandler(RayHandler rayHandler) {
+        this.rayHandler = rayHandler;
+    }
+
+    public PlayerHUD getPlayerHUD() {
+        return playerHUD;
     }
 }

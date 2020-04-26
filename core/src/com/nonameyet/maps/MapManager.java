@@ -1,7 +1,7 @@
 package com.nonameyet.maps;
 
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -11,20 +11,22 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.audio.AudioManager;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.sprites.Chest;
-import com.nonameyet.sprites.LightsEvent;
 import com.nonameyet.sprites.Player;
 import com.nonameyet.sprites.Torch;
+import com.nonameyet.ui.clock.DayTimeEvent;
 import com.nonameyet.worldcontact.WorldContactListener;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 import static com.nonameyet.utils.Constants.PPM;
 
-public class MapManager {
+public class MapManager implements Disposable, PropertyChangeListener {
     private final String TAG = this.getClass().getSimpleName();
     private final GameScreen screen;
 
@@ -52,6 +54,10 @@ public class MapManager {
         if (screen.getWorld() != null)
             screen.getWorld().dispose();
         screen.setWorld(new World(new Vector2(0, 0), true));
+
+        screen.setRayHandler(new RayHandler(screen.getWorld()));
+        screen.getRayHandler().setAmbientLight(1.0f);
+        screen.getRayHandler().useDiffuseLight(true);
 
         Map map = MapFactory.getMap(screen, mapType);
 
@@ -83,13 +89,9 @@ public class MapManager {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             torches.add(new Torch(screen, new Vector2(rect.getX() / PPM, rect.getY() / PPM)));
         }
-
-        changes.firePropertyChange(LightsEvent.class.getSimpleName(), null, LightsEvent.OFF);
     }
 
     public void updateEntities(float dt) {
-        inputTestToRemove();
-
         chest.update(dt);
 
         for (Torch torch : torches) {
@@ -105,13 +107,31 @@ public class MapManager {
         }
     }
 
-    public void inputTestToRemove() {
-        if (Gdx.input.isKeyPressed(Input.Keys.NUM_3)) {
-            changes.firePropertyChange(LightsEvent.class.getSimpleName(), null, LightsEvent.ON);
-        }
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        Gdx.app.debug(TAG, "MapManager --> propertyChange(): " + evt.getPropertyName() + ", getNewValue(): " + evt.getNewValue());
 
-        if (Gdx.input.isKeyPressed(Input.Keys.NUM_4)) {
-            changes.firePropertyChange(LightsEvent.class.getSimpleName(), null, LightsEvent.OFF);
+        if (evt.getPropertyName().equals(DayTimeEvent.class.getSimpleName()))
+            changeDayState((DayTimeEvent) evt.getNewValue());
+
+    }
+
+    private void changeDayState(DayTimeEvent event) {
+
+        switch (event) {
+
+            case DAWN:
+                screen.getRayHandler().setAmbientLight(1, 0.92f, 0.61f, 1f);
+                break;
+            case AFTERNOON:
+                screen.getRayHandler().setAmbientLight(1f, 1f, 1f, 1f);
+                break;
+            case DUSK:
+                screen.getRayHandler().setAmbientLight(0.7f, 0.5f, 0.7f, 1f);
+                break;
+            case NIGHT:
+                screen.getRayHandler().setAmbientLight(0.3f, 0.3f, 0.7f, 1f);
+                break;
         }
     }
 
@@ -166,5 +186,14 @@ public class MapManager {
 
     public Player getPlayer() {
         return player;
+    }
+
+    @Override
+    public void dispose() {
+        removePropertyChangeListener(AudioManager.getInstance());
+    }
+
+    public Array<Torch> getTorches() {
+        return torches;
     }
 }

@@ -1,0 +1,138 @@
+package com.nonameyet.ui.clock;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Disposable;
+import com.nonameyet.assets.AssetName;
+import com.nonameyet.audio.AudioManager;
+import com.nonameyet.screens.GameScreen;
+import com.nonameyet.sprites.Torch;
+
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
+public class ClockUI extends Label implements Disposable {
+    private final String TAG = this.getClass().getSimpleName();
+
+    static Label.LabelStyle labelStyle;
+
+    static {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(AssetName.PIXEL_FONT.getAssetName()));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 23;
+        BitmapFont bitmapFont = generator.generateFont(parameter);
+
+        generator.dispose(); // don't forget to dispose to avoid memory leaks!
+
+        labelStyle = new Label.LabelStyle();
+        labelStyle.font = bitmapFont;
+        labelStyle.fontColor = Color.WHITE;
+    }
+
+    private static final String FORMAT = "%02d:%02d %s";
+    private float totalTime = 0;
+    private float rateOfTime = 1;
+
+    DayTimeEvent previousStateOfDay = null;
+    DayTimeEvent currentStateOfDay = null;
+
+    // events
+    private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
+
+    public ClockUI(GameScreen screen, CharSequence text) {
+        super(text, labelStyle);
+        init();
+
+        addPropertyChangeListener(AudioManager.getInstance());
+        addPropertyChangeListener(screen.getMapMgr());
+        for (Torch torch : screen.getMapMgr().getTorches()) {
+            addPropertyChangeListener(torch);
+        }
+    }
+
+    private void init() {
+        String time = String.format(FORMAT, 0, 0, currentStateOfDay);
+        this.setText(time);
+        this.pack();
+    }
+
+    public void getCurrentStateOfDay(int hours) {
+        if (hours >= 5 && hours < 8) {
+            previousStateOfDay = currentStateOfDay;
+            currentStateOfDay = DayTimeEvent.DAWN;
+            if (currentStateOfDay != previousStateOfDay) {
+                changes.firePropertyChange(DayTimeEvent.class.getSimpleName(), null, currentStateOfDay);
+            }
+        } else if (hours >= 8 && hours < 18) {
+            previousStateOfDay = currentStateOfDay;
+            currentStateOfDay = DayTimeEvent.AFTERNOON;
+            if (currentStateOfDay != previousStateOfDay) {
+                changes.firePropertyChange(DayTimeEvent.class.getSimpleName(), null, currentStateOfDay);
+            }
+        } else if (hours >= 18 && hours < 23) {
+            previousStateOfDay = currentStateOfDay;
+            currentStateOfDay = DayTimeEvent.DUSK;
+            if (currentStateOfDay != previousStateOfDay) {
+                changes.firePropertyChange(DayTimeEvent.class.getSimpleName(), null, currentStateOfDay);
+            }
+        } else {
+            previousStateOfDay = currentStateOfDay;
+            currentStateOfDay = DayTimeEvent.NIGHT;
+            if (currentStateOfDay != previousStateOfDay) {
+                changes.firePropertyChange(DayTimeEvent.class.getSimpleName(), null, currentStateOfDay);
+            }
+        }
+    }
+
+    @Override
+    public void act(float delta) {
+        totalTime += (delta * rateOfTime);
+
+        int minutes = getCurrentTimeMinutes();
+        int hours = getCurrentTimeHours();
+
+        getCurrentStateOfDay(hours);
+
+        String time = String.format(FORMAT, hours, minutes, currentStateOfDay);
+        this.setText(time);
+    }
+
+    public int getCurrentTimeMinutes() {
+        return MathUtils.floor((totalTime / 60) % 60);
+    }
+
+    public int getCurrentTimeHours() {
+        return MathUtils.floor((totalTime / 3600) % 24);
+    }
+
+    public void setRateOfTime(float rateOfTime) {
+        this.rateOfTime = rateOfTime;
+    }
+
+    public float getTotalTime() {
+        return totalTime;
+    }
+
+    public void setTotalTime(float totalTime) {
+        this.totalTime = totalTime;
+    }
+
+    public void addPropertyChangeListener(
+            PropertyChangeListener p) {
+        changes.addPropertyChangeListener(p);
+    }
+
+    public void removePropertyChangeListener(
+            PropertyChangeListener p) {
+        changes.removePropertyChangeListener(p);
+    }
+
+    @Override
+    public void dispose() {
+        removePropertyChangeListener(AudioManager.getInstance());
+    }
+}

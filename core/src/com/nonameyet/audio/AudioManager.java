@@ -6,8 +6,8 @@ import com.badlogic.gdx.audio.Sound;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
 import com.nonameyet.preferences.Preferences;
-import com.nonameyet.sprites.LightsEvent;
 import com.nonameyet.ui.chest.ChestWindowEvent;
+import com.nonameyet.ui.clock.DayTimeEvent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -33,8 +33,8 @@ public class AudioManager implements PropertyChangeListener {
 
         if (evt.getPropertyName().equals(ChestWindowEvent.class.getSimpleName())) {
             chestWindowEvent((ChestWindowEvent) evt.getNewValue());
-        } else if (evt.getPropertyName().equals(LightsEvent.class.getSimpleName())) {
-            lightsEvent((LightsEvent) evt.getNewValue());
+        } else if (evt.getPropertyName().equals(DayTimeEvent.class.getSimpleName())) {
+            lightsEvent((DayTimeEvent) evt.getNewValue());
         }
     }
 
@@ -50,15 +50,17 @@ public class AudioManager implements PropertyChangeListener {
         }
     }
 
-    private void lightsEvent(LightsEvent event) {
+    private void lightsEvent(DayTimeEvent event) {
 
         switch (event) {
-            case ON:
+            case DUSK:
+            case NIGHT:
                 if (music != null)
                     music.stop();
                 music = playMusic(true, (Music) Assets.manager.get(AssetName.TOWN_NIGHT_MUSIC.getAssetName()));
                 break;
-            case OFF:
+            case DAWN:
+            case AFTERNOON:
                 if (music != null)
                     music.stop();
                 music = playMusic(true, (Music) Assets.manager.get(AssetName.TOWN_DAY_MUSIC.getAssetName()));

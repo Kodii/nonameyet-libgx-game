@@ -11,9 +11,11 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
+import com.nonameyet.preferences.PlayerPref;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.ui.chest.ChestInventoryUI;
 import com.nonameyet.ui.chest.ChestWindowEvent;
+import com.nonameyet.ui.clock.ClockUI;
 import com.nonameyet.ui.life.LifeUI;
 import com.nonameyet.ui.life.StatusEvent;
 
@@ -22,7 +24,7 @@ import java.beans.PropertyChangeListener;
 
 public class PlayerHUD implements Screen, PropertyChangeListener {
     private final String TAG = this.getClass().getSimpleName();
-    private GameScreen screen;
+    private final GameScreen screen;
 
     private Stage stage;
     private Viewport viewport;
@@ -30,6 +32,8 @@ public class PlayerHUD implements Screen, PropertyChangeListener {
 
     private LifeUI lifeUI;
     private ChestInventoryUI chestInventoryUI;
+
+    private ClockUI clockUI;
 
     public PlayerHUD(Camera camera, GameScreen screen) {
         this.camera = camera;
@@ -50,6 +54,13 @@ public class PlayerHUD implements Screen, PropertyChangeListener {
         lifeUI.addPropertyChangeListener(this);
         screen.getMapMgr().getWorldContactListener().addPropertyChangeListener(this);
 
+        clockUI = new ClockUI(screen, "0");
+        clockUI.setPosition(stage.getWidth() - clockUI.getWidth() - 15, stage.getHeight() - clockUI.getHeight() - 15);
+        clockUI.setRateOfTime(60);
+        clockUI.setVisible(true);
+        clockUI.setTotalTime(PlayerPref.getCurrentTime());
+
+        stage.addActor(clockUI);
     }
 
     private void cameraFrame() {
@@ -84,7 +95,8 @@ public class PlayerHUD implements Screen, PropertyChangeListener {
 
     @Override
     public void pause() {
-
+//        Gdx.app.debug(TAG, "currentTime: " + clockUI.getTotalTime());
+//        PlayerPref.setCurrentTime(clockUI.getTotalTime());
     }
 
     @Override
@@ -102,7 +114,6 @@ public class PlayerHUD implements Screen, PropertyChangeListener {
         screen.getMapMgr().getWorldContactListener().removePropertyChangeListener(this);
         stage.dispose();
     }
-
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -145,5 +156,9 @@ public class PlayerHUD implements Screen, PropertyChangeListener {
 
     public Stage getStage() {
         return stage;
+    }
+
+    public ClockUI getClockUI() {
+        return clockUI;
     }
 }
