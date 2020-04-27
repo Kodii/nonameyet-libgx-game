@@ -52,7 +52,7 @@ public class PlayerHUD implements Screen, PropertyChangeListener {
 
         // listeners
         lifeUI.addPropertyChangeListener(this);
-        screen.getMapMgr().getWorldContactListener().addPropertyChangeListener(this);
+        screen.getMapMgr().getB2dContactListener().addPropertyChangeListener(this);
 
         clockUI = new ClockUI(screen, "0");
         clockUI.setPosition(stage.getWidth() - clockUI.getWidth() - 15, stage.getHeight() - clockUI.getHeight() - 15);
@@ -111,7 +111,7 @@ public class PlayerHUD implements Screen, PropertyChangeListener {
     @Override
     public void dispose() {
         lifeUI.removePropertyChangeListener(this);
-        screen.getMapMgr().getWorldContactListener().removePropertyChangeListener(this);
+        screen.getMapMgr().getB2dContactListener().removePropertyChangeListener(this);
         stage.dispose();
     }
 

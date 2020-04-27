@@ -68,7 +68,7 @@ public class Chest extends Sprite implements Disposable, PropertyChangeListener 
                 Collision.OBJECT);
 
         // listeners
-        screen.getMapMgr().getWorldContactListener().addPropertyChangeListener(this);
+        screen.getMapMgr().getB2dContactListener().addPropertyChangeListener(this);
 
         Gdx.app.debug(TAG, "Chest was created");
     }
@@ -148,7 +148,7 @@ public class Chest extends Sprite implements Disposable, PropertyChangeListener 
 
     @Override
     public void dispose() {
-        screen.getMapMgr().getWorldContactListener().removePropertyChangeListener(this);
+        screen.getMapMgr().getB2dContactListener().removePropertyChangeListener(this);
     }
 
 }

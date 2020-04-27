@@ -1,4 +1,4 @@
-package com.nonameyet.worldcontact;
+package com.nonameyet.b2d;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
@@ -12,7 +12,7 @@ import com.nonameyet.ui.chest.ChestWindowEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public class WorldContactListener implements Disposable, ContactListener {
+public class B2dContactListener implements Disposable, ContactListener {
     private final String TAG = this.getClass().getSimpleName();
 
     private final MapManager mapMgr;
@@ -20,7 +20,7 @@ public class WorldContactListener implements Disposable, ContactListener {
     // events
     private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
-    public WorldContactListener(GameScreen screen) {
+    public B2dContactListener(GameScreen screen) {
         this.mapMgr = screen.getMapMgr();
 
         addPropertyChangeListener(AudioManager.getInstance());
@@ -31,8 +31,7 @@ public class WorldContactListener implements Disposable, ContactListener {
         final Fixture fixtureA = contact.getFixtureA();
         final Fixture fixtureB = contact.getFixtureB();
 
-        Gdx.app.debug("CONTACT", "BEGIN: " + fixtureA.getBody().getUserData() + " " + fixtureA.isSensor());
-        Gdx.app.debug("CONTACT", "BEGIN: " + fixtureB.getBody().getUserData() + " " + fixtureB.isSensor());
+        Gdx.app.debug("CONTACT", "BEGIN: " + fixtureA.getBody().getUserData() + " & " + fixtureB.getBody().getUserData());
 
         beginPortalContact(fixtureA, fixtureB);
         beginChestContact(fixtureA, fixtureB);
@@ -41,7 +40,6 @@ public class WorldContactListener implements Disposable, ContactListener {
 
     private void beginPortalContact(Fixture fixtureA, Fixture fixtureB) {
         if (fixtureA.getBody().getUserData().equals("PORTAL") || fixtureB.getBody().getUserData().equals("PORTAL")) {
-            Gdx.app.debug("TRIGGER", "BEGIN: " + fixtureA.getBody().getUserData() + " " + fixtureA.isSensor());
 
             if (mapMgr.getCurrentMapType() == MapFactory.MapType.TOWN)
                 mapMgr.setCurrentMapType(MapFactory.MapType.TOP_WORLD);
@@ -62,8 +60,7 @@ public class WorldContactListener implements Disposable, ContactListener {
         final Fixture fixtureA = contact.getFixtureA();
         final Fixture fixtureB = contact.getFixtureB();
 
-        Gdx.app.debug("CONTACT", "END: " + fixtureA.getBody().getUserData() + " " + fixtureA.isSensor());
-        Gdx.app.debug("CONTACT", "END: " + fixtureB.getBody().getUserData() + " " + fixtureB.isSensor());
+        Gdx.app.debug("CONTACT", "END: " + fixtureA.getBody().getUserData() + " & " + fixtureB.getBody().getUserData());
 
         endChestContact(fixtureA, fixtureB);
     }

@@ -18,7 +18,7 @@ import com.nonameyet.sprites.Chest;
 import com.nonameyet.sprites.Player;
 import com.nonameyet.sprites.Torch;
 import com.nonameyet.ui.clock.DayTimeEvent;
-import com.nonameyet.worldcontact.WorldContactListener;
+import com.nonameyet.b2d.B2dContactListener;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -34,7 +34,7 @@ public class MapManager implements Disposable, PropertyChangeListener {
     private MapFactory.MapType currentMapType;
     private boolean mapChanged = false;
 
-    private WorldContactListener worldContactListener;
+    private B2dContactListener b2dContactListener;
 
     private Player player;
     private Chest chest;
@@ -69,8 +69,8 @@ public class MapManager implements Disposable, PropertyChangeListener {
         currentMapType = mapType;
         currentMap = map;
 
-        worldContactListener = new WorldContactListener(screen);
-        screen.getWorld().setContactListener(worldContactListener);
+        b2dContactListener = new B2dContactListener(screen);
+        screen.getWorld().setContactListener(b2dContactListener);
 
         createPlayer();
         createEntities();
@@ -135,8 +135,8 @@ public class MapManager implements Disposable, PropertyChangeListener {
         }
     }
 
-    public WorldContactListener getWorldContactListener() {
-        return worldContactListener;
+    public B2dContactListener getB2dContactListener() {
+        return b2dContactListener;
     }
 
     public void addPropertyChangeListener(
