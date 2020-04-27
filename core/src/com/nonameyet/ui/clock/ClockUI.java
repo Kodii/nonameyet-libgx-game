@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.audio.AudioManager;
+import com.nonameyet.preferences.PlayerPref;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.sprites.Torch;
 
@@ -96,6 +97,8 @@ public class ClockUI extends Label implements Disposable {
         int hours = getCurrentTimeHours();
 
         getCurrentStateOfDay(hours);
+
+        PlayerPref.setCurrentTime(totalTime);
 
         String time = String.format(FORMAT, hours, minutes);
         this.setText(time);

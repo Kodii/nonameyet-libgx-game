@@ -56,7 +56,7 @@ public class PlayerHUD implements Screen, PropertyChangeListener {
 
         clockUI = new ClockUI(screen, "0");
         clockUI.setPosition(stage.getWidth() - clockUI.getWidth() - 15, stage.getHeight() - clockUI.getHeight() - 15);
-        clockUI.setRateOfTime(60);
+        clockUI.setRateOfTime(PlayerPref.getTimeSpeed());
         clockUI.setVisible(true);
         clockUI.setTotalTime(PlayerPref.getCurrentTime());
 
