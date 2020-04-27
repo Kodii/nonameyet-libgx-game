@@ -33,7 +33,7 @@ public class ClockUI extends Label implements Disposable {
         labelStyle.fontColor = Color.WHITE;
     }
 
-    private static final String FORMAT = "%02d:%02d %s";
+    private static final String FORMAT = "%02d:%02d";
     private float totalTime = 0;
     private float rateOfTime = 1;
 
@@ -97,7 +97,7 @@ public class ClockUI extends Label implements Disposable {
 
         getCurrentStateOfDay(hours);
 
-        String time = String.format(FORMAT, hours, minutes, currentStateOfDay);
+        String time = String.format(FORMAT, hours, minutes);
         this.setText(time);
     }
 

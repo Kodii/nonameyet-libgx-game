@@ -7,10 +7,12 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
+import com.nonameyet.b2d.BodyBuilder;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.utils.Collision;
 
@@ -86,57 +88,33 @@ abstract class Map implements Disposable {
     }
 
     private void create() {
-        BodyDef bdef = new BodyDef();
-        FixtureDef fdef = new FixtureDef();
-
-        createBodiesForCollision(bdef, fdef);
-
-        createBodiesForPortal(bdef, fdef);
+        createBodiesForCollision();
+        createBodiesForPortal();
     }
 
-    private void createBodiesForPortal(BodyDef bdef, FixtureDef fdef) {
-        Body body;
+    private void createBodiesForPortal() {
         for (MapObject object : portalLayer.getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / PPM, (rect.getY() + rect.getHeight() / 2) / PPM);
-
-            body = world.createBody(bdef);
-            body.setUserData("PORTAL");
-
-            fdef.isSensor = true;
-
-            PolygonShape shape = new PolygonShape();
-            shape.setAsBox(rect.getWidth() / 2 / PPM, rect.getHeight() / 2 / PPM);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-
-            shape.dispose();
+            BodyBuilder.staticRectangleBody(
+                    world,
+                    new Vector2((rect.getX() + rect.getWidth() / 2) / PPM, (rect.getY() + rect.getHeight() / 2) / PPM),
+                    new Vector2(rect.getWidth(), rect.getHeight()),
+                    "PORTAL",
+                    Collision.OBSTACLE);
         }
     }
 
-    private void createBodiesForCollision(BodyDef bdef, FixtureDef fdef) {
-        Body body;
+    private void createBodiesForCollision() {
         for (MapObject object : collisionLayer.getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            bdef.type = BodyDef.BodyType.StaticBody;
-            bdef.position.set((rect.getX() + rect.getWidth() / 2) / PPM, (rect.getY() + rect.getHeight() / 2) / PPM);
-
-            body = world.createBody(bdef);
-            body.setUserData("COLLISION");
-
-            PolygonShape shape = new PolygonShape();
-            shape.setAsBox(rect.getWidth() / 2 / PPM, rect.getHeight() / 2 / PPM);
-            fdef.shape = shape;
-
-            fdef.filter.categoryBits = Collision.OBSTACLE;
-
-            body.createFixture(fdef);
-
-            shape.dispose();
-
+            BodyBuilder.staticRectangleBody(
+                    world,
+                    new Vector2((rect.getX() + rect.getWidth() / 2) / PPM, (rect.getY() + rect.getHeight() / 2) / PPM),
+                    new Vector2(rect.getWidth(), rect.getHeight()),
+                    "COLLISION",
+                    Collision.OBSTACLE);
         }
     }
 

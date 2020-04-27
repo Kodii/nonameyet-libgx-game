@@ -1,4 +1,4 @@
-package com.nonameyet.lights;
+package com.nonameyet.b2d;
 
 import box2dLight.ConeLight;
 import box2dLight.PointLight;

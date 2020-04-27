@@ -9,10 +9,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
+import com.nonameyet.b2d.BodyBuilder;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.utils.Collision;
 
@@ -20,7 +21,7 @@ import static com.nonameyet.utils.Constants.PPM;
 
 public class Player extends Sprite {
     private final String TAG = this.getClass().getSimpleName();
-    private GameScreen screen;
+    private final GameScreen screen;
 
     private static final int FRAME_COLS = 4, FRAME_ROWS = 4;
 
@@ -38,7 +39,6 @@ public class Player extends Sprite {
     private State currentState = State.STANDING_DOWN;
     private State previousState = State.STANDING_DOWN;
 
-    private World world;
     public Body b2body;
 
     private TextureRegion standUp;
@@ -56,12 +56,18 @@ public class Player extends Sprite {
     public Player(GameScreen screen) {
         super((Texture) Assets.manager.get(AssetName.PLAYER_PNG.getAssetName()));
         this.screen = screen;
-        this.world = screen.getWorld();
 
         createStand();
         createRunAnimation();
 
-        definePlayer();
+        b2body = BodyBuilder.dynamicRectangleBody(
+                screen.getWorld(),
+                playerPosition(),
+                new Vector2(standDown.getRegionWidth(), standDown.getRegionHeight()),
+                "PLAYER",
+                Collision.PLAYER);
+
+
         setBounds(0, 0, 16 / PPM, 16 / PPM);
         setRegion(standDown);
 
@@ -207,26 +213,6 @@ public class Player extends Sprite {
             return previousState;
         else
             return State.STANDING_DOWN;
-    }
-
-    private void definePlayer() {
-        BodyDef bdef = new BodyDef();
-        bdef.position.set(playerPosition());
-
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
-        b2body.setUserData("PLAYER");
-
-        FixtureDef fdef = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(6 / PPM, 8 / PPM);
-
-        fdef.filter.categoryBits = Collision.PLAYER;
-
-        fdef.shape = shape;
-        b2body.createFixture(fdef);
-
-        shape.dispose();
     }
 
     private Vector2 playerPosition() {

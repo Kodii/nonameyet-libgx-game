@@ -8,12 +8,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
-import com.nonameyet.lights.LightBuilder;
+import com.nonameyet.b2d.BodyBuilder;
+import com.nonameyet.b2d.LightBuilder;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.ui.clock.DayTimeEvent;
 import com.nonameyet.utils.Collision;
@@ -23,9 +23,8 @@ import java.beans.PropertyChangeListener;
 
 import static com.nonameyet.utils.Constants.PPM;
 
-public class Torch extends Sprite implements Disposable, PropertyChangeListener {
+public class Torch extends Sprite implements PropertyChangeListener {
     private final String TAG = this.getClass().getSimpleName();
-    private GameScreen screen;
 
     public enum State {
         TORCH_ON,
@@ -35,11 +34,9 @@ public class Torch extends Sprite implements Disposable, PropertyChangeListener 
     private State currentState = State.TORCH_OFF;
     private State previousState = State.TORCH_OFF;
 
-    private World world;
-    public Body b2body;
-    Vector2 position;
+    Body b2body;
 
-    private TextureRegion torchOff;
+    private final TextureRegion torchOff;
     private Animation<TextureRegion> torchOn;
     private float stateTime = 0;
 
@@ -51,15 +48,18 @@ public class Torch extends Sprite implements Disposable, PropertyChangeListener 
 
     public Torch(GameScreen screen, Vector2 position) {
         super(textureAtlas.findRegion("torch"));
-        this.screen = screen;
-        this.world = screen.getWorld();
-        this.position = position;
 
         torchOff = new TextureRegion(getTexture(), 0, 0, 6, 15);
         setBounds(0, 0, 6 / PPM, 15 / PPM);
         setRegion(torchOff);
         createAnimation();
-        defineTorch();
+
+        b2body = BodyBuilder.staticPointBody(
+                screen.getWorld(),
+                new Vector2(position.x, position.y),
+                new Vector2(torchOff.getRegionWidth(), torchOff.getRegionHeight()),
+                "TORCH",
+                Collision.LIGHT);
 
         createLight(screen);
 
@@ -147,34 +147,4 @@ public class Torch extends Sprite implements Disposable, PropertyChangeListener 
 
         return region;
     }
-
-    private void defineTorch() {
-        float x = torchOff.getRegionWidth() / PPM;
-        float y = torchOff.getRegionHeight() / PPM;
-
-        BodyDef bdef = new BodyDef();
-        bdef.position.set(position.x, position.y + (y / 2));
-
-        bdef.type = BodyDef.BodyType.StaticBody;
-        b2body = world.createBody(bdef);
-        b2body.setUserData("TORCH");
-
-        FixtureDef fdef = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(x / 2, y / 2);
-
-        fdef.filter.categoryBits = Collision.LIGHT;
-
-        fdef.shape = shape;
-        b2body.createFixture(fdef);
-
-
-        shape.dispose();
-    }
-
-
-    @Override
-    public void dispose() {
-    }
-
 }

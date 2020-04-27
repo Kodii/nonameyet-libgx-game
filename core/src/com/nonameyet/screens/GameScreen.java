@@ -92,7 +92,7 @@ public class GameScreen extends AbstractScreen {
         mapRenderer.render();
 
         //_mapRenderer our Box2DDebugLines
-//        _b2dr.render(world, camera.combined);
+        _b2dr.render(world, camera.combined);
         batchRender(delta);
 
         rayHandler.render();

@@ -9,12 +9,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
+import com.nonameyet.b2d.BodyBuilder;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.ui.chest.ChestWindowEvent;
+import com.nonameyet.utils.Collision;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -56,7 +59,13 @@ public class Chest extends Sprite implements Disposable, PropertyChangeListener 
         setBounds(0, 0, 19 / PPM, 16 / PPM);
         setRegion(openIdle);
         createAnimation();
-        defineChest();
+
+        b2body = BodyBuilder.staticPointBody(
+                world,
+                chestPosition(),
+                new Vector2(closeIdle.getRegionWidth(), closeIdle.getRegionHeight()),
+                "CHEST",
+                Collision.OBJECT);
 
         // listeners
         screen.getMapMgr().getWorldContactListener().addPropertyChangeListener(this);
@@ -130,27 +139,6 @@ public class Chest extends Sprite implements Disposable, PropertyChangeListener 
         }
 
         return region;
-    }
-
-    private void defineChest() {
-        float x = closeIdle.getRegionWidth() / PPM;
-        float y = closeIdle.getRegionHeight() / PPM;
-
-        BodyDef bdef = new BodyDef();
-        bdef.position.set(chestPosition().x, chestPosition().y);
-
-        bdef.type = BodyDef.BodyType.StaticBody;
-        b2body = world.createBody(bdef);
-        b2body.setUserData("CHEST");
-
-        FixtureDef fdef = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(x / 2, y / 2);
-
-        fdef.shape = shape;
-        b2body.createFixture(fdef);
-
-        shape.dispose();
     }
 
     private Vector2 chestPosition() {
