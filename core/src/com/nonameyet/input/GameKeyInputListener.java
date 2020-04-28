@@ -1,6 +1,6 @@
 package com.nonameyet.input;
 
-public interface InputListener {
+public interface GameKeyInputListener {
 
     void keyPressed(final InputManager inputManager, final GameKeys key);
 

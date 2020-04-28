@@ -14,14 +14,14 @@ import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
 import com.nonameyet.b2d.BodyBuilder;
 import com.nonameyet.input.GameKeys;
-import com.nonameyet.input.InputListener;
+import com.nonameyet.input.GameKeyInputListener;
 import com.nonameyet.input.InputManager;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.utils.Collision;
 
 import static com.nonameyet.utils.Constants.PPM;
 
-public class Player extends Sprite implements InputListener {
+public class Player extends Sprite implements GameKeyInputListener {
     private final String TAG = this.getClass().getSimpleName();
     private final GameScreen screen;
 
