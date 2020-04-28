@@ -51,7 +51,7 @@ public class ClockUI extends Label implements Disposable {
         init();
 
         addPropertyChangeListener(AudioManager.getInstance());
-        addPropertyChangeListener(screen.getMapMgr());
+//        addPropertyChangeListener(screen.getMapMgr());
     }
 
     private void init() {
@@ -137,6 +137,6 @@ public class ClockUI extends Label implements Disposable {
     @Override
     public void dispose() {
         removePropertyChangeListener(AudioManager.getInstance());
-        removePropertyChangeListener(screen.getMapMgr());
+//        removePropertyChangeListener(screen.getMapMgr());
     }
 }

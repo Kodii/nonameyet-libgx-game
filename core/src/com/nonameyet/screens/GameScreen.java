@@ -20,7 +20,7 @@ import static com.nonameyet.utils.Constants.PPM;
 public class GameScreen extends AbstractScreen {
     private final String TAG = this.getClass().getSimpleName();
 
-    private final MapManager mapMgr;
+    private MapManager mapMgr;
 
     private OrthogonalTiledMapRenderer mapRenderer = null;
 
@@ -41,7 +41,6 @@ public class GameScreen extends AbstractScreen {
 
     public GameScreen(NoNameYet game) {
         super(game);
-        mapMgr = new MapManager(this);
     }
 
     @Override
@@ -59,6 +58,7 @@ public class GameScreen extends AbstractScreen {
         ecsEngine = new ECSEngine(this);
 
         // 5. create map with ecs components (Player, Npc, Torch, Chest)
+        mapMgr = new MapManager(this);
         if (mapRenderer == null) {
             mapRenderer = new OrthogonalTiledMapRenderer(mapMgr.getCurrentTiledMap(), 1 / PPM);
         }

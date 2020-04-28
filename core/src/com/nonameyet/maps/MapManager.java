@@ -12,7 +12,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.nonameyet.audio.AudioManager;
 import com.nonameyet.b2d.B2dContactListener;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.sprites.Chest;
@@ -46,7 +45,7 @@ public class MapManager implements Disposable, PropertyChangeListener {
     public MapManager(GameScreen screen) {
         this.screen = screen;
 
-        addPropertyChangeListener(AudioManager.getInstance());
+        screen.getPlayerHUD().getClockUI().addPropertyChangeListener(this);
     }
 
     public void loadMap(MapFactory.MapType mapType) {
@@ -144,16 +143,6 @@ public class MapManager implements Disposable, PropertyChangeListener {
         return b2dContactListener;
     }
 
-    public void addPropertyChangeListener(
-            PropertyChangeListener p) {
-        changes.addPropertyChangeListener(p);
-    }
-
-    public void removePropertyChangeListener(
-            PropertyChangeListener p) {
-        changes.removePropertyChangeListener(p);
-    }
-
     public MapFactory.MapType getCurrentMapType() {
         return currentMapType;
     }
@@ -195,10 +184,6 @@ public class MapManager implements Disposable, PropertyChangeListener {
 
     @Override
     public void dispose() {
-        removePropertyChangeListener(AudioManager.getInstance());
-    }
-
-    public Array<Torch> getTorches() {
-        return torches;
+        screen.getPlayerHUD().getClockUI().removePropertyChangeListener(this);
     }
 }
