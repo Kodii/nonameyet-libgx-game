@@ -11,7 +11,6 @@ import com.nonameyet.assets.AssetName;
 import com.nonameyet.audio.AudioManager;
 import com.nonameyet.preferences.PlayerPref;
 import com.nonameyet.screens.GameScreen;
-import com.nonameyet.sprites.Torch;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -34,6 +33,8 @@ public class ClockUI extends Label implements Disposable {
         labelStyle.fontColor = Color.WHITE;
     }
 
+    private final GameScreen screen;
+
     private static final String FORMAT = "%02d:%02d";
     private float totalTime = 0;
     private float rateOfTime = 1;
@@ -46,13 +47,11 @@ public class ClockUI extends Label implements Disposable {
 
     public ClockUI(GameScreen screen, CharSequence text) {
         super(text, labelStyle);
+        this.screen = screen;
         init();
 
         addPropertyChangeListener(AudioManager.getInstance());
         addPropertyChangeListener(screen.getMapMgr());
-        for (Torch torch : screen.getMapMgr().getTorches()) {
-            addPropertyChangeListener(torch);
-        }
     }
 
     private void init() {
@@ -84,6 +83,7 @@ public class ClockUI extends Label implements Disposable {
             previousStateOfDay = currentStateOfDay;
             currentStateOfDay = DayTimeEvent.NIGHT;
             if (currentStateOfDay != previousStateOfDay) {
+                Gdx.app.debug(TAG, "NIGHT EVENT !!!!!");
                 changes.firePropertyChange(DayTimeEvent.class.getSimpleName(), null, currentStateOfDay);
             }
         }
@@ -137,5 +137,6 @@ public class ClockUI extends Label implements Disposable {
     @Override
     public void dispose() {
         removePropertyChangeListener(AudioManager.getInstance());
+        removePropertyChangeListener(screen.getMapMgr());
     }
 }

@@ -1,7 +1,6 @@
 package com.nonameyet.sprites;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -14,12 +13,15 @@ import com.badlogic.gdx.utils.Array;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
 import com.nonameyet.b2d.BodyBuilder;
+import com.nonameyet.input.GameKeys;
+import com.nonameyet.input.InputListener;
+import com.nonameyet.input.InputManager;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.utils.Collision;
 
 import static com.nonameyet.utils.Constants.PPM;
 
-public class Player extends Sprite {
+public class Player extends Sprite implements InputListener {
     private final String TAG = this.getClass().getSimpleName();
     private final GameScreen screen;
 
@@ -53,6 +55,11 @@ public class Player extends Sprite {
 
     private float stateTimer = 0;
 
+    // movement
+    final float speed = 3;
+    float speedX;
+    float speedY;
+
     public Player(GameScreen screen) {
         super((Texture) Assets.manager.get(AssetName.PLAYER_PNG.getAssetName()));
         this.screen = screen;
@@ -70,6 +77,8 @@ public class Player extends Sprite {
 
         setBounds(0, 0, 16 / PPM, 16 / PPM);
         setRegion(standDown);
+
+        InputManager.getInstance().addInputListener(this);
 
         Gdx.app.debug(TAG, "Player was created");
     }
@@ -121,21 +130,7 @@ public class Player extends Sprite {
 
     }
 
-    public void input() {
-        final float speed = 3;
-
-        // movement
-        final float speedX;
-        final float speedY;
-
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) speedX = -speed;
-        else if (Gdx.input.isKeyPressed(Input.Keys.D)) speedX = +speed;
-        else speedX = 0;
-
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) speedY = -speed;
-        else if (Gdx.input.isKeyPressed(Input.Keys.W)) speedY = +speed;
-        else speedY = 0;
-
+    public void move() {
         //control our _player using immediate impulses
         b2body.applyLinearImpulse(
                 (speedX - b2body.getLinearVelocity().x * b2body.getMass()),
@@ -144,6 +139,54 @@ public class Player extends Sprite {
                 b2body.getWorldCenter().y,
                 true
         );
+    }
+
+    @Override
+    public void keyPressed(InputManager inputManager, GameKeys key) {
+
+        switch (key) {
+            case UP:
+                speedY = +speed;
+                speedX = 0;
+                break;
+            case DOWN:
+                speedY = -speed;
+                speedX = 0;
+                break;
+            case LEFT:
+                speedX = -speed;
+                speedY = 0;
+                break;
+            case RIGHT:
+                speedX = +speed;
+                speedY = 0;
+                break;
+            default:
+                break;
+
+        }
+    }
+
+    @Override
+    public void keyReleased(InputManager inputManager, GameKeys key) {
+        switch (key) {
+            case UP:
+                speedY = inputManager.isKeyPressed(GameKeys.DOWN) ? -speed : 0;
+                break;
+            case DOWN:
+                speedY = inputManager.isKeyPressed(GameKeys.UP) ? +speed : 0;
+                break;
+            case LEFT:
+                speedX = inputManager.isKeyPressed(GameKeys.RIGHT) ? +speed : 0;
+                break;
+            case RIGHT:
+                speedX = inputManager.isKeyPressed(GameKeys.LEFT) ? -speed : 0;
+                break;
+            default:
+                break;
+
+        }
+
     }
 
     private TextureRegion getFrame(float dt) {

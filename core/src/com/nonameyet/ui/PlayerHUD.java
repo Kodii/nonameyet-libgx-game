@@ -52,7 +52,6 @@ public class PlayerHUD implements Screen, PropertyChangeListener {
 
         // listeners
         lifeUI.addPropertyChangeListener(this);
-        screen.getMapMgr().getB2dContactListener().addPropertyChangeListener(this);
 
         clockUI = new ClockUI(screen, "0");
         clockUI.setPosition(stage.getWidth() - clockUI.getWidth() - 15, stage.getHeight() - clockUI.getHeight() - 15);

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
 import com.nonameyet.b2d.BodyBuilder;
@@ -23,8 +24,9 @@ import java.beans.PropertyChangeListener;
 
 import static com.nonameyet.utils.Constants.PPM;
 
-public class Torch extends Sprite implements PropertyChangeListener {
+public class Torch extends Sprite implements Disposable, PropertyChangeListener {
     private final String TAG = this.getClass().getSimpleName();
+    private final GameScreen screen;
 
     public enum State {
         TORCH_ON,
@@ -48,6 +50,7 @@ public class Torch extends Sprite implements PropertyChangeListener {
 
     public Torch(GameScreen screen, Vector2 position) {
         super(textureAtlas.findRegion("torch"));
+        this.screen = screen;
 
         torchOff = new TextureRegion(getTexture(), 0, 0, 6, 15);
         setBounds(0, 0, 6 / PPM, 15 / PPM);
@@ -62,6 +65,8 @@ public class Torch extends Sprite implements PropertyChangeListener {
                 Collision.LIGHT);
 
         createLight(screen);
+
+        screen.getPlayerHUD().getClockUI().addPropertyChangeListener(this);
 
         Gdx.app.debug(TAG, "Torch was created");
     }
@@ -115,16 +120,16 @@ public class Torch extends Sprite implements PropertyChangeListener {
 
     private void lightsEvent(DayTimeEvent event) {
         switch (event) {
-            case DUSK:
-            case NIGHT:
-                currentState = State.TORCH_ON;
-                torchLight.setActive(true);
-                break;
-
             case DAWN:
             case AFTERNOON:
                 currentState = State.TORCH_OFF;
                 torchLight.setActive(false);
+                break;
+
+            case DUSK:
+            case NIGHT:
+                currentState = State.TORCH_ON;
+                torchLight.setActive(true);
                 break;
         }
     }
@@ -146,5 +151,10 @@ public class Torch extends Sprite implements PropertyChangeListener {
         }
 
         return region;
+    }
+
+    @Override
+    public void dispose() {
+        screen.getPlayerHUD().getClockUI().removePropertyChangeListener(this);
     }
 }

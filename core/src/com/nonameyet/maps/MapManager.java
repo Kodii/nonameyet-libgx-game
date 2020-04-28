@@ -13,12 +13,12 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.audio.AudioManager;
+import com.nonameyet.b2d.B2dContactListener;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.sprites.Chest;
 import com.nonameyet.sprites.Player;
 import com.nonameyet.sprites.Torch;
 import com.nonameyet.ui.clock.DayTimeEvent;
-import com.nonameyet.b2d.B2dContactListener;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -57,7 +57,7 @@ public class MapManager implements Disposable, PropertyChangeListener {
 
         screen.setRayHandler(new RayHandler(screen.getWorld()));
         screen.getRayHandler().setAmbientLight(1.0f);
-        screen.getRayHandler().useDiffuseLight(true);
+        RayHandler.useDiffuseLight(true);
 
         Map map = MapFactory.getMap(screen, mapType);
 
@@ -71,6 +71,11 @@ public class MapManager implements Disposable, PropertyChangeListener {
 
         b2dContactListener = new B2dContactListener(screen);
         screen.getWorld().setContactListener(b2dContactListener);
+
+        // ecs player
+        Rectangle rect = getPlayerSpawnLayer().getObjects().getByType(RectangleMapObject.class).get(0).getRectangle();
+        screen.getEcsEngine().createPlayer(new Vector2(rect.getX(), rect.getY()));
+
 
         createPlayer();
         createEntities();

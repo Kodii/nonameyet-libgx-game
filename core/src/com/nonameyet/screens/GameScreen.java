@@ -2,7 +2,6 @@ package com.nonameyet.screens;
 
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,6 +10,8 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.nonameyet.NoNameYet;
 import com.nonameyet.camera.CameraBounds;
+import com.nonameyet.ecs.ECSEngine;
+import com.nonameyet.input.InputManager;
 import com.nonameyet.maps.MapManager;
 import com.nonameyet.ui.PlayerHUD;
 
@@ -35,6 +36,9 @@ public class GameScreen extends AbstractScreen {
     // Lights2d
     RayHandler rayHandler;
 
+    // ecs
+    ECSEngine ecsEngine;
+
     private PlayerHUD playerHUD;
 
     public float testFloatAmbient = 1f;
@@ -42,19 +46,20 @@ public class GameScreen extends AbstractScreen {
     public GameScreen(NoNameYet game) {
         super(game);
         mapMgr = new MapManager(this);
+        ecsEngine = new ECSEngine(this);
     }
 
     @Override
     public void show() {
         createCameras();
 
-        if (mapRenderer == null) {
-            mapRenderer = new OrthogonalTiledMapRenderer(mapMgr.getCurrentTiledMap(), 1 / PPM);
-        }
-
         playerHUD = new PlayerHUD(hudCamera, this);
 
         createInputMultiplexer();
+
+        if (mapRenderer == null) {
+            mapRenderer = new OrthogonalTiledMapRenderer(mapMgr.getCurrentTiledMap(), 1 / PPM);
+        }
 
         //allows for debug lines of our box2d _world.
         _b2dr = new Box2DDebugRenderer();
@@ -77,6 +82,7 @@ public class GameScreen extends AbstractScreen {
     private void createInputMultiplexer() {
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(playerHUD.getStage());
+        multiplexer.addProcessor(InputManager.getInstance());
         Gdx.input.setInputProcessor(multiplexer);
     }
 
@@ -102,8 +108,9 @@ public class GameScreen extends AbstractScreen {
 
     private void update(float delta) {
         // handle user input first
-        mapMgr.getPlayer().input();
-        testInputLights();
+        mapMgr.getPlayer().move();
+
+        ecsEngine.update(delta);
 
         //takes 1 step in the physics simulation(60 times per second)
         world.step(FIXED_TIME_STEP, 6, 2);
@@ -126,18 +133,6 @@ public class GameScreen extends AbstractScreen {
 
         mapRenderer.getBatch().setProjectionMatrix(camera.combined);
         rayHandler.setCombinedMatrix(camera);
-    }
-
-    private void testInputLights() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) {
-
-            testFloatAmbient -= .1f;
-            rayHandler.setAmbientLight(testFloatAmbient);
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) {
-            testFloatAmbient += .1f;
-            rayHandler.setAmbientLight(testFloatAmbient);
-        }
     }
 
     private void clearGameScreen() {
@@ -183,16 +178,20 @@ public class GameScreen extends AbstractScreen {
         return mapMgr;
     }
 
-    public OrthogonalTiledMapRenderer getMapRenderer() {
-        return mapRenderer;
-    }
-
     public World getWorld() {
         return world;
     }
 
     public void setWorld(World world) {
         this.world = world;
+    }
+
+    public ECSEngine getEcsEngine() {
+        return ecsEngine;
+    }
+
+    public OrthogonalTiledMapRenderer getMapRenderer() {
+        return mapRenderer;
     }
 
     public OrthographicCamera getCamera() {

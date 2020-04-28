@@ -15,15 +15,18 @@ import java.beans.PropertyChangeSupport;
 public class B2dContactListener implements Disposable, ContactListener {
     private final String TAG = this.getClass().getSimpleName();
 
+    private final GameScreen screen;
     private final MapManager mapMgr;
 
     // events
     private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
     public B2dContactListener(GameScreen screen) {
+        this.screen = screen;
         this.mapMgr = screen.getMapMgr();
 
         addPropertyChangeListener(AudioManager.getInstance());
+        addPropertyChangeListener(screen.getPlayerHUD());
     }
 
     @Override
@@ -100,5 +103,6 @@ public class B2dContactListener implements Disposable, ContactListener {
     @Override
     public void dispose() {
         removePropertyChangeListener(AudioManager.getInstance());
+        removePropertyChangeListener(screen.getPlayerHUD());
     }
 }
