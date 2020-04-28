@@ -1,23 +1,39 @@
-package com.nonameyet.camera;
+package com.nonameyet.ecs.systems;
 
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.math.Vector2;
+import com.nonameyet.ecs.ECSEngine;
+import com.nonameyet.ecs.components.B2dComponent;
+import com.nonameyet.ecs.components.PlayerComponent;
 import com.nonameyet.screens.GameScreen;
 
 import static com.nonameyet.utils.Constants.PPM;
 
-/**
- * keep camera within bounds of TiledMap
- */
-public class CameraBounds {
-    private final String TAG = this.getClass().getSimpleName();
+public class PlayerCameraSystem extends IteratingSystem {
 
     private final GameScreen screen;
+    private final OrthographicCamera gameCamera;
 
-    public CameraBounds(GameScreen screen) {
+    public PlayerCameraSystem(GameScreen screen) {
+        super(Family.all(PlayerComponent.class, B2dComponent.class).get());
+
         this.screen = screen;
+        gameCamera = screen.getCamera();
     }
 
-    public void cameraCornerBounds() {
+    @Override
+    protected void processEntity(Entity entity, float deltaTime) {
+        Vector2 position = ECSEngine.b2dCmpMapper.get(entity).body.getPosition();
+        gameCamera.update();
+        cameraCornerBounds(position);
+
+    }
+
+    public void cameraCornerBounds(Vector2 position) {
         MapProperties prop = screen.getMapRenderer().getMap().getProperties();
 
         int mapWidth = prop.get("width", Integer.class);
@@ -44,8 +60,8 @@ public class CameraBounds {
 
         // Move camera after player as normal
         //attach our gamecam to our players.x coordinate
-        screen.getCamera().position.x = screen.getMapMgr().getPlayer().b2body.getPosition().x;
-        screen.getCamera().position.y = screen.getMapMgr().getPlayer().b2body.getPosition().y;
+        screen.getCamera().position.x = position.x;
+        screen.getCamera().position.y = position.y;
 
         float cameraLeft = screen.getCamera().position.x - cameraHalfWidth;
         float cameraRight = screen.getCamera().position.x + cameraHalfWidth;

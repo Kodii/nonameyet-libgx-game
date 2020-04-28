@@ -9,7 +9,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.nonameyet.NoNameYet;
-import com.nonameyet.camera.CameraBounds;
 import com.nonameyet.ecs.ECSEngine;
 import com.nonameyet.input.InputManager;
 import com.nonameyet.maps.MapManager;
@@ -27,7 +26,6 @@ public class GameScreen extends AbstractScreen {
 
     private OrthographicCamera camera = null;
     protected OrthographicCamera hudCamera = null;
-    private CameraBounds cameraBounds;
 
     //Box2d
     private World world;
@@ -41,22 +39,26 @@ public class GameScreen extends AbstractScreen {
 
     private PlayerHUD playerHUD;
 
-    public float testFloatAmbient = 1f;
-
     public GameScreen(NoNameYet game) {
         super(game);
         mapMgr = new MapManager(this);
-        ecsEngine = new ECSEngine(this);
     }
 
     @Override
     public void show() {
+        // 1. cams
         createCameras();
 
+        // 2. HUD
         playerHUD = new PlayerHUD(hudCamera, this);
 
+        // 3. concat inputs
         createInputMultiplexer();
 
+        // 4. create ecs & systems
+        ecsEngine = new ECSEngine(this);
+
+        // 5. create map with ecs components (Player, Npc, Torch, Chest)
         if (mapRenderer == null) {
             mapRenderer = new OrthogonalTiledMapRenderer(mapMgr.getCurrentTiledMap(), 1 / PPM);
         }
@@ -75,8 +77,6 @@ public class GameScreen extends AbstractScreen {
 
         hudCamera = new OrthographicCamera();
         hudCamera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
-
-        cameraBounds = new CameraBounds(this);
     }
 
     private void createInputMultiplexer() {
@@ -123,10 +123,6 @@ public class GameScreen extends AbstractScreen {
 
         mapMgr.getPlayer().update(delta);
         mapMgr.updateEntities(delta);
-
-        // update our _camera with correct coordinates after changes
-        camera.update();
-        cameraBounds.cameraCornerBounds();
 
         //tell our _mapRenderer to draw only what our _camera can see in our game _world.
         mapRenderer.setView(camera);

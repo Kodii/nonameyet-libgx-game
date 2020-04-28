@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.nonameyet.b2d.BodyBuilder;
 import com.nonameyet.ecs.components.B2dComponent;
 import com.nonameyet.ecs.components.PlayerComponent;
+import com.nonameyet.ecs.systems.PlayerCameraSystem;
 import com.nonameyet.ecs.systems.PlayerMovementSystem;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.utils.Collision;
@@ -24,6 +25,7 @@ public class ECSEngine extends PooledEngine {
         this.screen = screen;
 
         this.addSystem(new PlayerMovementSystem());
+        this.addSystem(new PlayerCameraSystem(screen));
     }
 
     public void createPlayer(final Vector2 playerSpawnLocation) {

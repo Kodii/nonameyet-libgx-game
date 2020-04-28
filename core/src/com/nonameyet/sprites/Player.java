@@ -13,8 +13,8 @@ import com.badlogic.gdx.utils.Array;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
 import com.nonameyet.b2d.BodyBuilder;
-import com.nonameyet.input.GameKeys;
 import com.nonameyet.input.GameKeyInputListener;
+import com.nonameyet.input.GameKeys;
 import com.nonameyet.input.InputManager;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.utils.Collision;
@@ -78,7 +78,7 @@ public class Player extends Sprite implements GameKeyInputListener {
         setBounds(0, 0, 16 / PPM, 16 / PPM);
         setRegion(standDown);
 
-        InputManager.getInstance().addInputListener(this);
+//        InputManager.getInstance().addInputListener(this);
 
         Gdx.app.debug(TAG, "Player was created");
     }
