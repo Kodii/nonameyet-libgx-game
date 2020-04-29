@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.nonameyet.NoNameYet;
 import com.nonameyet.ecs.ECSEngine;
 import com.nonameyet.ecs.systems.PhysicsDebugSystem;
+import com.nonameyet.ecs.systems.PhysicsSystem;
 import com.nonameyet.ecs.systems.RenderingSystem;
 import com.nonameyet.input.InputManager;
 import com.nonameyet.maps.MapManager;
@@ -64,7 +65,8 @@ public class GameScreen extends AbstractScreen {
         }
 
         ecsEngine.addSystem(new RenderingSystem(this));
-        ecsEngine.addSystem(new PhysicsDebugSystem(world, camera));
+        ecsEngine.addSystem(new PhysicsSystem(world));
+//        ecsEngine.addSystem(new PhysicsDebugSystem(world, camera));
     }
 
     private void createCameras() {

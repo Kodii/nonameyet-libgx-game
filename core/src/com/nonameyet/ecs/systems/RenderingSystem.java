@@ -1,5 +1,6 @@
 package com.nonameyet.ecs.systems;
 
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
@@ -8,9 +9,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
-import com.nonameyet.ecs.ECSEngine;
 import com.nonameyet.ecs.components.BodyComponent;
 import com.nonameyet.ecs.components.TextureComponent;
+import com.nonameyet.ecs.components.TransformComponent;
 import com.nonameyet.screens.GameScreen;
 
 import java.util.Comparator;
@@ -23,6 +24,9 @@ public class RenderingSystem extends SortedIteratingSystem {
     private Array<Entity> renderQueue; // an array used to allow sorting of images allowing us to draw images on top of each other
     private Comparator<Entity> comparator; // a comparator to sort images based on the z position of the transfromComponent
     private OrthographicCamera cam;
+
+    private ComponentMapper<TextureComponent> textureM = ComponentMapper.getFor(TextureComponent.class);
+    private ComponentMapper<TransformComponent> transformM = ComponentMapper.getFor(TransformComponent.class);
 
     public RenderingSystem(GameScreen screen) {
         super(Family.all(BodyComponent.class, TextureComponent.class).get(), new ZComparator());
@@ -53,8 +57,8 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         // loop through each entity in our render queue
         for (Entity entity : renderQueue) {
-            TextureComponent tex = ECSEngine.textureCmpMapper.get(entity);
-            BodyComponent b2d = ECSEngine.b2dCmpMapper.get(entity);
+            TextureComponent tex = textureM.get(entity);
+            TransformComponent t = transformM.get(entity);
 
             if (tex.region == null) {
                 continue;
@@ -70,7 +74,7 @@ public class RenderingSystem extends SortedIteratingSystem {
             float originY = height / 2;
 
             batch.draw(tex.region,
-                    b2d.body.getPosition().x - originX, b2d.body.getPosition().y - originY,
+                    t.position.x - originX, t.position.y - originY,
                     originX, originY,
                     width, height,
                     1 / PPM, 1 / PPM, 0);

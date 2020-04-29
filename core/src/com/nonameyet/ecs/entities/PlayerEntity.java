@@ -23,6 +23,7 @@ public class PlayerEntity extends Entity {
         final TextureComponent texture = ecsEngine.createComponent(TextureComponent.class);
         final PlayerComponent player = ecsEngine.createComponent(PlayerComponent.class);
         final TypeComponent type = ecsEngine.createComponent(TypeComponent.class);
+        final PlayerStateComponent state = ecsEngine.createComponent(PlayerStateComponent.class);
 //      final AnimationComponent animationComponent = this.createComponent(AnimationComponent.class);
 
         // create the data for the components and add them to the components
@@ -44,6 +45,7 @@ public class PlayerEntity extends Entity {
         playerEntity.add(texture);
         playerEntity.add(player);
         playerEntity.add(type);
+        playerEntity.add(state);
 //        player.add(animationComponent);
 
         ecsEngine.addEntity(playerEntity);
