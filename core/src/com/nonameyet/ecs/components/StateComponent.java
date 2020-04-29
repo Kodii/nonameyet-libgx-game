@@ -18,6 +18,9 @@ public class StateComponent implements Component {
     public static final int STATE_CHEST_OPEN = 101;
     public static final int STATE_CHEST_CLOSE = 102;
 
+    public static final int STATE_TORCH_ON = 140;
+    public static final int STATE_TORCH_OFF = 141;
+
 
     private int state = 0;
     public float time = 0.0f;

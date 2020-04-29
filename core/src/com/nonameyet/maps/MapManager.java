@@ -3,16 +3,15 @@ package com.nonameyet.maps;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.b2d.B2dContactListener;
 import com.nonameyet.screens.GameScreen;
-import com.nonameyet.sprites.Torch;
 import com.nonameyet.ui.clock.DayTimeEvent;
 
 import java.beans.PropertyChangeEvent;
@@ -33,7 +32,7 @@ public class MapManager implements Disposable, PropertyChangeListener {
 
 //    private final ImmutableArray<Entity> animatedEntities;
 
-    private final Array<Torch> torches = new Array<>(20);
+//    private final Array<Torch> torches = new Array<>(20);
 
     // events
     private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
@@ -104,6 +103,11 @@ public class MapManager implements Disposable, PropertyChangeListener {
         Rectangle chestPositionPoint = currentMap.chestSpawnLayer.getObjects().getByType(RectangleMapObject.class).get(0).getRectangle();
         screen.getEcsEngine().createChest(new Vector2(chestPositionPoint.getX() / PPM, chestPositionPoint.getY() / PPM));
 
+        // ecs torches
+        for (MapObject object : currentMap.torchesSpawnLayer.getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            screen.getEcsEngine().createTorch(new Vector2(rect.getX() / PPM, rect.getY() / PPM));
+        }
     }
 
     @Override
