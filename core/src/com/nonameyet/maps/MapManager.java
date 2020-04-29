@@ -2,9 +2,7 @@ package com.nonameyet.maps;
 
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
@@ -22,8 +20,6 @@ import com.nonameyet.ui.clock.DayTimeEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-
-import static com.nonameyet.utils.Constants.PPM;
 
 public class MapManager implements Disposable, PropertyChangeListener {
     private final String TAG = this.getClass().getSimpleName();
@@ -80,36 +76,34 @@ public class MapManager implements Disposable, PropertyChangeListener {
         screen.getEcsEngine().createPlayer(new Vector2(rect.getX(), rect.getY()));
 
 
-        createPlayer();
-        createEntities();
+//        createPlayer();
+//        createEntities();
 
         mapChanged = false;
     }
 
-    private void createPlayer() {
-        player = new Player(screen);
-    }
-
-    public void createEntities() {
-        chest = new Chest(screen);
-
-        for (MapObject object : getTorchesSpawnLayer().getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            torches.add(new Torch(screen, new Vector2(rect.getX() / PPM, rect.getY() / PPM)));
-        }
-    }
-
-    public void renderEntities(float dt) {
-        chest.update(dt);
-
-        for (Torch torch : torches) {
-            torch.update(dt);
-        }
-
+//    private void createPlayer() {
+//        player = new Player(screen);
+//    }
+//
+//    public void createEntities() {
+//        chest = new Chest(screen);
+//
+//        for (MapObject object : getTorchesSpawnLayer().getObjects().getByType(RectangleMapObject.class)) {
+//            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+//            torches.add(new Torch(screen, new Vector2(rect.getX() / PPM, rect.getY() / PPM)));
+//        }
+//    }
+//    public void renderEntities(float dt) {
+//        chest.update(dt);
+//
+//        for (Torch torch : torches) {
+//            torch.update(dt);
+//        }
 //        for (final Entity entity : animatedEntities) {
 //            renderEntity(entity, dt);
 //        }
-    }
+//    }
 
 //    private void renderEntity(Entity entity, float dt) {
 //        final B2dComponent b2dComponent = ECSEngine.b2dCmpMapper.get(entity);
@@ -117,13 +111,13 @@ public class MapManager implements Disposable, PropertyChangeListener {
 //        b2dComponent.renderPosition.lerp(b2dComponent.body.getPosition(), dt);
 //    }
 
-    public void drawEntities(Batch batch) {
-        chest.draw(batch);
-
-        for (Torch torch : torches) {
-            torch.draw(batch);
-        }
-    }
+//    public void drawEntities(Batch batch) {
+//        chest.draw(batch);
+//
+//        for (Torch torch : torches) {
+//            torch.draw(batch);
+//        }
+//    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

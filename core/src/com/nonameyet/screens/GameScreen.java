@@ -16,7 +16,6 @@ import com.nonameyet.input.InputManager;
 import com.nonameyet.maps.MapManager;
 import com.nonameyet.ui.PlayerHUD;
 
-import static com.nonameyet.utils.Constants.FIXED_TIME_STEP;
 import static com.nonameyet.utils.Constants.PPM;
 
 public class GameScreen extends AbstractScreen {
@@ -66,7 +65,7 @@ public class GameScreen extends AbstractScreen {
 
         ecsEngine.addSystem(new RenderingSystem(this));
         ecsEngine.addSystem(new PhysicsSystem(world));
-//        ecsEngine.addSystem(new PhysicsDebugSystem(world, camera));
+        ecsEngine.addSystem(new PhysicsDebugSystem(world, camera));
     }
 
     private void createCameras() {
@@ -91,64 +90,32 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void render(float delta) {
+        clearGameScreen();
         //separate our update logic from render
         update(delta);
-
-        clearGameScreen();
-
         //render our game maps
         mapRenderer.render();
-
         ecsEngine.update(delta);
-
-        //_mapRenderer our Box2DDebugLines
-//        batchRender(delta);
-
         rayHandler.render();
-
         playerHUD.render(delta);
-    }
-
-    private void update(float delta) {
-        // handle user input first
-        mapMgr.getPlayer().move();
-
-        //takes 1 step in the physics simulation(60 times per second)
-        world.step(FIXED_TIME_STEP, 6, 2);
-        rayHandler.update();
-
-        if (mapMgr.isMapChanged()) {
-            mapMgr.loadMap(mapMgr.getCurrentMapType());
-            mapRenderer.setMap(mapMgr.getCurrentTiledMap());
-        }
-
-//        mapMgr.getPlayer().update(delta);
-//        mapMgr.renderEntities(delta);
-
-        //tell our _mapRenderer to draw only what our _camera can see in our game _world.
-        mapRenderer.setView(camera);
-
-//        mapRenderer.getBatch().setProjectionMatrix(camera.combined);
-        rayHandler.setCombinedMatrix(camera);
     }
 
     private void clearGameScreen() {
         // Clear the game screen
         Gdx.gl.glClearColor(0.15f, 0.15f, 0.15f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-//        mapRenderer.getBatch().enableBlending();
-//        mapRenderer.getBatch().setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
     }
 
-//    private void batchRender(float delta) {
-//        mapRenderer.getBatch().begin();
-//
-//        mapMgr.drawEntities(mapRenderer.getBatch());
-//        mapMgr.getPlayer().draw(mapRenderer.getBatch());
-//
-//        mapRenderer.getBatch().end();
-//    }
+    private void update(float delta) {
+        rayHandler.update();
+
+        if (mapMgr.isMapChanged()) {
+            mapMgr.loadMap(mapMgr.getCurrentMapType());
+            mapRenderer.setMap(mapMgr.getCurrentTiledMap());
+        }
+        mapRenderer.setView(camera);
+        rayHandler.setCombinedMatrix(camera);
+    }
 
     @Override
     public void resize(int width, int height) {
@@ -168,7 +135,6 @@ public class GameScreen extends AbstractScreen {
 //        _b2dr.dispose();
         rayHandler.dispose();
     }
-
 
     public MapManager getMapMgr() {
         return mapMgr;

@@ -1,6 +1,5 @@
 package com.nonameyet.ecs.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -11,13 +10,13 @@ import com.nonameyet.ecs.components.BodyComponent;
 import com.nonameyet.ecs.components.PlayerComponent;
 import com.nonameyet.screens.GameScreen;
 
+import static com.nonameyet.ecs.ComponentMappers.bodyCmpMapper;
 import static com.nonameyet.utils.Constants.PPM;
 
 public class PlayerCameraSystem extends IteratingSystem {
 
     private final GameScreen screen;
     private final OrthographicCamera gameCamera;
-    private ComponentMapper<BodyComponent> bm = ComponentMapper.getFor(BodyComponent.class);
 
     public PlayerCameraSystem(GameScreen screen) {
         super(Family.all(PlayerComponent.class, BodyComponent.class).get());
@@ -28,7 +27,7 @@ public class PlayerCameraSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        Vector2 position = bm.get(entity).body.getPosition();
+        Vector2 position = bodyCmpMapper.get(entity).body.getPosition();
         gameCamera.update();
         cameraCornerBounds(position);
 

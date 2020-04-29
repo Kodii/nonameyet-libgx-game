@@ -1,6 +1,5 @@
 package com.nonameyet.ecs.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
@@ -11,6 +10,9 @@ import com.badlogic.gdx.utils.Array;
 import com.nonameyet.ecs.components.BodyComponent;
 import com.nonameyet.ecs.components.TransformComponent;
 
+import static com.nonameyet.ecs.ComponentMappers.bodyCmpMapper;
+import static com.nonameyet.ecs.ComponentMappers.transformCmpMapper;
+
 public class PhysicsSystem extends IteratingSystem {
 
     private static final float MAX_STEP_TIME = 1 / 60f;
@@ -18,9 +20,6 @@ public class PhysicsSystem extends IteratingSystem {
 
     private World world;
     private Array<Entity> bodiesQueue;
-
-    private ComponentMapper<BodyComponent> bm = ComponentMapper.getFor(BodyComponent.class);
-    private ComponentMapper<TransformComponent> tm = ComponentMapper.getFor(TransformComponent.class);
 
     public PhysicsSystem(World world) {
         super(Family.all(BodyComponent.class, TransformComponent.class).get());
@@ -40,8 +39,8 @@ public class PhysicsSystem extends IteratingSystem {
 
             //Entity Queue
             for (Entity entity : bodiesQueue) {
-                TransformComponent tfm = tm.get(entity);
-                BodyComponent bodyComp = bm.get(entity);
+                TransformComponent tfm = transformCmpMapper.get(entity);
+                BodyComponent bodyComp = bodyCmpMapper.get(entity);
                 Vector2 position = bodyComp.body.getPosition();
                 tfm.position.x = position.x;
                 tfm.position.y = position.y;

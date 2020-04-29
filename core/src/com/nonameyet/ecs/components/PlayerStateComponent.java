@@ -12,9 +12,9 @@ public class PlayerStateComponent implements Component {
     public static final int STATE_RUNNING_LEFT = 6;
     public static final int STATE_RUNNING_RIGHT = 7;
 
-    private int state = 0;
+    private int state = 5;
     public float time = 0.0f;
-    public boolean isLooping = false;
+    public boolean isLooping = true;
 
     public void set(int newState) {
         state = newState;

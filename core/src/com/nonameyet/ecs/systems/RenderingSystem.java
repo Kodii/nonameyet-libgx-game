@@ -1,6 +1,5 @@
 package com.nonameyet.ecs.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
@@ -16,6 +15,8 @@ import com.nonameyet.screens.GameScreen;
 
 import java.util.Comparator;
 
+import static com.nonameyet.ecs.ComponentMappers.textureCmpMapper;
+import static com.nonameyet.ecs.ComponentMappers.transformCmpMapper;
 import static com.nonameyet.utils.Constants.PPM;
 
 public class RenderingSystem extends SortedIteratingSystem {
@@ -24,9 +25,6 @@ public class RenderingSystem extends SortedIteratingSystem {
     private Array<Entity> renderQueue; // an array used to allow sorting of images allowing us to draw images on top of each other
     private Comparator<Entity> comparator; // a comparator to sort images based on the z position of the transfromComponent
     private OrthographicCamera cam;
-
-    private ComponentMapper<TextureComponent> textureM = ComponentMapper.getFor(TextureComponent.class);
-    private ComponentMapper<TransformComponent> transformM = ComponentMapper.getFor(TransformComponent.class);
 
     public RenderingSystem(GameScreen screen) {
         super(Family.all(BodyComponent.class, TextureComponent.class).get(), new ZComparator());
@@ -57,8 +55,8 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         // loop through each entity in our render queue
         for (Entity entity : renderQueue) {
-            TextureComponent tex = textureM.get(entity);
-            TransformComponent t = transformM.get(entity);
+            TextureComponent tex = textureCmpMapper.get(entity);
+            TransformComponent t = transformCmpMapper.get(entity);
 
             if (tex.region == null) {
                 continue;

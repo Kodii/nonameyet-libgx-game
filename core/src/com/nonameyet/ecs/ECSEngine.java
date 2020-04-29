@@ -3,6 +3,7 @@ package com.nonameyet.ecs;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.nonameyet.ecs.entities.PlayerEntity;
+import com.nonameyet.ecs.systems.AnimationSystem;
 import com.nonameyet.ecs.systems.PlayerCameraSystem;
 import com.nonameyet.ecs.systems.PlayerControlSystem;
 import com.nonameyet.screens.GameScreen;
@@ -14,6 +15,7 @@ public class ECSEngine extends PooledEngine {
         super();
         this.screen = screen;
 
+        this.addSystem(new AnimationSystem());
         this.addSystem(new PlayerControlSystem());
         this.addSystem(new PlayerCameraSystem(screen));
     }
