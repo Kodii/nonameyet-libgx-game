@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
-import com.nonameyet.ecs.components.BodyComponent;
 import com.nonameyet.ecs.components.TextureComponent;
 import com.nonameyet.ecs.components.TransformComponent;
 import com.nonameyet.screens.GameScreen;
@@ -21,13 +20,17 @@ import static com.nonameyet.utils.Constants.PPM;
 
 public class RenderingSystem extends SortedIteratingSystem {
 
+    static {
+        comparator = new ZComparator();
+    }
+
     private Batch batch;
     private Array<Entity> renderQueue; // an array used to allow sorting of images allowing us to draw images on top of each other
-    private Comparator<Entity> comparator; // a comparator to sort images based on the z position of the transfromComponent
+    private static Comparator<Entity> comparator; // a comparator to sort images based on the z position of the transfromComponent
     private OrthographicCamera cam;
 
     public RenderingSystem(GameScreen screen) {
-        super(Family.all(BodyComponent.class, TextureComponent.class).get(), new ZComparator());
+        super(Family.all(TransformComponent.class, TextureComponent.class).get(), comparator);
 
         // create the array for sorting entities
         renderQueue = new Array<>();
@@ -58,12 +61,9 @@ public class RenderingSystem extends SortedIteratingSystem {
             TextureComponent tex = textureCmpMapper.get(entity);
             TransformComponent t = transformCmpMapper.get(entity);
 
-            if (tex.region == null) {
+            if (tex.region == null || t.isHidden) {
                 continue;
             }
-//            if (tex.region == null || t.isHidden) {
-//                continue;
-//            }
 
             float width = tex.region.getRegionWidth();
             float height = tex.region.getRegionHeight();

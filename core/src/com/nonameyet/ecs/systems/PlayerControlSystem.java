@@ -5,7 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.nonameyet.ecs.components.BodyComponent;
 import com.nonameyet.ecs.components.PlayerComponent;
-import com.nonameyet.ecs.components.PlayerStateComponent;
+import com.nonameyet.ecs.components.StateComponent;
 import com.nonameyet.input.GameKeyInputListener;
 import com.nonameyet.input.GameKeys;
 import com.nonameyet.input.InputManager;
@@ -20,7 +20,7 @@ public class PlayerControlSystem extends IteratingSystem implements GameKeyInput
     float speedY;
 
     public PlayerControlSystem() {
-        super(Family.all(PlayerComponent.class, BodyComponent.class, PlayerStateComponent.class).get());
+        super(Family.all(PlayerComponent.class, BodyComponent.class, StateComponent.class).get());
 
         InputManager.getInstance().addInputListener(this);
     }
@@ -29,7 +29,7 @@ public class PlayerControlSystem extends IteratingSystem implements GameKeyInput
     protected void processEntity(Entity entity, float deltaTime) {
         final PlayerComponent player = playerCmpMapper.get(entity);
         final BodyComponent b2dbody = bodyCmpMapper.get(entity);
-        final PlayerStateComponent state = playerStateCmpMapper.get(entity);
+        final StateComponent state = stateCmpMapper.get(entity);
 
         speed = player.speed;
 
@@ -42,30 +42,30 @@ public class PlayerControlSystem extends IteratingSystem implements GameKeyInput
                 true);
 
         if (speedY > 0) {
-            if (state.get() != PlayerStateComponent.STATE_RUNNING_UP)
-                state.set(PlayerStateComponent.STATE_RUNNING_UP);
+            if (state.get() != StateComponent.STATE_RUNNING_UP)
+                state.set(StateComponent.STATE_RUNNING_UP);
         }
         if (speedY < 0) {
-            if (state.get() != PlayerStateComponent.STATE_RUNNING_DOWN)
-                state.set(PlayerStateComponent.STATE_RUNNING_DOWN);
+            if (state.get() != StateComponent.STATE_RUNNING_DOWN)
+                state.set(StateComponent.STATE_RUNNING_DOWN);
         }
         if (speedX > 0) {
-            if (state.get() != PlayerStateComponent.STATE_RUNNING_RIGHT)
-                state.set(PlayerStateComponent.STATE_RUNNING_RIGHT);
+            if (state.get() != StateComponent.STATE_RUNNING_RIGHT)
+                state.set(StateComponent.STATE_RUNNING_RIGHT);
         }
         if (speedX < 0) {
-            if (state.get() != PlayerStateComponent.STATE_RUNNING_LEFT)
-                state.set(PlayerStateComponent.STATE_RUNNING_LEFT);
+            if (state.get() != StateComponent.STATE_RUNNING_LEFT)
+                state.set(StateComponent.STATE_RUNNING_LEFT);
         }
 
-        if (speedY == 0 && state.get() == PlayerStateComponent.STATE_RUNNING_UP)
-            state.set(PlayerStateComponent.STATE_STANDING_UP);
-        if (speedY == 0 && state.get() == PlayerStateComponent.STATE_RUNNING_DOWN)
-            state.set(PlayerStateComponent.STATE_STANDING_DOWN);
-        if (speedX == 0 && state.get() == PlayerStateComponent.STATE_RUNNING_RIGHT)
-            state.set(PlayerStateComponent.STATE_STANDING_RIGHT);
-        if (speedX == 0 && state.get() == PlayerStateComponent.STATE_RUNNING_LEFT)
-            state.set(PlayerStateComponent.STATE_STANDING_LEFT);
+        if (speedY == 0 && state.get() == StateComponent.STATE_RUNNING_UP)
+            state.set(StateComponent.STATE_STANDING_UP);
+        if (speedY == 0 && state.get() == StateComponent.STATE_RUNNING_DOWN)
+            state.set(StateComponent.STATE_STANDING_DOWN);
+        if (speedX == 0 && state.get() == StateComponent.STATE_RUNNING_RIGHT)
+            state.set(StateComponent.STATE_STANDING_RIGHT);
+        if (speedX == 0 && state.get() == StateComponent.STATE_RUNNING_LEFT)
+            state.set(StateComponent.STATE_STANDING_LEFT);
     }
 
     @Override

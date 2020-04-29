@@ -3,8 +3,21 @@ package com.nonameyet.ecs.components;
 import com.badlogic.ashley.core.Component;
 
 public class StateComponent implements Component {
-    public static final int STATE_NORMAL = 0;
-    public static final int STATE_MOVING = 1;
+    // for player
+    public static final int STATE_STANDING_DOWN = 0;
+    public static final int STATE_STANDING_UP = 1;
+    public static final int STATE_STANDING_LEFT = 2;
+    public static final int STATE_STANDING_RIGHT = 3;
+    public static final int STATE_RUNNING_DOWN = 4;
+    public static final int STATE_RUNNING_UP = 5;
+    public static final int STATE_RUNNING_LEFT = 6;
+    public static final int STATE_RUNNING_RIGHT = 7;
+
+    // for chest
+    public static final int STATE_CHEST_NORMAL = 100;
+    public static final int STATE_CHEST_OPEN = 101;
+    public static final int STATE_CHEST_CLOSE = 102;
+
 
     private int state = 0;
     public float time = 0.0f;

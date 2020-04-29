@@ -13,8 +13,6 @@ import com.nonameyet.ecs.ECSEngine;
 import com.nonameyet.ecs.components.*;
 import com.nonameyet.utils.Collision;
 
-import static com.nonameyet.utils.Constants.PPM;
-
 public class PlayerEntity extends Entity {
 
     public PlayerEntity(final ECSEngine ecsEngine, final Vector2 playerSpawnLocation) {
@@ -27,10 +25,10 @@ public class PlayerEntity extends Entity {
         final BodyComponent b2dbody = ecsEngine.createComponent(BodyComponent.class);
         final PlayerComponent player = ecsEngine.createComponent(PlayerComponent.class);
         final TypeComponent type = ecsEngine.createComponent(TypeComponent.class);
-        final PlayerStateComponent state = ecsEngine.createComponent(PlayerStateComponent.class);
+        final StateComponent state = ecsEngine.createComponent(StateComponent.class);
 
         // create the data for the components and add them to the components
-        position.position.set(playerSpawnLocation.x / PPM, playerSpawnLocation.y / PPM, 0);
+        position.position.set(playerSpawnLocation.x, playerSpawnLocation.y, 0);
 
         Texture textureAsset = Assets.manager.get(AssetName.PLAYER_PNG.getAssetName());
 
@@ -40,13 +38,14 @@ public class PlayerEntity extends Entity {
 
         b2dbody.body = BodyBuilder.dynamicRectangleBody(
                 ecsEngine.getScreen().getWorld(),
-                new Vector2(playerSpawnLocation.x / PPM, playerSpawnLocation.y / PPM),
+                new Vector2(playerSpawnLocation.x, playerSpawnLocation.y),
                 new Vector2(16, 16),
                 "PLAYER",
                 Collision.PLAYER
         );
         player.speed = 3;
         type.type = TypeComponent.PLAYER;
+        state.set(StateComponent.STATE_STANDING_DOWN);
 
 
         playerEntity.add(position);
@@ -75,30 +74,30 @@ public class PlayerEntity extends Entity {
 
         TextureRegion[][] temp = TextureRegion.split(textureAsset, frameWidth, frameHeight);
 
-        animation.animations.put(PlayerStateComponent.STATE_STANDING_DOWN, new Animation(0, temp[0][0]));
-        animation.animations.put(PlayerStateComponent.STATE_STANDING_LEFT, new Animation(0, temp[1][0]));
-        animation.animations.put(PlayerStateComponent.STATE_STANDING_RIGHT, new Animation(0, temp[2][0]));
-        animation.animations.put(PlayerStateComponent.STATE_STANDING_UP, new Animation(0, temp[3][0]));
+        animation.animations.put(StateComponent.STATE_STANDING_DOWN, new Animation(0, temp[0][0]));
+        animation.animations.put(StateComponent.STATE_STANDING_LEFT, new Animation(0, temp[1][0]));
+        animation.animations.put(StateComponent.STATE_STANDING_RIGHT, new Animation(0, temp[2][0]));
+        animation.animations.put(StateComponent.STATE_STANDING_UP, new Animation(0, temp[3][0]));
 
         Array<TextureRegion> frames = new Array<>();
         for (int c = 1; c < 4; c++)
             frames.add(temp[0][c]);
-        animation.animations.put(PlayerStateComponent.STATE_RUNNING_DOWN, new Animation(frameDuration, frames, Animation.PlayMode.LOOP_PINGPONG));
+        animation.animations.put(StateComponent.STATE_RUNNING_DOWN, new Animation(frameDuration, frames, Animation.PlayMode.LOOP_PINGPONG));
         frames.clear();
 
         for (int c = 1; c < 4; c++)
             frames.add(temp[1][c]);
-        animation.animations.put(PlayerStateComponent.STATE_RUNNING_LEFT, new Animation(frameDuration, frames, Animation.PlayMode.LOOP_PINGPONG));
+        animation.animations.put(StateComponent.STATE_RUNNING_LEFT, new Animation(frameDuration, frames, Animation.PlayMode.LOOP_PINGPONG));
         frames.clear();
 
         for (int c = 1; c < 4; c++)
             frames.add(temp[2][c]);
-        animation.animations.put(PlayerStateComponent.STATE_RUNNING_RIGHT, new Animation(frameDuration, frames, Animation.PlayMode.LOOP_PINGPONG));
+        animation.animations.put(StateComponent.STATE_RUNNING_RIGHT, new Animation(frameDuration, frames, Animation.PlayMode.LOOP_PINGPONG));
         frames.clear();
 
         for (int c = 1; c < 4; c++)
             frames.add(temp[3][c]);
-        animation.animations.put(PlayerStateComponent.STATE_RUNNING_UP, new Animation(frameDuration, frames, Animation.PlayMode.LOOP_PINGPONG));
+        animation.animations.put(StateComponent.STATE_RUNNING_UP, new Animation(frameDuration, frames, Animation.PlayMode.LOOP_PINGPONG));
         frames.clear();
     }
 }

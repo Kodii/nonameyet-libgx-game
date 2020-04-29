@@ -12,14 +12,14 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.b2d.B2dContactListener;
 import com.nonameyet.screens.GameScreen;
-import com.nonameyet.sprites.Chest;
-import com.nonameyet.sprites.Player;
 import com.nonameyet.sprites.Torch;
 import com.nonameyet.ui.clock.DayTimeEvent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+
+import static com.nonameyet.utils.Constants.PPM;
 
 public class MapManager implements Disposable, PropertyChangeListener {
     private final String TAG = this.getClass().getSimpleName();
@@ -33,8 +33,6 @@ public class MapManager implements Disposable, PropertyChangeListener {
 
 //    private final ImmutableArray<Entity> animatedEntities;
 
-    private Player player;
-    private Chest chest;
     private final Array<Torch> torches = new Array<>(20);
 
     // events
@@ -71,23 +69,10 @@ public class MapManager implements Disposable, PropertyChangeListener {
         b2dContactListener = new B2dContactListener(screen);
         screen.getWorld().setContactListener(b2dContactListener);
 
-        // ecs player
-        Rectangle rect = getPlayerSpawnLayer().getObjects().getByType(RectangleMapObject.class).get(0).getRectangle();
-        screen.getEcsEngine().createPlayer(new Vector2(rect.getX(), rect.getY()));
-
-
-//        createPlayer();
-//        createEntities();
-
         mapChanged = false;
     }
 
-//    private void createPlayer() {
-//        player = new Player(screen);
-//    }
-//
 //    public void createEntities() {
-//        chest = new Chest(screen);
 //
 //        for (MapObject object : getTorchesSpawnLayer().getObjects().getByType(RectangleMapObject.class)) {
 //            Rectangle rect = ((RectangleMapObject) object).getRectangle();
@@ -95,8 +80,6 @@ public class MapManager implements Disposable, PropertyChangeListener {
 //        }
 //    }
 //    public void renderEntities(float dt) {
-//        chest.update(dt);
-//
 //        for (Torch torch : torches) {
 //            torch.update(dt);
 //        }
@@ -105,19 +88,23 @@ public class MapManager implements Disposable, PropertyChangeListener {
 //        }
 //    }
 
-//    private void renderEntity(Entity entity, float dt) {
-//        final B2dComponent b2dComponent = ECSEngine.b2dCmpMapper.get(entity);
-//
-//        b2dComponent.renderPosition.lerp(b2dComponent.body.getPosition(), dt);
-//    }
-
 //    public void drawEntities(Batch batch) {
-//        chest.draw(batch);
 //
 //        for (Torch torch : torches) {
 //            torch.draw(batch);
 //        }
 //    }
+
+    public void createEntites() {
+        // ecs player
+        Rectangle playerPositionPoint = currentMap.playerSpawnLayer.getObjects().getByType(RectangleMapObject.class).get(0).getRectangle();
+        screen.getEcsEngine().createPlayer(new Vector2(playerPositionPoint.getX() / PPM, playerPositionPoint.getY() / PPM));
+
+        // ecs chest
+        Rectangle chestPositionPoint = currentMap.chestSpawnLayer.getObjects().getByType(RectangleMapObject.class).get(0).getRectangle();
+        screen.getEcsEngine().createChest(new Vector2(chestPositionPoint.getX() / PPM, chestPositionPoint.getY() / PPM));
+
+    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -166,16 +153,8 @@ public class MapManager implements Disposable, PropertyChangeListener {
         return currentMap.getCurrentTiledMap();
     }
 
-    public MapLayer getChestSpawnLayer() {
-        return currentMap.chestSpawnLayer;
-    }
-
     public MapLayer getTorchesSpawnLayer() {
         return currentMap.torchesSpawnLayer;
-    }
-
-    public MapLayer getPlayerSpawnLayer() {
-        return currentMap.playerSpawnLayer;
     }
 
     public boolean isMapChanged() {
@@ -184,10 +163,6 @@ public class MapManager implements Disposable, PropertyChangeListener {
 
     public void setMapChanged(boolean mapChanged) {
         this.mapChanged = mapChanged;
-    }
-
-    public Player getPlayer() {
-        return player;
     }
 
     @Override
