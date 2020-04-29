@@ -6,10 +6,11 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.nonameyet.NoNameYet;
 import com.nonameyet.ecs.ECSEngine;
+import com.nonameyet.ecs.systems.PhysicsDebugSystem;
+import com.nonameyet.ecs.systems.RenderingSystem;
 import com.nonameyet.input.InputManager;
 import com.nonameyet.maps.MapManager;
 import com.nonameyet.ui.PlayerHUD;
@@ -29,7 +30,6 @@ public class GameScreen extends AbstractScreen {
 
     //Box2d
     private World world;
-    private Box2DDebugRenderer _b2dr;
 
     // Lights2d
     RayHandler rayHandler;
@@ -54,7 +54,7 @@ public class GameScreen extends AbstractScreen {
         // 3. concat inputs
         createInputMultiplexer();
 
-        // 4. create ecs & systems
+        // 4. //create a ECS engine
         ecsEngine = new ECSEngine(this);
 
         // 5. create map with ecs components (Player, Npc, Torch, Chest)
@@ -63,8 +63,8 @@ public class GameScreen extends AbstractScreen {
             mapRenderer = new OrthogonalTiledMapRenderer(mapMgr.getCurrentTiledMap(), 1 / PPM);
         }
 
-        //allows for debug lines of our box2d _world.
-        _b2dr = new Box2DDebugRenderer();
+        ecsEngine.addSystem(new RenderingSystem(this));
+        ecsEngine.addSystem(new PhysicsDebugSystem(world, camera));
     }
 
     private void createCameras() {
@@ -97,9 +97,10 @@ public class GameScreen extends AbstractScreen {
         //render our game maps
         mapRenderer.render();
 
+        ecsEngine.update(delta);
+
         //_mapRenderer our Box2DDebugLines
-        _b2dr.render(world, camera.combined);
-        batchRender(delta);
+//        batchRender(delta);
 
         rayHandler.render();
 
@@ -110,8 +111,6 @@ public class GameScreen extends AbstractScreen {
         // handle user input first
         mapMgr.getPlayer().move();
 
-        ecsEngine.update(delta);
-
         //takes 1 step in the physics simulation(60 times per second)
         world.step(FIXED_TIME_STEP, 6, 2);
         rayHandler.update();
@@ -121,13 +120,13 @@ public class GameScreen extends AbstractScreen {
             mapRenderer.setMap(mapMgr.getCurrentTiledMap());
         }
 
-        mapMgr.getPlayer().update(delta);
-        mapMgr.updateEntities(delta);
+//        mapMgr.getPlayer().update(delta);
+//        mapMgr.renderEntities(delta);
 
         //tell our _mapRenderer to draw only what our _camera can see in our game _world.
         mapRenderer.setView(camera);
 
-        mapRenderer.getBatch().setProjectionMatrix(camera.combined);
+//        mapRenderer.getBatch().setProjectionMatrix(camera.combined);
         rayHandler.setCombinedMatrix(camera);
     }
 
@@ -136,19 +135,18 @@ public class GameScreen extends AbstractScreen {
         Gdx.gl.glClearColor(0.15f, 0.15f, 0.15f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        mapRenderer.getBatch().enableBlending();
-        mapRenderer.getBatch().setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+//        mapRenderer.getBatch().enableBlending();
+//        mapRenderer.getBatch().setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
     }
 
-    private void batchRender(float delta) {
-        mapRenderer.getBatch().begin();
-
-        Gdx.graphics.setTitle("NoNameYet | fps: " + Gdx.graphics.getFramesPerSecond());
-        mapMgr.drawEntities(mapRenderer.getBatch());
-        mapMgr.getPlayer().draw(mapRenderer.getBatch());
-
-        mapRenderer.getBatch().end();
-    }
+//    private void batchRender(float delta) {
+//        mapRenderer.getBatch().begin();
+//
+//        mapMgr.drawEntities(mapRenderer.getBatch());
+//        mapMgr.getPlayer().draw(mapRenderer.getBatch());
+//
+//        mapRenderer.getBatch().end();
+//    }
 
     @Override
     public void resize(int width, int height) {
@@ -165,7 +163,7 @@ public class GameScreen extends AbstractScreen {
             mapRenderer.dispose();
         }
         world.dispose();
-        _b2dr.dispose();
+//        _b2dr.dispose();
         rayHandler.dispose();
     }
 

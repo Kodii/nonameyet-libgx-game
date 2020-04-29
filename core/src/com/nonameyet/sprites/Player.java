@@ -69,7 +69,7 @@ public class Player extends Sprite implements GameKeyInputListener {
 
         b2body = BodyBuilder.dynamicRectangleBody(
                 screen.getWorld(),
-                playerPosition(),
+                new Vector2(playerPosition().x + 3, playerPosition().y + 3),
                 new Vector2(standDown.getRegionWidth(), standDown.getRegionHeight()),
                 "PLAYER",
                 Collision.PLAYER);

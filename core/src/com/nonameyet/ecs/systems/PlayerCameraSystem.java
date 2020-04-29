@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector2;
 import com.nonameyet.ecs.ECSEngine;
-import com.nonameyet.ecs.components.B2dComponent;
+import com.nonameyet.ecs.components.BodyComponent;
 import com.nonameyet.ecs.components.PlayerComponent;
 import com.nonameyet.screens.GameScreen;
 
@@ -19,7 +19,7 @@ public class PlayerCameraSystem extends IteratingSystem {
     private final OrthographicCamera gameCamera;
 
     public PlayerCameraSystem(GameScreen screen) {
-        super(Family.all(PlayerComponent.class, B2dComponent.class).get());
+        super(Family.all(PlayerComponent.class, BodyComponent.class).get());
 
         this.screen = screen;
         gameCamera = screen.getCamera();

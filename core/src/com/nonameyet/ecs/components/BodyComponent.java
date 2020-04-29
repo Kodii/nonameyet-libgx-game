@@ -4,11 +4,8 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Pool;
 
-public class B2dComponent implements Component, Pool.Poolable {
+public class BodyComponent implements Component, Pool.Poolable {
     public Body body;
-
-    public float width;
-    public float height;
 
     @Override
     public void reset() {
@@ -16,6 +13,5 @@ public class B2dComponent implements Component, Pool.Poolable {
             body.getWorld().destroyBody(body);
             body = null;
         }
-        width = height = 0;
     }
 }

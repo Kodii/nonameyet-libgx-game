@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.nonameyet.ecs.ECSEngine;
-import com.nonameyet.ecs.components.B2dComponent;
+import com.nonameyet.ecs.components.BodyComponent;
 import com.nonameyet.ecs.components.PlayerComponent;
 import com.nonameyet.input.GameKeyInputListener;
 import com.nonameyet.input.GameKeys;
@@ -18,7 +18,7 @@ public class PlayerMovementSystem extends IteratingSystem implements GameKeyInpu
     float speedY;
 
     public PlayerMovementSystem() {
-        super(Family.all(PlayerComponent.class, B2dComponent.class).get());
+        super(Family.all(PlayerComponent.class, BodyComponent.class).get());
 
         InputManager.getInstance().addInputListener(this);
     }
@@ -26,15 +26,15 @@ public class PlayerMovementSystem extends IteratingSystem implements GameKeyInpu
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         final PlayerComponent playerComponent = ECSEngine.playerCmpMapper.get(entity);
-        final B2dComponent b2dComponent = ECSEngine.b2dCmpMapper.get(entity);
+        final BodyComponent bodyComponent = ECSEngine.b2dCmpMapper.get(entity);
         speed = playerComponent.speed;
 
         //control our _player using immediate impulses
-        b2dComponent.body.applyLinearImpulse(
-                (speedX - b2dComponent.body.getLinearVelocity().x * b2dComponent.body.getMass()),
-                (speedY - b2dComponent.body.getLinearVelocity().y * b2dComponent.body.getMass()),
-                b2dComponent.body.getWorldCenter().x,
-                b2dComponent.body.getWorldCenter().y,
+        bodyComponent.body.applyLinearImpulse(
+                (speedX - bodyComponent.body.getLinearVelocity().x * bodyComponent.body.getMass()),
+                (speedY - bodyComponent.body.getLinearVelocity().y * bodyComponent.body.getMass()),
+                bodyComponent.body.getWorldCenter().x,
+                bodyComponent.body.getWorldCenter().y,
                 true);
     }
 

@@ -68,7 +68,7 @@ public class AudioManager implements PropertyChangeListener {
         }
     }
 
-    private Music playMusic(boolean isLooping, Music music) {
+    public Music playMusic(boolean isLooping, Music music) {
         Gdx.app.debug(TAG, "isMusicEnabled: " + Preferences.isMusicEnabled());
         if (!Preferences.isMusicEnabled())
             return null;
@@ -84,7 +84,7 @@ public class AudioManager implements PropertyChangeListener {
         return music;
     }
 
-    private Sound playSound(Sound sound) {
+    public Sound playSound(Sound sound) {
         Gdx.app.debug(TAG, "isSoundEnabled: " + Preferences.isSoundEnabled());
         if (!Preferences.isSoundEnabled())
             return null;

@@ -1,22 +1,20 @@
 package com.nonameyet.ecs;
 
 import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
-import com.nonameyet.b2d.BodyBuilder;
-import com.nonameyet.ecs.components.B2dComponent;
+import com.nonameyet.ecs.components.BodyComponent;
 import com.nonameyet.ecs.components.PlayerComponent;
+import com.nonameyet.ecs.components.TextureComponent;
+import com.nonameyet.ecs.entities.PlayerEntity;
 import com.nonameyet.ecs.systems.PlayerCameraSystem;
 import com.nonameyet.ecs.systems.PlayerMovementSystem;
 import com.nonameyet.screens.GameScreen;
-import com.nonameyet.utils.Collision;
-
-import static com.nonameyet.utils.Constants.PPM;
 
 public class ECSEngine extends PooledEngine {
     public static final ComponentMapper<PlayerComponent> playerCmpMapper = ComponentMapper.getFor(PlayerComponent.class);
-    public static final ComponentMapper<B2dComponent> b2dCmpMapper = ComponentMapper.getFor(B2dComponent.class);
+    public static final ComponentMapper<BodyComponent> b2dCmpMapper = ComponentMapper.getFor(BodyComponent.class);
+    public static final ComponentMapper<TextureComponent> textureCmpMapper = ComponentMapper.getFor(TextureComponent.class);
 
     private final GameScreen screen;
 
@@ -28,25 +26,11 @@ public class ECSEngine extends PooledEngine {
         this.addSystem(new PlayerCameraSystem(screen));
     }
 
-    public void createPlayer(final Vector2 playerSpawnLocation) {
-        final Entity player = this.createEntity();
-
-        // add components
-        PlayerComponent playerComponent = this.createComponent(PlayerComponent.class);
-        playerComponent.speed = 3;
-        player.add(playerComponent);
-
-        B2dComponent b2dComponent = this.createComponent(B2dComponent.class);
-        b2dComponent.body = BodyBuilder.dynamicRectangleBody(
-                screen.getWorld(),
-                new Vector2(playerSpawnLocation.x / PPM, playerSpawnLocation.y / PPM),
-                new Vector2(16, 16),
-                "PLAYER",
-                Collision.PLAYER
-        );
-        player.add(b2dComponent);
-
-        this.addEntity(player);
+    public GameScreen getScreen() {
+        return screen;
     }
 
+    public void createPlayer(Vector2 position) {
+        PlayerEntity playerEntity = new PlayerEntity(this, position);
+    }
 }

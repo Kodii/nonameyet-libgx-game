@@ -35,6 +35,8 @@ public class MapManager implements Disposable, PropertyChangeListener {
 
     private B2dContactListener b2dContactListener;
 
+//    private final ImmutableArray<Entity> animatedEntities;
+
     private Player player;
     private Chest chest;
     private final Array<Torch> torches = new Array<>(20);
@@ -44,6 +46,8 @@ public class MapManager implements Disposable, PropertyChangeListener {
 
     public MapManager(GameScreen screen) {
         this.screen = screen;
+
+//        animatedEntities = screen.getEcsEngine().getEntitiesFor(Family.all(AnimationComponent.class, B2dComponent.class).get());
 
         screen.getPlayerHUD().getClockUI().addPropertyChangeListener(this);
     }
@@ -95,13 +99,23 @@ public class MapManager implements Disposable, PropertyChangeListener {
         }
     }
 
-    public void updateEntities(float dt) {
+    public void renderEntities(float dt) {
         chest.update(dt);
 
         for (Torch torch : torches) {
             torch.update(dt);
         }
+
+//        for (final Entity entity : animatedEntities) {
+//            renderEntity(entity, dt);
+//        }
     }
+
+//    private void renderEntity(Entity entity, float dt) {
+//        final B2dComponent b2dComponent = ECSEngine.b2dCmpMapper.get(entity);
+//
+//        b2dComponent.renderPosition.lerp(b2dComponent.body.getPosition(), dt);
+//    }
 
     public void drawEntities(Batch batch) {
         chest.draw(batch);
