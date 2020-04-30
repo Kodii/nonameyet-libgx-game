@@ -65,7 +65,7 @@ public class GameScreen extends AbstractScreen {
 
         ecsEngine.addSystem(new RenderingSystem(this));
         ecsEngine.addSystem(new PhysicsSystem(world));
-        ecsEngine.addSystem(new PhysicsDebugSystem(world, camera));
+//        ecsEngine.addSystem(new PhysicsDebugSystem(world, camera));
 
         mapMgr.createEntites();
     }
