@@ -102,7 +102,8 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
         b2dlight.light = LightBuilder.pointLight(screen.getRayHandler(), b2dbody.body, Color.valueOf("#e28822"), b2dlight.distance);
         b2dlight.light.setSoft(true);
 
-        b2dlight.flSpeed = 3;
+        b2dlight.callEvery = 0.15f;
+        b2dlight.flSpeed = 2;
         b2dlight.flDistance = b2dlight.light.getDistance() * 0.1f;
 
         lightState.set(LightStateComponent.STATE_OFF);
