@@ -95,7 +95,7 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
     }
 
     private void createLight() {
-        float random = (float) (1.9f + Math.random() * (2.1f - 1.9f));
+        float random = (float) (2.3f + Math.random() * (2.5f - 2.3f));
 
         b2dlight.distance = random;
 

@@ -15,7 +15,8 @@ public class Collision {
     public final static short LIGHT_GROUP = 1;
 
     // masks
-    public final static short MASK_LIGHTS = PLAYER | OBJECT;
+//    public final static short MASK_LIGHTS = PLAYER | OBJECT;
+    public final static short MASK_LIGHTS = 0;
     public final static short MASK_PLAYER = OBSTACLE;
 
 

@@ -3,6 +3,7 @@ package com.nonameyet.maps;
 import box2dLight.Light;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -17,7 +18,6 @@ import com.nonameyet.utils.Collision;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 
 import static com.nonameyet.utils.Constants.PPM;
 
@@ -31,9 +31,6 @@ public class MapManager implements Disposable, PropertyChangeListener {
 
     private B2dContactListener b2dContactListener;
 
-    // events
-    private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
-
     public MapManager(GameScreen screen) {
         this.screen = screen;
 
@@ -46,7 +43,8 @@ public class MapManager implements Disposable, PropertyChangeListener {
             screen.getWorld().dispose();
         screen.setWorld(new World(new Vector2(0, 0), true));
 
-        screen.setRayHandler(new RayHandler(screen.getWorld()));
+        screen.setRayHandler(new RayHandler(screen.getWorld(), 256, 144));
+        screen.getRayHandler().getLightMapTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
         screen.getRayHandler().setAmbientLight(1.0f);
         Light.setGlobalContactFilter(Collision.lightsFilter());
         RayHandler.useDiffuseLight(true);
