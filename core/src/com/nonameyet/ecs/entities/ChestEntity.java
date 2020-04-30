@@ -34,7 +34,7 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
         final TransformComponent position = ecsEngine.createComponent(TransformComponent.class);
         final AnimationComponent animation = ecsEngine.createComponent(AnimationComponent.class);
         final TextureComponent texture = ecsEngine.createComponent(TextureComponent.class);
-        final BodyComponent b2dbody = ecsEngine.createComponent(BodyComponent.class);
+        final B2dBodyComponent b2dbody = ecsEngine.createComponent(B2dBodyComponent.class);
         final TypeComponent type = ecsEngine.createComponent(TypeComponent.class);
         final StateComponent state = ecsEngine.createComponent(StateComponent.class);
         this.state = state;

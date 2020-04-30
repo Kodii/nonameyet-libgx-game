@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.nonameyet.NoNameYet;
+import com.nonameyet.preferences.PlayerPref;
+import com.nonameyet.preferences.Preferences;
 
 public class DesktopLauncher {
     public static void main(String[] arg) {

@@ -1,8 +1,8 @@
 package com.nonameyet.maps;
 
+import box2dLight.Light;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.b2d.B2dContactListener;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.ui.clock.DayTimeEvent;
+import com.nonameyet.utils.Collision;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -30,17 +31,11 @@ public class MapManager implements Disposable, PropertyChangeListener {
 
     private B2dContactListener b2dContactListener;
 
-//    private final ImmutableArray<Entity> animatedEntities;
-
-//    private final Array<Torch> torches = new Array<>(20);
-
     // events
     private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
     public MapManager(GameScreen screen) {
         this.screen = screen;
-
-//        animatedEntities = screen.getEcsEngine().getEntitiesFor(Family.all(AnimationComponent.class, B2dComponent.class).get());
 
         screen.getPlayerHUD().getClockUI().addPropertyChangeListener(this);
     }
@@ -53,6 +48,7 @@ public class MapManager implements Disposable, PropertyChangeListener {
 
         screen.setRayHandler(new RayHandler(screen.getWorld()));
         screen.getRayHandler().setAmbientLight(1.0f);
+        Light.setGlobalContactFilter(Collision.lightsFilter());
         RayHandler.useDiffuseLight(true);
 
         Map map = MapFactory.getMap(screen, mapType);
@@ -70,29 +66,6 @@ public class MapManager implements Disposable, PropertyChangeListener {
 
         mapChanged = false;
     }
-
-//    public void createEntities() {
-//
-//        for (MapObject object : getTorchesSpawnLayer().getObjects().getByType(RectangleMapObject.class)) {
-//            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-//            torches.add(new Torch(screen, new Vector2(rect.getX() / PPM, rect.getY() / PPM)));
-//        }
-//    }
-//    public void renderEntities(float dt) {
-//        for (Torch torch : torches) {
-//            torch.update(dt);
-//        }
-//        for (final Entity entity : animatedEntities) {
-//            renderEntity(entity, dt);
-//        }
-//    }
-
-//    public void drawEntities(Batch batch) {
-//
-//        for (Torch torch : torches) {
-//            torch.draw(batch);
-//        }
-//    }
 
     public void createEntites() {
         // ecs player
@@ -155,10 +128,6 @@ public class MapManager implements Disposable, PropertyChangeListener {
             loadMap(MapFactory.MapType.SPAWN);
         }
         return currentMap.getCurrentTiledMap();
-    }
-
-    public MapLayer getTorchesSpawnLayer() {
-        return currentMap.torchesSpawnLayer;
     }
 
     public boolean isMapChanged() {

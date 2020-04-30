@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
+import com.nonameyet.preferences.PlayerPref;
 import com.nonameyet.preferences.Preferences;
 import com.nonameyet.screens.ScreenType;
 

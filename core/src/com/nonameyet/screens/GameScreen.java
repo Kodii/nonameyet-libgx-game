@@ -92,31 +92,24 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void render(float delta) {
-        clearGameScreen();
-        //separate our update logic from render
-        update(delta);
-        //render our game maps
-        mapRenderer.render();
-        ecsEngine.update(delta);
-        rayHandler.render();
-        playerHUD.render(delta);
-    }
-
-    private void clearGameScreen() {
         // Clear the game screen
         Gdx.gl.glClearColor(0.15f, 0.15f, 0.15f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-    }
-
-    private void update(float delta) {
-        rayHandler.update();
 
         if (mapMgr.isMapChanged()) {
             mapMgr.loadMap(mapMgr.getCurrentMapType());
             mapRenderer.setMap(mapMgr.getCurrentTiledMap());
         }
+        //render our game maps
         mapRenderer.setView(camera);
+        mapRenderer.render();
+
+        ecsEngine.update(delta);
+
         rayHandler.setCombinedMatrix(camera);
+        rayHandler.updateAndRender();
+
+        playerHUD.render(delta);
     }
 
     @Override
@@ -134,7 +127,6 @@ public class GameScreen extends AbstractScreen {
             mapRenderer.dispose();
         }
         world.dispose();
-//        _b2dr.dispose();
         rayHandler.dispose();
     }
 

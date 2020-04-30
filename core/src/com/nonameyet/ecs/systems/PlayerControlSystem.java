@@ -3,7 +3,7 @@ package com.nonameyet.ecs.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.nonameyet.ecs.components.BodyComponent;
+import com.nonameyet.ecs.components.B2dBodyComponent;
 import com.nonameyet.ecs.components.PlayerComponent;
 import com.nonameyet.ecs.components.StateComponent;
 import com.nonameyet.input.GameKeyInputListener;
@@ -20,7 +20,7 @@ public class PlayerControlSystem extends IteratingSystem implements GameKeyInput
     float speedY;
 
     public PlayerControlSystem() {
-        super(Family.all(PlayerComponent.class, BodyComponent.class, StateComponent.class).get());
+        super(Family.all(PlayerComponent.class, B2dBodyComponent.class, StateComponent.class).get());
 
         InputManager.getInstance().addInputListener(this);
     }
@@ -28,7 +28,7 @@ public class PlayerControlSystem extends IteratingSystem implements GameKeyInput
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         final PlayerComponent player = playerCmpMapper.get(entity);
-        final BodyComponent b2dbody = bodyCmpMapper.get(entity);
+        final B2dBodyComponent b2dbody = b2dbodyCmpMapper.get(entity);
         final StateComponent state = stateCmpMapper.get(entity);
 
         speed = player.speed;

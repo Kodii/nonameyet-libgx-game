@@ -7,10 +7,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.nonameyet.ecs.components.BodyComponent;
+import com.nonameyet.ecs.components.B2dBodyComponent;
 import com.nonameyet.ecs.components.TransformComponent;
 
-import static com.nonameyet.ecs.ComponentMappers.bodyCmpMapper;
+import static com.nonameyet.ecs.ComponentMappers.b2dbodyCmpMapper;
 import static com.nonameyet.ecs.ComponentMappers.transformCmpMapper;
 
 public class PhysicsSystem extends IteratingSystem {
@@ -22,7 +22,7 @@ public class PhysicsSystem extends IteratingSystem {
     private Array<Entity> bodiesQueue;
 
     public PhysicsSystem(World world) {
-        super(Family.all(BodyComponent.class, TransformComponent.class).get());
+        super(Family.all(B2dBodyComponent.class, TransformComponent.class).get());
 
         this.world = world;
         this.bodiesQueue = new Array<>();
@@ -40,7 +40,7 @@ public class PhysicsSystem extends IteratingSystem {
             //Entity Queue
             for (Entity entity : bodiesQueue) {
                 TransformComponent tfm = transformCmpMapper.get(entity);
-                BodyComponent bodyComp = bodyCmpMapper.get(entity);
+                B2dBodyComponent bodyComp = b2dbodyCmpMapper.get(entity);
                 Vector2 position = bodyComp.body.getPosition();
                 tfm.position.x = position.x;
                 tfm.position.y = position.y;

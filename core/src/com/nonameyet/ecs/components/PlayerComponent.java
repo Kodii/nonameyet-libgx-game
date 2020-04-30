@@ -7,8 +7,6 @@ import com.badlogic.gdx.utils.Pool;
  * PlayerComponent should have info about player like: speed, health, lvl, exp etc
  */
 public class PlayerComponent implements Component, Pool.Poolable {
-    private final String TAG = this.getClass().getSimpleName();
-
     public float speed;
 
     @Override

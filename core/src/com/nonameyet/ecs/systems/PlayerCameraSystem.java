@@ -6,11 +6,11 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector2;
-import com.nonameyet.ecs.components.BodyComponent;
+import com.nonameyet.ecs.components.B2dBodyComponent;
 import com.nonameyet.ecs.components.PlayerComponent;
 import com.nonameyet.screens.GameScreen;
 
-import static com.nonameyet.ecs.ComponentMappers.bodyCmpMapper;
+import static com.nonameyet.ecs.ComponentMappers.b2dbodyCmpMapper;
 import static com.nonameyet.utils.Constants.PPM;
 
 public class PlayerCameraSystem extends IteratingSystem {
@@ -19,7 +19,7 @@ public class PlayerCameraSystem extends IteratingSystem {
     private final OrthographicCamera gameCamera;
 
     public PlayerCameraSystem(GameScreen screen) {
-        super(Family.all(PlayerComponent.class, BodyComponent.class).get());
+        super(Family.all(PlayerComponent.class, B2dBodyComponent.class).get());
 
         this.screen = screen;
         gameCamera = screen.getCamera();
@@ -27,7 +27,7 @@ public class PlayerCameraSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        Vector2 position = bodyCmpMapper.get(entity).body.getPosition();
+        Vector2 position = b2dbodyCmpMapper.get(entity).body.getPosition();
         gameCamera.update();
         cameraCornerBounds(position);
 

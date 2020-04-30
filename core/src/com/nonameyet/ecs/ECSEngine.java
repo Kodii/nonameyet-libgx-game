@@ -6,6 +6,7 @@ import com.nonameyet.ecs.entities.ChestEntity;
 import com.nonameyet.ecs.entities.PlayerEntity;
 import com.nonameyet.ecs.entities.TorchEntity;
 import com.nonameyet.ecs.systems.AnimationSystem;
+import com.nonameyet.ecs.systems.LightSystem;
 import com.nonameyet.ecs.systems.PlayerCameraSystem;
 import com.nonameyet.ecs.systems.PlayerControlSystem;
 import com.nonameyet.screens.GameScreen;
@@ -18,6 +19,7 @@ public class ECSEngine extends PooledEngine {
         this.screen = screen;
 
         this.addSystem(new AnimationSystem());
+        this.addSystem(new LightSystem());
         this.addSystem(new PlayerControlSystem());
         this.addSystem(new PlayerCameraSystem(screen));
     }
