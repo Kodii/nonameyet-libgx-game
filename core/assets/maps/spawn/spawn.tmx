@@ -91,7 +91,7 @@
  </group>
  <group id="28" name="npc">
   <objectgroup id="29" name="NPC_SPAWN_LAYER" offsetx="17.7019" offsety="3.50454">
-   <object id="78" name="elder" x="135.127" y="118.007">
+   <object id="78" name="elder" x="155.182" y="114.83">
     <point/>
    </object>
   </objectgroup>
