@@ -99,9 +99,10 @@ public class ElderEntity extends Entity {
     }
 
     private void createLight() {
-        b2dlight.distance = 1;
+        b2dlight.distance = 2f;
 
         b2dlight.light = LightBuilder.pointLight(screen.getRayHandler(), b2dbody.body, Color.valueOf("#e28822"), b2dlight.distance);
         b2dlight.light.setSoft(true);
+        b2dlight.light.attachToBody(b2dbody.body, 0, -0.6f);
     }
 }

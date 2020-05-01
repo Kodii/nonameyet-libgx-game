@@ -2,6 +2,7 @@ package com.nonameyet.ecs.entities;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
 import com.nonameyet.b2d.BodyBuilder;
+import com.nonameyet.b2d.LightBuilder;
 import com.nonameyet.ecs.ECSEngine;
 import com.nonameyet.ecs.components.*;
 import com.nonameyet.screens.GameScreen;
@@ -24,6 +26,8 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
 
     private final GameScreen screen;
     private final StateComponent state;
+    private final B2dBodyComponent b2dbody;
+    private final B2dLightComponent b2dlight;
 
     public ChestEntity(final ECSEngine ecsEngine, final Vector2 chestSpawnLocation) {
         this.screen = ecsEngine.getScreen();
@@ -34,7 +38,8 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
         final TransformComponent position = ecsEngine.createComponent(TransformComponent.class);
         final AnimationComponent animation = ecsEngine.createComponent(AnimationComponent.class);
         final TextureComponent texture = ecsEngine.createComponent(TextureComponent.class);
-        final B2dBodyComponent b2dbody = ecsEngine.createComponent(B2dBodyComponent.class);
+        b2dbody = ecsEngine.createComponent(B2dBodyComponent.class);
+        b2dlight = new B2dLightComponent(screen);
         final TypeComponent type = ecsEngine.createComponent(TypeComponent.class);
         final StateComponent state = ecsEngine.createComponent(StateComponent.class);
         this.state = state;
@@ -58,6 +63,8 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
         type.type = TypeComponent.CHEST;
         state.set(StateComponent.STATE_CHEST_NORMAL);
 
+        createLight();
+
         chestEntity.add(position);
         chestEntity.add(animation);
         chestEntity.add(texture);
@@ -76,6 +83,15 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
         animation.animations.put(StateComponent.STATE_CHEST_NORMAL, new Animation(0, textureAtlas.findRegion("chest_grass")));
         animation.animations.put(StateComponent.STATE_CHEST_OPEN, new Animation(0.15f, textureAtlas.findRegions("chest_grass")));
         animation.animations.put(StateComponent.STATE_CHEST_CLOSE, new Animation(0.15f, textureAtlas.findRegions("chest_grass"), Animation.PlayMode.REVERSED));
+    }
+
+
+    private void createLight() {
+
+        b2dlight.distance = 1f;
+
+        b2dlight.light = LightBuilder.pointLight(screen.getRayHandler(), b2dbody.body, Color.valueOf("#e28822"), b2dlight.distance);
+        b2dlight.light.setSoft(true);
     }
 
     @Override

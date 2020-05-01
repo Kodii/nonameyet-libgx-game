@@ -72,14 +72,14 @@
  </group>
  <group id="17" name="chest">
   <objectgroup id="19" name="CHEST_SPAWN_LAYER" offsetx="27.6285" offsety="3.95652">
-   <object id="65" name="chest" x="455.421" y="308.871">
+   <object id="65" name="chest" x="476.209" y="355.34">
     <point/>
    </object>
   </objectgroup>
  </group>
  <group id="28" name="npc">
   <objectgroup id="29" name="NPC_SPAWN_LAYER" offsetx="9.17151" offsety="4.28004">
-   <object id="78" name="elder" x="70.9263" y="96.6065">
+   <object id="78" name="elder" x="97.218" y="80.7093">
     <point/>
    </object>
    <object id="80" name="hacksmith" x="592.479" y="109.447">

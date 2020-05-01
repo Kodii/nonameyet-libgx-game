@@ -54,11 +54,12 @@ public class PlayerEntity extends Entity {
         b2dbody.body = BodyBuilder.dynamicRectangleBody(
                 ecsEngine.getScreen().getWorld(),
                 new Vector2(playerSpawnLocation.x, playerSpawnLocation.y),
-                new Vector2(20, 36),
+                new Vector2(14, 36),
                 "PLAYER",
-                Collision.PLAYER
-        );
-        player.speed = 3;
+                Collision.PLAYER);
+        b2dbody.body.setLinearDamping(20f);
+
+        player.speed = 4;
         type.type = TypeComponent.PLAYER;
         state.set(StateComponent.STATE_STANDING_DOWN);
 
@@ -93,9 +94,10 @@ public class PlayerEntity extends Entity {
 
     private void createLight() {
 
-        b2dlight.distance = 2;
+        b2dlight.distance = 1f;
 
         b2dlight.light = LightBuilder.pointLight(screen.getRayHandler(), b2dbody.body, Color.valueOf("#e28822"), b2dlight.distance);
         b2dlight.light.setSoft(true);
+        b2dlight.light.attachToBody(b2dbody.body, 0, -0.6f);
     }
 }

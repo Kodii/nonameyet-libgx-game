@@ -1,6 +1,6 @@
 package com.nonameyet.ecs.components;
 
-import box2dLight.Light;
+import box2dLight.PointLight;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
@@ -23,7 +23,7 @@ public class B2dLightComponent implements Component, Pool.Poolable, Disposable, 
         screen.getPlayerHUD().getClockUI().addPropertyChangeListener(this);
     }
 
-    public Light light;
+    public PointLight light;
 
     public float distance = 0;
     public float flDistance = 0;
