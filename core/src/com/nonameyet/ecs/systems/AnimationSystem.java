@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.nonameyet.ecs.components.AnimationComponent;
+import com.nonameyet.ecs.components.NpcComponent;
 import com.nonameyet.ecs.components.StateComponent;
 import com.nonameyet.ecs.components.TextureComponent;
 
@@ -23,6 +24,7 @@ public class AnimationSystem extends IteratingSystem {
 
         AnimationComponent animation = animationCmpMapper.get(entity);
         StateComponent state = stateCmpMapper.get(entity);
+        NpcComponent npc = npcCmpMapper.get(entity);
 
         if (animation.animations.containsKey(state.get())) {
             TextureComponent texture = textureCmpMapper.get(entity);
@@ -30,6 +32,5 @@ public class AnimationSystem extends IteratingSystem {
         }
 
         state.time += deltaTime;
-
     }
 }

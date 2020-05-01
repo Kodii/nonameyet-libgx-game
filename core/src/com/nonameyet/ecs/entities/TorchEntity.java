@@ -30,7 +30,6 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
     private final B2dLightComponent b2dlight;
     private final GameScreen screen;
     private final StateComponent state;
-    private final LightStateComponent lightState;
 
     public TorchEntity(ECSEngine ecsEngine, Vector2 torchLocation) {
         this.screen = ecsEngine.getScreen();
@@ -42,10 +41,10 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
         animation = ecsEngine.createComponent(AnimationComponent.class);
         final TextureComponent texture = ecsEngine.createComponent(TextureComponent.class);
         b2dbody = ecsEngine.createComponent(B2dBodyComponent.class);
+        b2dlight = new B2dLightComponent(screen);
         final TypeComponent type = ecsEngine.createComponent(TypeComponent.class);
         state = ecsEngine.createComponent(StateComponent.class);
-        b2dlight = ecsEngine.createComponent(B2dLightComponent.class);
-        lightState = ecsEngine.createComponent(LightStateComponent.class);
+
 
         // create the data for the components and add them to the components
         position.position.set(torchLocation.x, torchLocation.y, 0);
@@ -77,7 +76,6 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
         torchEntity.add(type);
         torchEntity.add(state);
         torchEntity.add(b2dlight);
-        torchEntity.add(lightState);
 
         ecsEngine.addEntity(torchEntity);
 
@@ -105,8 +103,6 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
         b2dlight.callEvery = 0.15f;
         b2dlight.flSpeed = 2;
         b2dlight.flDistance = b2dlight.light.getDistance() * 0.1f;
-
-        lightState.set(LightStateComponent.STATE_OFF);
     }
 
     @Override
@@ -123,13 +119,11 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
             case DAWN:
             case AFTERNOON:
                 state.set(StateComponent.STATE_TORCH_OFF);
-                lightState.set(LightStateComponent.STATE_OFF);
                 break;
 
             case DUSK:
             case NIGHT:
                 state.set(StateComponent.STATE_TORCH_ON);
-                lightState.set(LightStateComponent.STATE__ON);
                 break;
         }
     }

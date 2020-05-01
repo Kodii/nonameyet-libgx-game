@@ -15,6 +15,6 @@ public class ComponentMappers {
     public static ComponentMapper<TransformComponent> transformCmpMapper = ComponentMapper.getFor(TransformComponent.class);
     public static ComponentMapper<TypeComponent> typeCmpMapper = ComponentMapper.getFor(TypeComponent.class);
     public static ComponentMapper<B2dLightComponent> b2dlightCmpMapper = ComponentMapper.getFor(B2dLightComponent.class);
-    public static ComponentMapper<LightStateComponent> lightStateCmpMapper = ComponentMapper.getFor(LightStateComponent.class);
+    public static ComponentMapper<NpcComponent> npcCmpMapper = ComponentMapper.getFor(NpcComponent.class);
 
 }

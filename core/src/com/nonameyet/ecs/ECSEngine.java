@@ -3,6 +3,7 @@ package com.nonameyet.ecs;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
 import com.nonameyet.ecs.entities.ChestEntity;
+import com.nonameyet.ecs.entities.ElderEntity;
 import com.nonameyet.ecs.entities.PlayerEntity;
 import com.nonameyet.ecs.entities.TorchEntity;
 import com.nonameyet.ecs.systems.AnimationSystem;
@@ -38,5 +39,12 @@ public class ECSEngine extends PooledEngine {
 
     public void createTorch(Vector2 position) {
         new TorchEntity(this, position);
+    }
+
+    public void createElder(Vector2 position) {
+        new ElderEntity(this, position);
+    }
+
+    public void createHacksmith(Vector2 position) {
     }
 }

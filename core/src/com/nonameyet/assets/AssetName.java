@@ -13,6 +13,7 @@ public enum AssetName {
     // sprites
     PLAYER_PNG("from_web/sprites/characters/Rogue.png"),
     PLAYER_ATLAS("sprites/npc/player.atlas"),
+    ELDER_ATLAS("sprites/npc/elder.atlas"),
     CHEST_ATLAS("sprites/items/chests/chest_grass.atlas"),
     TORCH_ATLAS("sprites/items/torch/torch.atlas"),
 

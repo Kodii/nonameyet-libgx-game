@@ -27,7 +27,12 @@ abstract class Map implements Disposable {
     protected final static String PLAYER_SPAWN_LAYER = "PLAYER_SPAWN_LAYER";
     // Chests layers
     protected final static String CHEST_SPAWN_LAYER = "CHEST_SPAWN_LAYER";
+
+    // Lights layers
     protected final static String TORCHES_SPAWN_LAYER = "TORCHES_SPAWN_LAYER";
+
+    // Npc layers
+    protected final static String NPC_SPAWN_LAYER = "NPC_SPAWN_LAYER";
 
     protected MapLayer collisionLayer = null;
     protected MapLayer portalLayer = null;
@@ -35,6 +40,7 @@ abstract class Map implements Disposable {
 
     protected MapLayer chestSpawnLayer = null;
     protected MapLayer torchesSpawnLayer = null;
+    protected MapLayer npcSpawnLayer = null;
 
     protected TiledMap currentTiledMap = null;
     protected MapFactory.MapType currentMapType;
@@ -84,6 +90,17 @@ abstract class Map implements Disposable {
             }
         } else {
             Gdx.app.debug(TAG, "No lights group, skip!");
+        }
+
+        MapGroupLayer npcGroup = (MapGroupLayer) currentTiledMap.getLayers().get("npc");
+        if (lightsGroup != null) {
+            npcSpawnLayer = npcGroup.getLayers().get(NPC_SPAWN_LAYER);
+            if (npcSpawnLayer == null) {
+                Gdx.app.debug(TAG, "No npc spawn layer!");
+            }
+
+        } else {
+            Gdx.app.debug(TAG, "No npc group, skip!");
         }
     }
 

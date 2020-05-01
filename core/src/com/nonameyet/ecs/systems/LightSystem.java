@@ -7,21 +7,19 @@ import com.badlogic.gdx.math.MathUtils;
 import com.nonameyet.ecs.ComponentMappers;
 import com.nonameyet.ecs.components.B2dBodyComponent;
 import com.nonameyet.ecs.components.B2dLightComponent;
-import com.nonameyet.ecs.components.LightStateComponent;
 
 public class LightSystem extends IteratingSystem {
 
     public LightSystem() {
-        super(Family.all(B2dBodyComponent.class, B2dLightComponent.class, LightStateComponent.class).get());
+        super(Family.all(B2dBodyComponent.class, B2dLightComponent.class).get());
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         final B2dLightComponent b2dlight = ComponentMappers.b2dlightCmpMapper.get(entity);
-        final LightStateComponent lightState = ComponentMappers.lightStateCmpMapper.get(entity);
 
 
-        if (lightState.get() == LightStateComponent.STATE__ON && b2dlight.flDistance > 0) {
+        if (b2dlight.flDistance > 0) {
             b2dlight.flTime += (b2dlight.flSpeed * deltaTime);
 
             if (b2dlight.flTime > MathUtils.PI2) {

@@ -63,9 +63,9 @@ public class GameScreen extends AbstractScreen {
             mapRenderer = new OrthogonalTiledMapRenderer(mapMgr.getCurrentTiledMap(), 1 / PPM);
         }
 
-        ecsEngine.addSystem(new RenderingSystem(this));
         ecsEngine.addSystem(new PhysicsSystem(world));
-//        ecsEngine.addSystem(new PhysicsDebugSystem(world, camera));
+        ecsEngine.addSystem(new RenderingSystem(this));
+        ecsEngine.addSystem(new PhysicsDebugSystem(world, camera));
 
         mapMgr.createEntites();
     }

@@ -16,11 +16,13 @@ import com.nonameyet.screens.GameScreen;
 import com.nonameyet.utils.Collision;
 
 public class PlayerEntity extends Entity {
+    private final String TAG = this.getClass().getSimpleName();
+
     private final GameScreen screen;
 
     private final B2dBodyComponent b2dbody;
     private final B2dLightComponent b2dlight;
-    private final LightStateComponent lightState;
+    private final StateComponent state;
 
     public PlayerEntity(final ECSEngine ecsEngine, final Vector2 playerSpawnLocation) {
         this.screen = ecsEngine.getScreen();
@@ -33,11 +35,10 @@ public class PlayerEntity extends Entity {
         final AnimationComponent animation = ecsEngine.createComponent(AnimationComponent.class);
         final TextureComponent texture = ecsEngine.createComponent(TextureComponent.class);
         b2dbody = ecsEngine.createComponent(B2dBodyComponent.class);
+        b2dlight = new B2dLightComponent(screen);
         final PlayerComponent player = ecsEngine.createComponent(PlayerComponent.class);
         final TypeComponent type = ecsEngine.createComponent(TypeComponent.class);
-        final StateComponent state = ecsEngine.createComponent(StateComponent.class);
-        b2dlight = ecsEngine.createComponent(B2dLightComponent.class);
-        lightState = ecsEngine.createComponent(LightStateComponent.class);
+        state = ecsEngine.createComponent(StateComponent.class);
 
         // create the data for the components and add them to the components
         position.position.set(playerSpawnLocation.x, playerSpawnLocation.y, 0);
@@ -72,7 +73,6 @@ public class PlayerEntity extends Entity {
         playerEntity.add(type);
         playerEntity.add(state);
         playerEntity.add(b2dlight);
-        playerEntity.add(lightState);
 
         ecsEngine.addEntity(playerEntity);
     }
@@ -97,7 +97,5 @@ public class PlayerEntity extends Entity {
 
         b2dlight.light = LightBuilder.pointLight(screen.getRayHandler(), b2dbody.body, Color.valueOf("#e28822"), b2dlight.distance);
         b2dlight.light.setSoft(true);
-
-        lightState.set(LightStateComponent.STATE__ON);
     }
 }

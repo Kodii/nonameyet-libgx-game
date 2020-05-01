@@ -67,17 +67,42 @@ public class MapManager implements Disposable, PropertyChangeListener {
 
     public void createEntites() {
         // ecs player
-        Rectangle playerPositionPoint = currentMap.playerSpawnLayer.getObjects().getByType(RectangleMapObject.class).get(0).getRectangle();
-        screen.getEcsEngine().createPlayer(new Vector2(playerPositionPoint.getX() / PPM, playerPositionPoint.getY() / PPM));
-
+        if (currentMap.playerSpawnLayer != null) {
+            Rectangle playerPositionPoint = currentMap.playerSpawnLayer.getObjects().getByType(RectangleMapObject.class).get(0).getRectangle();
+            screen.getEcsEngine().createPlayer(new Vector2(playerPositionPoint.getX() / PPM, playerPositionPoint.getY() / PPM));
+        }
         // ecs chest
-        Rectangle chestPositionPoint = currentMap.chestSpawnLayer.getObjects().getByType(RectangleMapObject.class).get(0).getRectangle();
-        screen.getEcsEngine().createChest(new Vector2(chestPositionPoint.getX() / PPM, chestPositionPoint.getY() / PPM));
+        if (currentMap.chestSpawnLayer != null) {
+            Rectangle chestPositionPoint = currentMap.chestSpawnLayer.getObjects().getByType(RectangleMapObject.class).get(0).getRectangle();
+            screen.getEcsEngine().createChest(new Vector2(chestPositionPoint.getX() / PPM, chestPositionPoint.getY() / PPM));
+        }
 
         // ecs torches
-        for (MapObject object : currentMap.torchesSpawnLayer.getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            screen.getEcsEngine().createTorch(new Vector2(rect.getX() / PPM, rect.getY() / PPM));
+        if (currentMap.torchesSpawnLayer != null) {
+            for (MapObject object : currentMap.torchesSpawnLayer.getObjects().getByType(RectangleMapObject.class)) {
+                Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                screen.getEcsEngine().createTorch(new Vector2(rect.getX() / PPM, rect.getY() / PPM));
+            }
+        }
+
+        // ecs npcs
+        if (currentMap.npcSpawnLayer != null) {
+            for (MapObject object : currentMap.npcSpawnLayer.getObjects().getByType(RectangleMapObject.class)) {
+                Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                Vector2 position = new Vector2(rect.getX() / PPM, rect.getY() / PPM);
+
+                switch (object.getName()) {
+                    case "elder":
+                        screen.getEcsEngine().createElder(position);
+                        break;
+                    case "hacksmith":
+                        screen.getEcsEngine().createHacksmith(position);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
         }
     }
 
