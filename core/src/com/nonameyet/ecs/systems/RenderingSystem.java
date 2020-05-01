@@ -58,21 +58,21 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         // loop through each entity in our render queue
         for (Entity entity : renderQueue) {
-            TextureComponent tex = textureCmpMapper.get(entity);
-            TransformComponent t = transformCmpMapper.get(entity);
+            TextureComponent texture = textureCmpMapper.get(entity);
+            TransformComponent transform = transformCmpMapper.get(entity);
 
-            if (tex.region == null || t.isHidden) {
+            if (texture.region == null || transform.isHidden) {
                 continue;
             }
 
-            float width = tex.region.getRegionWidth();
-            float height = tex.region.getRegionHeight();
+            float width = texture.region.getRegionWidth();
+            float height = texture.region.getRegionHeight();
 
             float originX = width / 2;
             float originY = height / 2;
 
-            batch.draw(tex.region,
-                    t.position.x - originX, t.position.y - originY,
+            batch.draw(texture.region,
+                    transform.position.x - originX, transform.position.y - originY,
                     originX, originY,
                     width, height,
                     1 / PPM, 1 / PPM, 0);

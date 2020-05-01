@@ -49,12 +49,12 @@ public class PlayerEntity extends Entity {
 
         createRunAnimation(animation, textureAtlas);
 
-        texture.region = new TextureRegion(textureRegion, 0, 0, 28, 40);
+        texture.region = new TextureRegion(textureRegion, 0, 0, 22, 38);
 
         b2dbody.body = BodyBuilder.dynamicRectangleBody(
                 ecsEngine.getScreen().getWorld(),
                 new Vector2(playerSpawnLocation.x, playerSpawnLocation.y),
-                new Vector2(14, 36),
+                new Vector2(14, 38),
                 "PLAYER",
                 Collision.PLAYER);
         b2dbody.body.setLinearDamping(20f);

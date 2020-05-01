@@ -120,7 +120,7 @@ public class MapManager implements Disposable, PropertyChangeListener {
         switch (event) {
 
             case DAWN:
-                screen.getRayHandler().setAmbientLight(1, 0.92f, 0.61f, 1f);
+                screen.getRayHandler().setAmbientLight(1, 0.92f, 0.7f, 1f);
                 break;
             case AFTERNOON:
                 screen.getRayHandler().setAmbientLight(1f, 1f, 1f, 1f);
