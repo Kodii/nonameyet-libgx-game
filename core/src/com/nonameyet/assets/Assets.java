@@ -32,6 +32,11 @@ public class Assets implements Disposable {
         manager.load(AssetName.CHEST_ATLAS.getAssetName(), TextureAtlas.class);
         manager.load(AssetName.TORCH_ATLAS.getAssetName(), TextureAtlas.class);
 
+        //blacksmith
+        manager.load(AssetName.BLACKSMITH_ATLAS.getAssetName(), TextureAtlas.class);
+        manager.load(AssetName.OWEN_ATLAS.getAssetName(), TextureAtlas.class);
+        manager.load(AssetName.ANVIL_ATLAS.getAssetName(), TextureAtlas.class);
+
         // hud
         manager.load(AssetName.CAMERA_FRAME.getAssetName(), Texture.class);
         manager.load(AssetName.CHEST_WINDOW.getAssetName(), Texture.class);

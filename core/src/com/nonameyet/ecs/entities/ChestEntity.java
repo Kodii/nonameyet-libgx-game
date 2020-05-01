@@ -29,11 +29,11 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
     private final B2dBodyComponent b2dbody;
     private final B2dLightComponent b2dlight;
 
-    public ChestEntity(final ECSEngine ecsEngine, final Vector2 chestSpawnLocation) {
+    public ChestEntity(final ECSEngine ecsEngine, final Vector2 spawnLocation) {
         this.screen = ecsEngine.getScreen();
 
         // Create the Entity and all the components that will go in the entity
-        final Entity chestEntity = ecsEngine.createEntity();
+        final Entity entity = ecsEngine.createEntity();
 
         final TransformComponent position = ecsEngine.createComponent(TransformComponent.class);
         final AnimationComponent animation = ecsEngine.createComponent(AnimationComponent.class);
@@ -45,10 +45,10 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
         this.state = state;
 
         // create the data for the components and add them to the components
-        position.position.set(chestSpawnLocation.x, chestSpawnLocation.y, 0);
+        position.position.set(spawnLocation.x, spawnLocation.y, 0);
 
         TextureAtlas textureAtlas = Assets.manager.get(AssetName.CHEST_ATLAS.getAssetName());
-        TextureRegion textureRegion = textureAtlas.findRegion("chest_grass");
+        TextureRegion textureRegion = textureAtlas.findRegion("chest");
 
         createAnimation(animation, textureAtlas);
 
@@ -56,7 +56,7 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
 
         b2dbody.body = BodyBuilder.staticPointBody(
                 ecsEngine.getScreen().getWorld(),
-                new Vector2(chestSpawnLocation.x, chestSpawnLocation.y),
+                new Vector2(spawnLocation.x, spawnLocation.y),
                 new Vector2(19, 16),
                 "CHEST",
                 Collision.OBJECT);
@@ -65,14 +65,14 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
 
         createLight();
 
-        chestEntity.add(position);
-        chestEntity.add(animation);
-        chestEntity.add(texture);
-        chestEntity.add(b2dbody);
-        chestEntity.add(type);
-        chestEntity.add(state);
+        entity.add(position);
+        entity.add(animation);
+        entity.add(texture);
+        entity.add(b2dbody);
+        entity.add(type);
+        entity.add(state);
 
-        ecsEngine.addEntity(chestEntity);
+        ecsEngine.addEntity(entity);
 
         // listeners
         screen.getMapMgr().getB2dContactListener().addPropertyChangeListener(this);
@@ -80,9 +80,9 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
 
     private void createAnimation(AnimationComponent animation, TextureAtlas textureAtlas) {
 
-        animation.animations.put(StateComponent.STATE_CHEST_NORMAL, new Animation(0, textureAtlas.findRegion("chest_grass")));
-        animation.animations.put(StateComponent.STATE_CHEST_OPEN, new Animation(0.15f, textureAtlas.findRegions("chest_grass")));
-        animation.animations.put(StateComponent.STATE_CHEST_CLOSE, new Animation(0.15f, textureAtlas.findRegions("chest_grass"), Animation.PlayMode.REVERSED));
+        animation.animations.put(StateComponent.STATE_CHEST_NORMAL, new Animation(0, textureAtlas.findRegion("chest")));
+        animation.animations.put(StateComponent.STATE_CHEST_OPEN, new Animation(0.15f, textureAtlas.findRegions("chest")));
+        animation.animations.put(StateComponent.STATE_CHEST_CLOSE, new Animation(0.15f, textureAtlas.findRegions("chest"), Animation.PlayMode.REVERSED));
     }
 
 

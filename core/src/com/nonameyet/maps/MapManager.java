@@ -95,8 +95,28 @@ public class MapManager implements Disposable, PropertyChangeListener {
                     case "elder":
                         screen.getEcsEngine().createElder(position);
                         break;
-                    case "hacksmith":
-                        screen.getEcsEngine().createHacksmith(position);
+                    default:
+                        break;
+                }
+
+            }
+        }
+
+        // ecs blacksmith
+        if (currentMap.blacksmithSpawnLayer != null) {
+            for (MapObject object : currentMap.blacksmithSpawnLayer.getObjects().getByType(RectangleMapObject.class)) {
+                Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                Vector2 position = new Vector2(rect.getX() / PPM, rect.getY() / PPM);
+
+                switch (object.getName()) {
+                    case "blacksmith":
+                        screen.getEcsEngine().createBlacksmith(position);
+                        break;
+                    case "anvil":
+                        screen.getEcsEngine().createAnvil(position);
+                        break;
+                    case "owen":
+                        screen.getEcsEngine().createOwen(position);
                         break;
                     default:
                         break;
@@ -120,7 +140,7 @@ public class MapManager implements Disposable, PropertyChangeListener {
         switch (event) {
 
             case DAWN:
-                screen.getRayHandler().setAmbientLight(1, 0.92f, 0.7f, 1f);
+                screen.getRayHandler().setAmbientLight(1, 0.92f, 0.65f, 1f);
                 break;
             case AFTERNOON:
                 screen.getRayHandler().setAmbientLight(1f, 1f, 1f, 1f);

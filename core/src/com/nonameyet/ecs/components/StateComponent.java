@@ -22,7 +22,10 @@ public class StateComponent implements Component {
     public static final int STATE_TORCH_OFF = 141;
 
     public static final int STATE_ELDER = 200;
-    public static final int STATE_ELDER_DOWN = 201;
+
+    public static final int STATE_BLACKSMITH = 210;
+    public static final int STATE_OWEN = 211;
+    public static final int STATE_ANVIL = 212;
 
 
     private int state = 0;

@@ -11,7 +11,7 @@ import static com.nonameyet.utils.Constants.PPM;
 public class LightBuilder {
 
     public static PointLight pointLight(RayHandler rayHandler, Body body, Color color, float distance) {
-        PointLight light = new PointLight(rayHandler, 60, color, distance, 0, 0);
+        PointLight light = new PointLight(rayHandler, 120, color, distance, 0, 0);
         light.setSoftnessLength(0f);
         light.attachToBody(body);
         light.setXray(false);

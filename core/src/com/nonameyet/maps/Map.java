@@ -33,6 +33,7 @@ abstract class Map implements Disposable {
 
     // Npc layers
     protected final static String NPC_SPAWN_LAYER = "NPC_SPAWN_LAYER";
+    protected final static String BLACKSMITH_SPAWN_LAYER = "BLACKSMITH_SPAWN_LAYER";
 
     protected MapLayer collisionLayer = null;
     protected MapLayer portalLayer = null;
@@ -41,6 +42,7 @@ abstract class Map implements Disposable {
     protected MapLayer chestSpawnLayer = null;
     protected MapLayer torchesSpawnLayer = null;
     protected MapLayer npcSpawnLayer = null;
+    protected MapLayer blacksmithSpawnLayer = null;
 
     protected TiledMap currentTiledMap = null;
     protected MapFactory.MapType currentMapType;
@@ -101,6 +103,17 @@ abstract class Map implements Disposable {
 
         } else {
             Gdx.app.debug(TAG, "No npc group, skip!");
+        }
+
+        MapGroupLayer blacksmithGroup = (MapGroupLayer) currentTiledMap.getLayers().get("blacksmith");
+        if (blacksmithGroup != null) {
+            blacksmithSpawnLayer = blacksmithGroup.getLayers().get(BLACKSMITH_SPAWN_LAYER);
+            if (blacksmithSpawnLayer == null) {
+                Gdx.app.debug(TAG, "No blacksmith spawn layer!");
+            }
+
+        } else {
+            Gdx.app.debug(TAG, "No blacksmith group, skip!");
         }
     }
 

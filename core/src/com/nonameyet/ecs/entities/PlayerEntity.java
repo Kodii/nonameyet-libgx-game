@@ -24,12 +24,12 @@ public class PlayerEntity extends Entity {
     private final B2dLightComponent b2dlight;
     private final StateComponent state;
 
-    public PlayerEntity(final ECSEngine ecsEngine, final Vector2 playerSpawnLocation) {
+    public PlayerEntity(final ECSEngine ecsEngine, final Vector2 spawnLocation) {
         this.screen = ecsEngine.getScreen();
 
 
         // Create the Entity and all the components that will go in the entity
-        final Entity playerEntity = ecsEngine.createEntity();
+        final Entity entity = ecsEngine.createEntity();
 
         final TransformComponent position = ecsEngine.createComponent(TransformComponent.class);
         final AnimationComponent animation = ecsEngine.createComponent(AnimationComponent.class);
@@ -41,7 +41,7 @@ public class PlayerEntity extends Entity {
         state = ecsEngine.createComponent(StateComponent.class);
 
         // create the data for the components and add them to the components
-        position.position.set(playerSpawnLocation.x, playerSpawnLocation.y, 0);
+        position.position.set(spawnLocation.x, spawnLocation.y, 0);
 
         TextureAtlas textureAtlas = Assets.manager.get(AssetName.PLAYER_ATLAS.getAssetName());
         TextureRegion textureRegion = textureAtlas.findRegion("player_idle_right");
@@ -53,7 +53,7 @@ public class PlayerEntity extends Entity {
 
         b2dbody.body = BodyBuilder.dynamicRectangleBody(
                 ecsEngine.getScreen().getWorld(),
-                new Vector2(playerSpawnLocation.x, playerSpawnLocation.y),
+                new Vector2(spawnLocation.x, spawnLocation.y),
                 new Vector2(14, 38),
                 "PLAYER",
                 Collision.PLAYER);
@@ -66,16 +66,16 @@ public class PlayerEntity extends Entity {
         createLight();
 
 
-        playerEntity.add(position);
-        playerEntity.add(animation);
-        playerEntity.add(texture);
-        playerEntity.add(b2dbody);
-        playerEntity.add(player);
-        playerEntity.add(type);
-        playerEntity.add(state);
-        playerEntity.add(b2dlight);
+        entity.add(position);
+        entity.add(animation);
+        entity.add(texture);
+        entity.add(b2dbody);
+        entity.add(player);
+        entity.add(type);
+        entity.add(state);
+        entity.add(b2dlight);
 
-        ecsEngine.addEntity(playerEntity);
+        ecsEngine.addEntity(entity);
     }
 
     private void createRunAnimation(AnimationComponent animation, TextureAtlas textureAtlas) {
@@ -94,7 +94,7 @@ public class PlayerEntity extends Entity {
 
     private void createLight() {
 
-        b2dlight.distance = 1f;
+        b2dlight.distance = 1.5f;
 
         b2dlight.light = LightBuilder.pointLight(screen.getRayHandler(), b2dbody.body, Color.valueOf("#e28822"), b2dlight.distance);
         b2dlight.light.setSoft(true);

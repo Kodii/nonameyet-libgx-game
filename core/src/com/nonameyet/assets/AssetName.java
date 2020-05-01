@@ -14,8 +14,12 @@ public enum AssetName {
     PLAYER_PNG("from_web/sprites/characters/Rogue.png"),
     PLAYER_ATLAS("sprites/npc/player.atlas"),
     ELDER_ATLAS("sprites/npc/elder.atlas"),
-    CHEST_ATLAS("sprites/items/chests/chest_grass.atlas"),
+    CHEST_ATLAS("sprites/items/chests/chest.atlas"),
     TORCH_ATLAS("sprites/items/torch/torch.atlas"),
+    // blacksmith
+    BLACKSMITH_ATLAS("sprites/npc/blacksmith.atlas"),
+    OWEN_ATLAS("sprites/items/blacksmith/owen.atlas"),
+    ANVIL_ATLAS("sprites/items/blacksmith/anvil.atlas"),
 
     // hud
     CAMERA_FRAME("sprites/hud/camera_frame/camera_frame.png"),

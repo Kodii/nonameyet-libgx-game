@@ -1,6 +1,7 @@
 package com.nonameyet.ui.clock;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -91,6 +92,8 @@ public class ClockUI extends Label implements Disposable {
 
     @Override
     public void act(float delta) {
+        input();
+
         totalTime += (delta * rateOfTime);
 
         int minutes = getCurrentTimeMinutes();
@@ -102,6 +105,25 @@ public class ClockUI extends Label implements Disposable {
 
         String time = String.format(FORMAT, hours, minutes);
         this.setText(time);
+    }
+
+    private void input() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_6)) {
+            PlayerPref.setCurrentTime(60 * 60 * 5);
+            setTotalTime(PlayerPref.getCurrentTime());
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_7)) {
+            PlayerPref.setCurrentTime(60 * 60 * 10);
+            setTotalTime(PlayerPref.getCurrentTime());
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_8)) {
+            PlayerPref.setCurrentTime(60 * 60 * 19);
+            setTotalTime(PlayerPref.getCurrentTime());
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) {
+            PlayerPref.setCurrentTime(60 * 60 * 1);
+            setTotalTime(PlayerPref.getCurrentTime());
+        }
     }
 
     public int getCurrentTimeMinutes() {

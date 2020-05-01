@@ -31,11 +31,11 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
     private final GameScreen screen;
     private final StateComponent state;
 
-    public TorchEntity(ECSEngine ecsEngine, Vector2 torchLocation) {
+    public TorchEntity(ECSEngine ecsEngine, Vector2 spawnLocation) {
         this.screen = ecsEngine.getScreen();
 
         // Create the Entity and all the components that will go in the entity
-        final Entity torchEntity = ecsEngine.createEntity();
+        final Entity entity = ecsEngine.createEntity();
 
         final TransformComponent position = ecsEngine.createComponent(TransformComponent.class);
         animation = ecsEngine.createComponent(AnimationComponent.class);
@@ -47,7 +47,7 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
 
 
         // create the data for the components and add them to the components
-        position.position.set(torchLocation.x, torchLocation.y, 0);
+        position.position.set(spawnLocation.x, spawnLocation.y, 0);
 
         TextureAtlas textureAtlas = Assets.manager.get(AssetName.TORCH_ATLAS.getAssetName());
         TextureRegion textureRegion = textureAtlas.findRegion("torch");
@@ -58,7 +58,7 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
 
         b2dbody.body = BodyBuilder.staticPointBody(
                 ecsEngine.getScreen().getWorld(),
-                new Vector2(torchLocation.x, torchLocation.y),
+                new Vector2(spawnLocation.x, spawnLocation.y),
                 new Vector2(6, 15),
                 "TORCH",
                 Collision.LIGHT);
@@ -69,15 +69,15 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
         createLight();
 
 
-        torchEntity.add(position);
-        torchEntity.add(animation);
-        torchEntity.add(texture);
-        torchEntity.add(b2dbody);
-        torchEntity.add(type);
-        torchEntity.add(state);
-        torchEntity.add(b2dlight);
+        entity.add(position);
+        entity.add(animation);
+        entity.add(texture);
+        entity.add(b2dbody);
+        entity.add(type);
+        entity.add(state);
+        entity.add(b2dlight);
 
-        ecsEngine.addEntity(torchEntity);
+        ecsEngine.addEntity(entity);
 
         // listeners
         screen.getPlayerHUD().getClockUI().addPropertyChangeListener(this);
@@ -93,7 +93,7 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
     }
 
     private void createLight() {
-        float random = (float) (2.3f + Math.random() * (2.5f - 2.3f));
+        float random = (float) (2.6f + Math.random() * (2.9f - 2.3f));
 
         b2dlight.distance = random;
 

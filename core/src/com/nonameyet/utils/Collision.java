@@ -9,6 +9,7 @@ public class Collision {
     public final static short PLAYER = 1 << 1;
     public final static short OBJECT = 1 << 3;
     public final static short LIGHT = 1 << 4;
+    public final static short NPC = 1 << 5;
 //    public final static short SENSOR = 1 << 5;
 //    public final static short BODY_PART = 1 << 6;
 
