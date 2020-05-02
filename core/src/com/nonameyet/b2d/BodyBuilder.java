@@ -7,8 +7,7 @@ import static com.nonameyet.utils.Constants.PPM;
 
 public class BodyBuilder {
 
-
-    public static Body dynamicFootRectangleBody(World world, Vector2 position, Vector2 size, String userData, short categoryBits) {
+    public static Body playerFootBody(World world, Vector2 position, Vector2 size, String userData, short categoryBits) {
 
         return body(world,
                 new Vector2(position.x, position.y),
@@ -18,16 +17,26 @@ public class BodyBuilder {
                 categoryBits);
     }
 
-    public static Body staticFootRectangleBody(World world, Vector2 position, Vector2 size, String userData, short categoryBits) {
+    public static Body npcFootRectangleBody(World world, Vector2 position, Vector2 size, String userData, short categoryBits) {
 
         return body(world,
                 new Vector2(position.x, position.y),
                 new Vector2(size.x, (size.y / 8)),
-                BodyDef.BodyType.KinematicBody,
+                BodyDef.BodyType.StaticBody,
                 userData,
                 categoryBits);
     }
 
+    public static Body triggerBody(World world, int regionHeight, Vector2 position, float radius, String userData, short categoryBits) {
+
+        return trigger(world,
+                regionHeight,
+                new Vector2(position.x, position.y),
+                radius,
+                BodyDef.BodyType.StaticBody,
+                userData,
+                categoryBits);
+    }
 
     public static Body staticPointBody(World world, Vector2 position, Vector2 size, String userData, short categoryBits) {
 
@@ -40,9 +49,9 @@ public class BodyBuilder {
                 categoryBits);
     }
 
-    public static void staticRectangleBody(World world, Vector2 position, Vector2 size, String userData, short categoryBits) {
+    public static Body staticRectangleBody(World world, Vector2 position, Vector2 size, String userData, short categoryBits) {
 
-        body(
+        return body(
                 world,
                 position,
                 size,
@@ -70,6 +79,29 @@ public class BodyBuilder {
         fdef.filter.categoryBits = categoryBits;
 
         fdef.shape = shape;
+        body.createFixture(fdef);
+
+        shape.dispose();
+
+        return body;
+    }
+
+    private static Body trigger(World world, int regionHeight, Vector2 position, float radius, BodyDef.BodyType bodyType, String userData, short categoryBits) {
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(position.x, position.y + (regionHeight / PPM / 2));
+
+        bdef.type = bodyType;
+        Body body = world.createBody(bdef);
+        body.setUserData(userData);
+
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(radius / PPM);
+
+        fdef.filter.categoryBits = categoryBits;
+
+        fdef.shape = shape;
+        fdef.isSensor = true;
         body.createFixture(fdef);
 
         shape.dispose();

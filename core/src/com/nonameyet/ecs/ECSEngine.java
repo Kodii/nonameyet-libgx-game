@@ -1,6 +1,7 @@
 package com.nonameyet.ecs;
 
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.nonameyet.ecs.entities.*;
 import com.nonameyet.ecs.systems.AnimationSystem;
@@ -24,6 +25,14 @@ public class ECSEngine extends PooledEngine {
 
     public GameScreen getScreen() {
         return screen;
+    }
+
+    public void createScenery(Rectangle rect) {
+        new SceneryEntity(this, rect);
+    }
+
+    public void createPortal(Rectangle rect) {
+        new PortalEntity(this, rect);
     }
 
     public void createPlayer(Vector2 position) {

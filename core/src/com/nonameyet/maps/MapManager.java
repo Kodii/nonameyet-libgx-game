@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
-import com.nonameyet.b2d.B2dContactListener;
+import com.nonameyet.b2d.CollisionSystem;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.ui.clock.DayTimeEvent;
 import com.nonameyet.utils.Collision;
@@ -29,7 +29,7 @@ public class MapManager implements Disposable, PropertyChangeListener {
     private MapFactory.MapType currentMapType;
     private boolean mapChanged = false;
 
-    private B2dContactListener b2dContactListener;
+    private CollisionSystem collisionSystem;
 
     public MapManager(GameScreen screen) {
         this.screen = screen;
@@ -59,13 +59,25 @@ public class MapManager implements Disposable, PropertyChangeListener {
         currentMapType = mapType;
         currentMap = map;
 
-        b2dContactListener = new B2dContactListener(screen);
-        screen.getWorld().setContactListener(b2dContactListener);
+        collisionSystem = new CollisionSystem(screen);
+        screen.getWorld().setContactListener(collisionSystem);
 
         mapChanged = false;
     }
 
     public void createEntites() {
+        // ecs scenery
+        for (MapObject object : currentMap.collisionLayer.getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            screen.getEcsEngine().createScenery(rect);
+        }
+
+        // ecs portal
+        for (MapObject object : currentMap.portalLayer.getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            screen.getEcsEngine().createPortal(rect);
+        }
+
         // ecs player
         if (currentMap.playerSpawnLayer != null) {
             Rectangle playerPositionPoint = currentMap.playerSpawnLayer.getObjects().getByType(RectangleMapObject.class).get(0).getRectangle();
@@ -154,8 +166,8 @@ public class MapManager implements Disposable, PropertyChangeListener {
         }
     }
 
-    public B2dContactListener getB2dContactListener() {
-        return b2dContactListener;
+    public CollisionSystem getCollisionSystem() {
+        return collisionSystem;
     }
 
     public MapFactory.MapType getCurrentMapType() {

@@ -8,6 +8,7 @@ public class ComponentMappers {
 
     public static ComponentMapper<AnimationComponent> animationCmpMapper = ComponentMapper.getFor(AnimationComponent.class);
     public static ComponentMapper<B2dBodyComponent> b2dbodyCmpMapper = ComponentMapper.getFor(B2dBodyComponent.class);
+    public static ComponentMapper<TriggerB2dBodyComponent> triggerb2dbodyCmpMapper = ComponentMapper.getFor(TriggerB2dBodyComponent.class);
     public static ComponentMapper<CollisionComponent> collisionCmpMapper = ComponentMapper.getFor(CollisionComponent.class);
     public static ComponentMapper<PlayerComponent> playerCmpMapper = ComponentMapper.getFor(PlayerComponent.class);
     public static ComponentMapper<StateComponent> stateCmpMapper = ComponentMapper.getFor(StateComponent.class);

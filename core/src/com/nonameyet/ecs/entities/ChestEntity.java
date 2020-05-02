@@ -75,7 +75,7 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
         ecsEngine.addEntity(entity);
 
         // listeners
-        screen.getMapMgr().getB2dContactListener().addPropertyChangeListener(this);
+        screen.getMapMgr().getCollisionSystem().addPropertyChangeListener(this);
     }
 
     private void createAnimation(AnimationComponent animation, TextureAtlas textureAtlas) {
@@ -117,6 +117,6 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
 
     @Override
     public void dispose() {
-        screen.getMapMgr().getB2dContactListener().removePropertyChangeListener(this);
+        screen.getMapMgr().getCollisionSystem().removePropertyChangeListener(this);
     }
 }

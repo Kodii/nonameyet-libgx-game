@@ -3,20 +3,11 @@ package com.nonameyet.maps;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapGroupLayer;
 import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
-import com.nonameyet.b2d.BodyBuilder;
 import com.nonameyet.screens.GameScreen;
-import com.nonameyet.utils.Collision;
-
-import static com.nonameyet.utils.Constants.PPM;
 
 abstract class Map implements Disposable {
     private final String TAG = this.getClass().getSimpleName();
@@ -47,14 +38,11 @@ abstract class Map implements Disposable {
     protected TiledMap currentTiledMap = null;
     protected MapFactory.MapType currentMapType;
 
-    private final World world;
-
     public Map(GameScreen screen, MapFactory.MapType mapType, AssetName mapTmx) {
         Gdx.app.debug(TAG, "Create a new map: " + mapType);
 
         currentTiledMap = Assets.manager.get(mapTmx.getAssetName());
         currentMapType = mapType;
-        world = screen.getWorld();
 
         collisionLayer = currentTiledMap.getLayers().get(COLLISION_LAYER);
         if (collisionLayer == null) {
@@ -69,8 +57,6 @@ abstract class Map implements Disposable {
         if (playerSpawnLayer == null) {
             Gdx.app.debug(TAG, "No player spawn layer!");
         }
-
-        create();
 
         MapGroupLayer chestGroup = (MapGroupLayer) currentTiledMap.getLayers().get("chest");
         if (chestGroup != null) {
@@ -114,37 +100,6 @@ abstract class Map implements Disposable {
 
         } else {
             Gdx.app.debug(TAG, "No blacksmith group, skip!");
-        }
-    }
-
-    private void create() {
-        createBodiesForCollision();
-        createBodiesForPortal();
-    }
-
-    private void createBodiesForPortal() {
-        for (MapObject object : portalLayer.getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-            BodyBuilder.staticRectangleBody(
-                    world,
-                    new Vector2((rect.getX() + rect.getWidth() / 2) / PPM, (rect.getY() + rect.getHeight() / 2) / PPM),
-                    new Vector2(rect.getWidth(), rect.getHeight()),
-                    "PORTAL",
-                    Collision.OBSTACLE);
-        }
-    }
-
-    private void createBodiesForCollision() {
-        for (MapObject object : collisionLayer.getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-            BodyBuilder.staticRectangleBody(
-                    world,
-                    new Vector2((rect.getX() + rect.getWidth() / 2) / PPM, (rect.getY() + rect.getHeight() / 2) / PPM),
-                    new Vector2(rect.getWidth(), rect.getHeight()),
-                    "COLLISION",
-                    Collision.OBSTACLE);
         }
     }
 

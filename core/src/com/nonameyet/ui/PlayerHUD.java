@@ -110,7 +110,7 @@ public class PlayerHUD implements Screen, PropertyChangeListener {
     @Override
     public void dispose() {
         lifeUI.removePropertyChangeListener(this);
-        screen.getMapMgr().getB2dContactListener().removePropertyChangeListener(this);
+        screen.getMapMgr().getCollisionSystem().removePropertyChangeListener(this);
         stage.dispose();
     }
 

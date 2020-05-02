@@ -51,11 +51,11 @@ public class PlayerEntity extends Entity {
 
         texture.region = new TextureRegion(textureRegion, 0, 0, 22, 38);
 
-        b2dbody.body = BodyBuilder.dynamicFootRectangleBody(
+        b2dbody.body = BodyBuilder.playerFootBody(
                 ecsEngine.getScreen().getWorld(),
                 new Vector2(spawnLocation.x, spawnLocation.y),
                 new Vector2(14, 38),
-                "PLAYER",
+                "PLAYER_BODY",
                 Collision.PLAYER);
         b2dbody.body.setLinearDamping(20f);
 

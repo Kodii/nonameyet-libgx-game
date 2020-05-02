@@ -33,6 +33,7 @@ public class ElderEntity extends Entity {
         final AnimationComponent animation = ecsEngine.createComponent(AnimationComponent.class);
         final TextureComponent texture = ecsEngine.createComponent(TextureComponent.class);
         b2dbody = ecsEngine.createComponent(B2dBodyComponent.class);
+        TriggerB2dBodyComponent triggerb2dbody = ecsEngine.createComponent(TriggerB2dBodyComponent.class);
         b2dlight = new B2dLightComponent(screen);
         final TypeComponent type = ecsEngine.createComponent(TypeComponent.class);
         final StateComponent state = ecsEngine.createComponent(StateComponent.class);
@@ -48,13 +49,21 @@ public class ElderEntity extends Entity {
 
         texture.region = new TextureRegion(textureRegion, 0, 0, 26, 40);
 
-        b2dbody.body = BodyBuilder.staticFootRectangleBody(
+        b2dbody.body = BodyBuilder.npcFootRectangleBody(
                 ecsEngine.getScreen().getWorld(),
                 new Vector2(spawnLocation.x, spawnLocation.y),
                 new Vector2(20, 36),
+                "ELDER_BODY",
+                Collision.NPC);
+
+        triggerb2dbody.trigger = BodyBuilder.triggerBody(
+                ecsEngine.getScreen().getWorld(),
+                texture.region.getRegionHeight(),
+                new Vector2(spawnLocation.x, spawnLocation.y),
+                50,
                 "ELDER",
-                Collision.NPC
-        );
+                Collision.NPC);
+
         type.type = TypeComponent.NPC;
         state.set(StateComponent.STATE_ELDER);
 
@@ -65,6 +74,7 @@ public class ElderEntity extends Entity {
         entity.add(animation);
         entity.add(texture);
         entity.add(b2dbody);
+        entity.add(triggerb2dbody);
         entity.add(npc);
         entity.add(type);
         entity.add(state);

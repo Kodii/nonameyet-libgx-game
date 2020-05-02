@@ -7,10 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.nonameyet.ecs.components.B2dBodyComponent;
-import com.nonameyet.ecs.components.TextureComponent;
-import com.nonameyet.ecs.components.TransformComponent;
-import com.nonameyet.ecs.components.TypeComponent;
+import com.nonameyet.ecs.components.*;
 
 import static com.nonameyet.ecs.ComponentMappers.*;
 import static com.nonameyet.utils.Constants.PPM;
@@ -48,9 +45,14 @@ public class PhysicsSystem extends IteratingSystem {
                 Vector2 position = b2dbody.body.getPosition();
                 tfm.position.x = position.x;
 
-                if (type != null && (type.type == TypeComponent.PLAYER || type.type == TypeComponent.NPC || type.type == TypeComponent.ENEMY))
+                if (type != null && (type.type == TypeComponent.PLAYER || type.type == TypeComponent.NPC || type.type == TypeComponent.ENEMY)) {
                     tfm.position.y = position.y + (texture.region.getRegionHeight() / PPM / 2);
-                else tfm.position.y = position.y;
+//                    TriggerB2dBodyComponent triggerb2dbody = triggerb2dbodyCmpMapper.get(entity);
+//                    if (triggerb2dbody != null) {
+//
+//                        System.out.println(triggerb2dbody.trigger.getPosition());
+//                    }
+                } else tfm.position.y = position.y;
 
                 tfm.rotation = b2dbody.body.getAngle() * MathUtils.radiansToDegrees;
             }
@@ -59,6 +61,7 @@ public class PhysicsSystem extends IteratingSystem {
         bodiesQueue.clear();
 
     }
+
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {

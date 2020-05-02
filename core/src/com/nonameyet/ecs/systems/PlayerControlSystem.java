@@ -6,6 +6,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.nonameyet.ecs.components.B2dBodyComponent;
 import com.nonameyet.ecs.components.PlayerComponent;
 import com.nonameyet.ecs.components.StateComponent;
+import com.nonameyet.ecs.components.TriggerB2dBodyComponent;
 import com.nonameyet.input.GameKeyInputListener;
 import com.nonameyet.input.GameKeys;
 import com.nonameyet.input.InputManager;
@@ -29,6 +30,7 @@ public class PlayerControlSystem extends IteratingSystem implements GameKeyInput
     protected void processEntity(Entity entity, float deltaTime) {
         final PlayerComponent player = playerCmpMapper.get(entity);
         final B2dBodyComponent b2dbody = b2dbodyCmpMapper.get(entity);
+//        final TriggerB2dBodyComponent triggerB2dBody = triggerb2dbodyCmpMapper.get(entity);
         final StateComponent state = stateCmpMapper.get(entity);
 
         speed = player.speed;
