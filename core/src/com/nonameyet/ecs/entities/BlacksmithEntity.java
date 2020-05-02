@@ -38,7 +38,7 @@ public class BlacksmithEntity {
         final StateComponent state = ecsEngine.createComponent(StateComponent.class);
 
         // create the data for the components and add them to the components
-        position.position.set(spawnLocation.x, spawnLocation.y, 0);
+        position.position.set(spawnLocation.x, spawnLocation.y, 1);
 
         TextureAtlas textureAtlas = Assets.manager.get(AssetName.BLACKSMITH_ATLAS.getAssetName());
         TextureRegion textureRegion = textureAtlas.findRegion("blacksmith");
@@ -47,7 +47,7 @@ public class BlacksmithEntity {
 
         texture.region = new TextureRegion(textureRegion, 0, 0, 26, 40);
 
-        b2dbody.body = BodyBuilder.staticPointBody(
+        b2dbody.body = BodyBuilder.staticFootRectangleBody(
                 ecsEngine.getScreen().getWorld(),
                 new Vector2(spawnLocation.x, spawnLocation.y),
                 new Vector2(26, 40),
@@ -101,7 +101,7 @@ public class BlacksmithEntity {
 
         b2dlight.light = LightBuilder.pointLight(screen.getRayHandler(), b2dbody.body, Color.valueOf("#e28822"), b2dlight.distance);
         b2dlight.light.setSoft(true);
-        b2dlight.light.attachToBody(b2dbody.body, 0, -0.6f);
+        b2dlight.light.attachToBody(b2dbody.body);
     }
 }
 

@@ -36,7 +36,7 @@ public class OwenEntity {
         final StateComponent state = ecsEngine.createComponent(StateComponent.class);
 
         // create the data for the components and add them to the components
-        position.position.set(spawnLocation.x, spawnLocation.y, 0);
+        position.position.set(spawnLocation.x, spawnLocation.y, 1);
 
         TextureAtlas textureAtlas = Assets.manager.get(AssetName.OWEN_ATLAS.getAssetName());
         TextureRegion textureRegion = textureAtlas.findRegion("owen");

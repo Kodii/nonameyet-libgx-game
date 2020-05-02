@@ -45,7 +45,7 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
         this.state = state;
 
         // create the data for the components and add them to the components
-        position.position.set(spawnLocation.x, spawnLocation.y, 0);
+        position.position.set(spawnLocation.x, spawnLocation.y, 1);
 
         TextureAtlas textureAtlas = Assets.manager.get(AssetName.CHEST_ATLAS.getAssetName());
         TextureRegion textureRegion = textureAtlas.findRegion("chest");

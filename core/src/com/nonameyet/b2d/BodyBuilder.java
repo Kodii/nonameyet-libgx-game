@@ -8,12 +8,22 @@ import static com.nonameyet.utils.Constants.PPM;
 public class BodyBuilder {
 
 
-    public static Body dynamicRectangleBody(World world, Vector2 position, Vector2 size, String userData, short categoryBits) {
+    public static Body dynamicFootRectangleBody(World world, Vector2 position, Vector2 size, String userData, short categoryBits) {
 
         return body(world,
-                position,
-                size,
+                new Vector2(position.x, position.y),
+                new Vector2(size.x, (size.y / 8)),
                 BodyDef.BodyType.DynamicBody,
+                userData,
+                categoryBits);
+    }
+
+    public static Body staticFootRectangleBody(World world, Vector2 position, Vector2 size, String userData, short categoryBits) {
+
+        return body(world,
+                new Vector2(position.x, position.y),
+                new Vector2(size.x, (size.y / 8)),
+                BodyDef.BodyType.KinematicBody,
                 userData,
                 categoryBits);
     }

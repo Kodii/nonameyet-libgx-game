@@ -10,12 +10,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
 import com.nonameyet.ecs.components.TextureComponent;
 import com.nonameyet.ecs.components.TransformComponent;
+import com.nonameyet.ecs.components.TypeComponent;
 import com.nonameyet.screens.GameScreen;
 
 import java.util.Comparator;
 
-import static com.nonameyet.ecs.ComponentMappers.textureCmpMapper;
-import static com.nonameyet.ecs.ComponentMappers.transformCmpMapper;
+import static com.nonameyet.ecs.ComponentMappers.*;
 import static com.nonameyet.utils.Constants.PPM;
 
 public class RenderingSystem extends SortedIteratingSystem {
@@ -45,6 +45,9 @@ public class RenderingSystem extends SortedIteratingSystem {
         super.update(deltaTime);
 
         // sort the renderQueue based on z index
+
+        renderQueue.sort(comparator);
+        changePositionsDependPlayerPosition(renderQueue);
         renderQueue.sort(comparator);
 
         // update camera and sprite batch
@@ -80,6 +83,34 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         batch.end();
         renderQueue.clear();
+    }
+
+    private void changePositionsDependPlayerPosition(Array<Entity> renderQueue) {
+        float playerY = 0;
+
+        // find player
+        for (Entity entity : renderQueue) {
+            TypeComponent type = typeCmpMapper.get(entity);
+            if (type.type == TypeComponent.PLAYER) {
+                TransformComponent transform = transformCmpMapper.get(entity);
+                playerY = transform.position.y;
+                break;
+            }
+        }
+
+        for (Entity entity : renderQueue) {
+            TypeComponent type = typeCmpMapper.get(entity);
+            if (type.type != TypeComponent.PLAYER) {
+                TransformComponent transform = transformCmpMapper.get(entity);
+
+                if (transform.position.y > playerY)
+                    transform.position.z = 1;
+
+                if (transform.position.y < playerY)
+                    transform.position.z = -1;
+            }
+
+        }
     }
 
     @Override

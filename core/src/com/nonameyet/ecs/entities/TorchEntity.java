@@ -47,7 +47,7 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
 
 
         // create the data for the components and add them to the components
-        position.position.set(spawnLocation.x, spawnLocation.y, 0);
+        position.position.set(spawnLocation.x, spawnLocation.y, 1);
 
         TextureAtlas textureAtlas = Assets.manager.get(AssetName.TORCH_ATLAS.getAssetName());
         TextureRegion textureRegion = textureAtlas.findRegion("torch");

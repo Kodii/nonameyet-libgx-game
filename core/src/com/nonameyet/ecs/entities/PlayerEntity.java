@@ -51,7 +51,7 @@ public class PlayerEntity extends Entity {
 
         texture.region = new TextureRegion(textureRegion, 0, 0, 22, 38);
 
-        b2dbody.body = BodyBuilder.dynamicRectangleBody(
+        b2dbody.body = BodyBuilder.dynamicFootRectangleBody(
                 ecsEngine.getScreen().getWorld(),
                 new Vector2(spawnLocation.x, spawnLocation.y),
                 new Vector2(14, 38),
@@ -98,6 +98,6 @@ public class PlayerEntity extends Entity {
 
         b2dlight.light = LightBuilder.pointLight(screen.getRayHandler(), b2dbody.body, Color.valueOf("#e28822"), b2dlight.distance);
         b2dlight.light.setSoft(true);
-        b2dlight.light.attachToBody(b2dbody.body, 0, -0.6f);
+        b2dlight.light.attachToBody(b2dbody.body);
     }
 }
