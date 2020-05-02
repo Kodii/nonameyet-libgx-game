@@ -64,8 +64,8 @@ public class BubbleEntity extends Entity {
 
     private void createAnimation(AnimationComponent animation, TextureAtlas textureAtlas) {
         animation.animations.put(StateComponent.NPC_BUBBLE_NORMAL, new Animation(0, textureAtlas.findRegion("npc_bubble")));
-        animation.animations.put(StateComponent.NPC_BUBBLE_SHOW, new Animation(0.15f, textureAtlas.findRegions("npc_bubble")));
-        animation.animations.put(StateComponent.NPC_BUBBLE_HIDE, new Animation(0.15f, textureAtlas.findRegions("npc_bubble"), Animation.PlayMode.REVERSED));
+        animation.animations.put(StateComponent.NPC_BUBBLE_SHOW, new Animation(0.12f, textureAtlas.findRegions("npc_bubble")));
+        animation.animations.put(StateComponent.NPC_BUBBLE_HIDE, new Animation(0.12f, textureAtlas.findRegions("npc_bubble"), Animation.PlayMode.REVERSED));
 
     }
 }
