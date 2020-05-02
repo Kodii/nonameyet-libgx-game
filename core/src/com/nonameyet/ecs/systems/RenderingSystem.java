@@ -91,7 +91,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         // find player
         for (Entity entity : renderQueue) {
             TypeComponent type = typeCmpMapper.get(entity);
-            if (type.type == TypeComponent.PLAYER) {
+            if (type != null && type.type == TypeComponent.PLAYER) {
                 TransformComponent transform = transformCmpMapper.get(entity);
                 playerY = transform.position.y;
                 break;
@@ -100,7 +100,7 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         for (Entity entity : renderQueue) {
             TypeComponent type = typeCmpMapper.get(entity);
-            if (type.type != TypeComponent.PLAYER) {
+            if (type != null && type.type != TypeComponent.PLAYER) {
                 TransformComponent transform = transformCmpMapper.get(entity);
 
                 if (transform.position.y > playerY)

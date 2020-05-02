@@ -44,14 +44,15 @@ public class CollisionSystem implements Disposable, ContactListener {
     }
 
     private void beginCollision(Fixture fixture) {
+
         switch ((String) fixture.getBody().getUserData()) {
-            case ChestWindowEvent.NAME:
+            case "CHEST":
                 beginChestContact(fixture);
                 break;
-            case BlacksmithEvent.NAME:
+            case "BLACKSMITH":
                 beginBlacksmithContact(fixture);
                 break;
-            case ElderEvent.NAME:
+            case "ELDER":
                 beginElderContact(fixture);
                 break;
             default:
@@ -98,13 +99,13 @@ public class CollisionSystem implements Disposable, ContactListener {
     private void endCollision(Fixture fixture) {
 
         switch ((String) fixture.getBody().getUserData()) {
-            case ChestWindowEvent.NAME:
+            case "CHEST":
                 endChestContact(fixture);
                 break;
-            case BlacksmithEvent.NAME:
+            case "BLACKSMITH":
                 endBlacksmithContact(fixture);
                 break;
-            case ElderEvent.NAME:
+            case "ELDER":
                 endElderContact(fixture);
                 break;
             default:

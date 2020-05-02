@@ -1,26 +1,36 @@
 package com.nonameyet.ecs.entities;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
 import com.nonameyet.b2d.BodyBuilder;
 import com.nonameyet.b2d.LightBuilder;
 import com.nonameyet.ecs.ECSEngine;
 import com.nonameyet.ecs.components.*;
+import com.nonameyet.events.ElderEvent;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.utils.Collision;
 
-public class ElderEntity extends Entity {
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+public class ElderEntity extends Entity implements Disposable, PropertyChangeListener {
+    private final String TAG = this.getClass().getSimpleName();
+
     private final GameScreen screen;
 
     private final B2dBodyComponent b2dbody;
     private final B2dLightComponent b2dlight;
+
+    private final BubbleEntity bubbleEntity;
 
     public ElderEntity(ECSEngine ecsEngine, Vector2 spawnLocation) {
         this.screen = ecsEngine.getScreen();
@@ -81,6 +91,11 @@ public class ElderEntity extends Entity {
         entity.add(b2dlight);
 
         ecsEngine.addEntity(entity);
+
+        bubbleEntity = new BubbleEntity(ecsEngine, entity);
+
+        // listeners
+        screen.getMapMgr().getCollisionSystem().addPropertyChangeListener(this);
     }
 
     private void createRunAnimation(AnimationComponent animation, TextureAtlas textureAtlas) {
@@ -112,4 +127,33 @@ public class ElderEntity extends Entity {
         b2dlight.light.setSoft(true);
         b2dlight.light.attachToBody(b2dbody.body);
     }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        Gdx.app.debug(TAG, "Elder --> propertyChange(): " + evt.getPropertyName() + ", getNewValue(): " + evt.getNewValue());
+
+        if (evt.getPropertyName().equals(ElderEvent.NAME)) {
+            showDialogMark((ElderEvent) evt.getNewValue());
+        }
+    }
+
+    private void showDialogMark(ElderEvent event) {
+        switch (event) {
+            case SHOW_DIALOG_MARK:
+                bubbleEntity.state.set(StateComponent.NPC_BUBBLE_SHOW);
+                break;
+            case HIDE_DIALOG_MARK:
+                bubbleEntity.state.set(StateComponent.NPC_BUBBLE_HIDE);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void dispose() {
+        // listeners
+        screen.getMapMgr().getCollisionSystem().removePropertyChangeListener(this);
+    }
+
 }

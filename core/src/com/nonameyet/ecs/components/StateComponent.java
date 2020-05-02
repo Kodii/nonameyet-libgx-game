@@ -21,6 +21,10 @@ public class StateComponent implements Component {
     public static final int STATE_TORCH_ON = 140;
     public static final int STATE_TORCH_OFF = 141;
 
+    public static final int NPC_BUBBLE_NORMAL = 190;
+    public static final int NPC_BUBBLE_SHOW = 191;
+    public static final int NPC_BUBBLE_HIDE = 192;
+
     public static final int STATE_ELDER = 200;
 
     public static final int STATE_BLACKSMITH = 210;

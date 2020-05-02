@@ -30,6 +30,8 @@ public class BlacksmithEntity extends Entity implements Disposable, PropertyChan
     private final B2dBodyComponent b2dbody;
     private final B2dLightComponent b2dlight;
 
+    private final BubbleEntity bubbleEntity;
+
     public BlacksmithEntity(ECSEngine ecsEngine, Vector2 spawnLocation) {
         this.screen = ecsEngine.getScreen();
 
@@ -89,6 +91,8 @@ public class BlacksmithEntity extends Entity implements Disposable, PropertyChan
 
         ecsEngine.addEntity(entity);
 
+        bubbleEntity = new BubbleEntity(ecsEngine, entity);
+
         // listeners
         screen.getMapMgr().getCollisionSystem().addPropertyChangeListener(this);
     }
@@ -135,13 +139,12 @@ public class BlacksmithEntity extends Entity implements Disposable, PropertyChan
     }
 
     private void showDialogMark(BlacksmithEvent event) {
-
         switch (event) {
             case SHOW_DIALOG_MARK:
-                System.out.println("SHOW_DIALOG_MARK");
+                bubbleEntity.state.set(StateComponent.NPC_BUBBLE_SHOW);
                 break;
             case HIDE_DIALOG_MARK:
-                System.out.println("HIDE_DIALOG_MARK");
+                bubbleEntity.state.set(StateComponent.NPC_BUBBLE_HIDE);
                 break;
             default:
                 break;

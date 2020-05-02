@@ -21,12 +21,15 @@ public enum AssetName {
     OWEN_ATLAS("sprites/items/blacksmith/owen.atlas"),
     ANVIL_ATLAS("sprites/items/blacksmith/anvil.atlas"),
 
+    NPC_BUBBLE("sprites/npc/npc_bubble/npc_bubble.atlas"),
+
     // hud
     CAMERA_FRAME("sprites/hud/camera_frame/camera_frame.png"),
     CHEST_WINDOW("sprites/hud/chest_window/chest_window.png"),
     LIFE("sprites/hud/life/life.png"),
     SLOT("sprites/hud/slot/slot.png"),
     SLOT_HIGHLIGHT("sprites/hud/slot/slot_highlight.png"),
+
 
     // sound effects
     CHEST_OPEN_EFFECT("sound/effects/chest/chest-open.ogg"),
