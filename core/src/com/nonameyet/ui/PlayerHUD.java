@@ -11,13 +11,13 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
+import com.nonameyet.events.ChestWindowEvent;
+import com.nonameyet.events.StatusEvent;
 import com.nonameyet.preferences.PlayerPref;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.ui.chest.ChestInventoryUI;
-import com.nonameyet.ui.chest.ChestWindowEvent;
 import com.nonameyet.ui.clock.ClockUI;
 import com.nonameyet.ui.life.LifeUI;
-import com.nonameyet.ui.life.StatusEvent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -118,9 +118,9 @@ public class PlayerHUD implements Screen, PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         Gdx.app.debug(TAG, "GUI --> propertyChange(): " + evt.getPropertyName() + ", getNewValue(): " + evt.getNewValue());
 
-        if (evt.getPropertyName().equals(ChestWindowEvent.class.getSimpleName())) {
+        if (evt.getPropertyName().equals(ChestWindowEvent.NAME)) {
             chestWindowEvent((ChestWindowEvent) evt.getNewValue());
-        } else if (evt.getPropertyName().equals(StatusEvent.class.getSimpleName())) {
+        } else if (evt.getPropertyName().equals(StatusEvent.NAME)) {
             statusEvent((StatusEvent) evt.getNewValue());
         }
     }

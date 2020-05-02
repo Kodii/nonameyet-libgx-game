@@ -14,8 +14,8 @@ import com.nonameyet.b2d.BodyBuilder;
 import com.nonameyet.b2d.LightBuilder;
 import com.nonameyet.ecs.ECSEngine;
 import com.nonameyet.ecs.components.*;
+import com.nonameyet.events.ChestWindowEvent;
 import com.nonameyet.screens.GameScreen;
-import com.nonameyet.ui.chest.ChestWindowEvent;
 import com.nonameyet.utils.Collision;
 
 import java.beans.PropertyChangeEvent;
@@ -98,7 +98,7 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
     public void propertyChange(PropertyChangeEvent evt) {
         Gdx.app.debug(TAG, "Chest --> propertyChange(): " + evt.getPropertyName() + ", getNewValue(): " + evt.getNewValue());
 
-        if (evt.getPropertyName().equals(ChestWindowEvent.class.getSimpleName())) {
+        if (evt.getPropertyName().equals(ChestWindowEvent.NAME)) {
             chestWindowEvent((ChestWindowEvent) evt.getNewValue());
         }
     }

@@ -15,8 +15,8 @@ import com.nonameyet.b2d.BodyBuilder;
 import com.nonameyet.b2d.LightBuilder;
 import com.nonameyet.ecs.ECSEngine;
 import com.nonameyet.ecs.components.*;
+import com.nonameyet.events.DayTimeEvent;
 import com.nonameyet.screens.GameScreen;
-import com.nonameyet.ui.clock.DayTimeEvent;
 import com.nonameyet.utils.Collision;
 
 import java.beans.PropertyChangeEvent;
@@ -109,7 +109,7 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
     public void propertyChange(PropertyChangeEvent evt) {
         Gdx.app.debug(TAG, "Torch --> propertyChange(): " + evt.getPropertyName() + ", getNewValue(): " + evt.getNewValue());
 
-        if (evt.getPropertyName().equals(DayTimeEvent.class.getSimpleName())) {
+        if (evt.getPropertyName().equals(DayTimeEvent.NAME)) {
             lightsEvent((DayTimeEvent) evt.getNewValue());
         }
     }

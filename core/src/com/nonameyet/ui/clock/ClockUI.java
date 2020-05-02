@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.audio.AudioManager;
+import com.nonameyet.events.DayTimeEvent;
 import com.nonameyet.preferences.PlayerPref;
 import com.nonameyet.screens.GameScreen;
 
@@ -66,26 +67,26 @@ public class ClockUI extends Label implements Disposable {
             previousStateOfDay = currentStateOfDay;
             currentStateOfDay = DayTimeEvent.DAWN;
             if (currentStateOfDay != previousStateOfDay) {
-                changes.firePropertyChange(DayTimeEvent.class.getSimpleName(), null, currentStateOfDay);
+                changes.firePropertyChange(DayTimeEvent.NAME, null, currentStateOfDay);
             }
         } else if (hours >= 8 && hours < 18) {
             previousStateOfDay = currentStateOfDay;
             currentStateOfDay = DayTimeEvent.AFTERNOON;
             if (currentStateOfDay != previousStateOfDay) {
-                changes.firePropertyChange(DayTimeEvent.class.getSimpleName(), null, currentStateOfDay);
+                changes.firePropertyChange(DayTimeEvent.NAME, null, currentStateOfDay);
             }
         } else if (hours >= 18 && hours < 23) {
             previousStateOfDay = currentStateOfDay;
             currentStateOfDay = DayTimeEvent.DUSK;
             if (currentStateOfDay != previousStateOfDay) {
-                changes.firePropertyChange(DayTimeEvent.class.getSimpleName(), null, currentStateOfDay);
+                changes.firePropertyChange(DayTimeEvent.NAME, null, currentStateOfDay);
             }
         } else {
             previousStateOfDay = currentStateOfDay;
             currentStateOfDay = DayTimeEvent.NIGHT;
             if (currentStateOfDay != previousStateOfDay) {
                 Gdx.app.debug(TAG, "NIGHT EVENT !!!!!");
-                changes.firePropertyChange(DayTimeEvent.class.getSimpleName(), null, currentStateOfDay);
+                changes.firePropertyChange(DayTimeEvent.NAME, null, currentStateOfDay);
             }
         }
     }

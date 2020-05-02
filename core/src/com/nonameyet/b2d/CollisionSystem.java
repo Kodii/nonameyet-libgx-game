@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.audio.AudioManager;
+import com.nonameyet.events.BlacksmithEvent;
+import com.nonameyet.events.ChestWindowEvent;
+import com.nonameyet.events.ElderEvent;
 import com.nonameyet.maps.MapManager;
 import com.nonameyet.screens.GameScreen;
-import com.nonameyet.ui.chest.ChestWindowEvent;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -43,14 +45,19 @@ public class CollisionSystem implements Disposable, ContactListener {
 
     private void beginCollision(Fixture fixture) {
         switch ((String) fixture.getBody().getUserData()) {
-            case "CHEST":
+            case ChestWindowEvent.NAME:
                 beginChestContact(fixture);
+                break;
+            case BlacksmithEvent.NAME:
+                beginBlacksmithContact(fixture);
+                break;
+            case ElderEvent.NAME:
+                beginElderContact(fixture);
                 break;
             default:
                 break;
         }
     }
-
 
 //    private void beginPortalContact(Fixture fixtureA, Fixture fixtureB) {
 //        if (fixtureA.getBody().getUserData().equals("PORTAL") || fixtureB.getBody().getUserData().equals("PORTAL")) {
@@ -64,9 +71,15 @@ public class CollisionSystem implements Disposable, ContactListener {
 //    }
 
     private void beginChestContact(Fixture fixture) {
-        if (fixture.getBody().getUserData().equals("CHEST")) {
-            changes.firePropertyChange(ChestWindowEvent.class.getSimpleName(), null, ChestWindowEvent.CHEST_OPENED);
-        }
+        changes.firePropertyChange(ChestWindowEvent.NAME, null, ChestWindowEvent.CHEST_OPENED);
+    }
+
+    private void beginBlacksmithContact(Fixture fixture) {
+        changes.firePropertyChange(BlacksmithEvent.NAME, null, BlacksmithEvent.SHOW_DIALOG_MARK);
+    }
+
+    private void beginElderContact(Fixture fixture) {
+        changes.firePropertyChange(ElderEvent.NAME, null, ElderEvent.SHOW_DIALOG_MARK);
     }
 
     @Override
@@ -85,8 +98,14 @@ public class CollisionSystem implements Disposable, ContactListener {
     private void endCollision(Fixture fixture) {
 
         switch ((String) fixture.getBody().getUserData()) {
-            case "CHEST":
+            case ChestWindowEvent.NAME:
                 endChestContact(fixture);
+                break;
+            case BlacksmithEvent.NAME:
+                endBlacksmithContact(fixture);
+                break;
+            case ElderEvent.NAME:
+                endElderContact(fixture);
                 break;
             default:
                 break;
@@ -94,7 +113,15 @@ public class CollisionSystem implements Disposable, ContactListener {
     }
 
     private void endChestContact(Fixture fixture) {
-        changes.firePropertyChange(ChestWindowEvent.class.getSimpleName(), null, ChestWindowEvent.CHEST_CLOSED);
+        changes.firePropertyChange(ChestWindowEvent.NAME, null, ChestWindowEvent.CHEST_CLOSED);
+    }
+
+    private void endBlacksmithContact(Fixture fixture) {
+        changes.firePropertyChange(BlacksmithEvent.NAME, null, BlacksmithEvent.HIDE_DIALOG_MARK);
+    }
+
+    private void endElderContact(Fixture fixture) {
+        changes.firePropertyChange(ElderEvent.NAME, null, ElderEvent.HIDE_DIALOG_MARK);
     }
 
     @Override

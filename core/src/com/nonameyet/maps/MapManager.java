@@ -12,8 +12,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.b2d.CollisionSystem;
+import com.nonameyet.events.DayTimeEvent;
 import com.nonameyet.screens.GameScreen;
-import com.nonameyet.ui.clock.DayTimeEvent;
 import com.nonameyet.utils.Collision;
 
 import java.beans.PropertyChangeEvent;
@@ -142,7 +142,7 @@ public class MapManager implements Disposable, PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         Gdx.app.debug(TAG, "MapManager --> propertyChange(): " + evt.getPropertyName() + ", getNewValue(): " + evt.getNewValue());
 
-        if (evt.getPropertyName().equals(DayTimeEvent.class.getSimpleName()))
+        if (evt.getPropertyName().equals(DayTimeEvent.NAME))
             changeDayState((DayTimeEvent) evt.getNewValue());
 
     }

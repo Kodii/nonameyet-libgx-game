@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
+import com.nonameyet.events.StatusEvent;
 import com.nonameyet.screens.AbstractScreen;
 import com.nonameyet.utils.Constants;
 
@@ -68,26 +69,26 @@ public class LifeUI implements Disposable {
         if (Gdx.input.isKeyJustPressed(Input.Keys.PLUS)) {
             if (hpVal < hpCurrentMax) {
                 hpVal += 1;
-                changes.firePropertyChange(StatusEvent.class.getSimpleName(), null, StatusEvent.ADD_HP);
+                changes.firePropertyChange(StatusEvent.NAME, null, StatusEvent.ADD_HP);
             }
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.MINUS)) {
             if (hpVal > 0) {
                 hpVal -= 1;
-                changes.firePropertyChange(StatusEvent.class.getSimpleName(), null, StatusEvent.REMOVE_HP);
+                changes.firePropertyChange(StatusEvent.NAME, null, StatusEvent.REMOVE_HP);
             }
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
             hpVal = hpCurrentMax;
-            changes.firePropertyChange(StatusEvent.class.getSimpleName(), null, StatusEvent.HEAL_HP);
+            changes.firePropertyChange(StatusEvent.NAME, null, StatusEvent.HEAL_HP);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
             hpCurrentMax += 1;
             hpVal = hpCurrentMax;
-            changes.firePropertyChange(StatusEvent.class.getSimpleName(), null, StatusEvent.UPGRADE_HP);
+            changes.firePropertyChange(StatusEvent.NAME, null, StatusEvent.UPGRADE_HP);
         }
 
     }

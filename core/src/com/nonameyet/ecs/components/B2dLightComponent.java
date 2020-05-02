@@ -6,7 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool;
 import com.nonameyet.screens.GameScreen;
-import com.nonameyet.ui.clock.DayTimeEvent;
+import com.nonameyet.events.DayTimeEvent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -50,7 +50,7 @@ public class B2dLightComponent implements Component, Pool.Poolable, Disposable, 
     public void propertyChange(PropertyChangeEvent evt) {
         Gdx.app.debug(TAG, "b2dlight --> propertyChange(): " + evt.getPropertyName() + ", getNewValue(): " + evt.getNewValue());
 
-        if (evt.getPropertyName().equals(DayTimeEvent.class.getSimpleName())) {
+        if (evt.getPropertyName().equals(DayTimeEvent.NAME)) {
             lightsEvent((DayTimeEvent) evt.getNewValue());
         }
     }

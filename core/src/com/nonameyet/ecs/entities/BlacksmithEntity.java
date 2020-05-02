@@ -1,22 +1,30 @@
 package com.nonameyet.ecs.entities;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
 import com.nonameyet.b2d.BodyBuilder;
 import com.nonameyet.b2d.LightBuilder;
 import com.nonameyet.ecs.ECSEngine;
 import com.nonameyet.ecs.components.*;
+import com.nonameyet.events.BlacksmithEvent;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.utils.Collision;
 
-public class BlacksmithEntity {
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+public class BlacksmithEntity extends Entity implements Disposable, PropertyChangeListener {
+    private final String TAG = this.getClass().getSimpleName();
+
     private final GameScreen screen;
 
     private final B2dBodyComponent b2dbody;
@@ -80,6 +88,9 @@ public class BlacksmithEntity {
         entity.add(b2dlight);
 
         ecsEngine.addEntity(entity);
+
+        // listeners
+        screen.getMapMgr().getCollisionSystem().addPropertyChangeListener(this);
     }
 
     private void createRunAnimation(AnimationComponent animation, TextureAtlas textureAtlas) {
@@ -112,6 +123,35 @@ public class BlacksmithEntity {
         b2dlight.light = LightBuilder.pointLight(screen.getRayHandler(), b2dbody.body, Color.valueOf("#e28822"), b2dlight.distance);
         b2dlight.light.setSoft(true);
         b2dlight.light.attachToBody(b2dbody.body);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        Gdx.app.debug(TAG, "Blacksmith --> propertyChange(): " + evt.getPropertyName() + ", getNewValue(): " + evt.getNewValue());
+
+        if (evt.getPropertyName().equals(BlacksmithEvent.NAME)) {
+            showDialogMark((BlacksmithEvent) evt.getNewValue());
+        }
+    }
+
+    private void showDialogMark(BlacksmithEvent event) {
+
+        switch (event) {
+            case SHOW_DIALOG_MARK:
+                System.out.println("SHOW_DIALOG_MARK");
+                break;
+            case HIDE_DIALOG_MARK:
+                System.out.println("HIDE_DIALOG_MARK");
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void dispose() {
+        // listeners
+        screen.getMapMgr().getCollisionSystem().removePropertyChangeListener(this);
     }
 }
 

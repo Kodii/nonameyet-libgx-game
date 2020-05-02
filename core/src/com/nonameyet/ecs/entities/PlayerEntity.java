@@ -55,7 +55,7 @@ public class PlayerEntity extends Entity {
                 ecsEngine.getScreen().getWorld(),
                 new Vector2(spawnLocation.x, spawnLocation.y),
                 new Vector2(14, 38),
-                "PLAYER_BODY",
+                "PLAYER",
                 Collision.PLAYER);
         b2dbody.body.setLinearDamping(20f);
 

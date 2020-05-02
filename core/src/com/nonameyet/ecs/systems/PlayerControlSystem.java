@@ -30,7 +30,6 @@ public class PlayerControlSystem extends IteratingSystem implements GameKeyInput
     protected void processEntity(Entity entity, float deltaTime) {
         final PlayerComponent player = playerCmpMapper.get(entity);
         final B2dBodyComponent b2dbody = b2dbodyCmpMapper.get(entity);
-//        final TriggerB2dBodyComponent triggerB2dBody = triggerb2dbodyCmpMapper.get(entity);
         final StateComponent state = stateCmpMapper.get(entity);
 
         speed = player.speed;
