@@ -63,7 +63,7 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
 
         createAnimation(animation, textureAtlas);
 
-        texture.region = new TextureRegion(textureRegion, 0, 0, 19, 16);
+        texture.region = new TextureRegion(textureRegion, 0, 0, 18, 20);
 
         b2dbody.body = BodyBuilder.npcFootRectangleBody(
                 ecsEngine.getScreen().getWorld(),

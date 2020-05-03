@@ -39,10 +39,10 @@ public class BubbleEntity extends Entity {
         // create the data for the components and add them to the components
 
 
-        TextureRegion region = parentEntity.getComponent(TextureComponent.class).region;
+        TextureRegion parentRegion = parentEntity.getComponent(TextureComponent.class).region;
         Vector3 parentPosition = parentEntity.getComponent(TransformComponent.class).position;
-        position.position.set(parentPosition.x + (region.getRegionWidth() / PPM / 2),
-                parentPosition.y + (region.getRegionHeight() / PPM) + (region.getRegionHeight() / 4 / PPM),
+        position.position.set(parentPosition.x + (parentRegion.getRegionWidth() / PPM / 2),
+                parentPosition.y + (parentRegion.getRegionHeight() / PPM) + (5 / PPM),
                 parentPosition.z);
 
         TextureAtlas textureAtlas = Assets.manager.get(AssetName.NPC_BUBBLE.getAssetName());
@@ -50,7 +50,7 @@ public class BubbleEntity extends Entity {
 
         createAnimation(animation, textureAtlas);
 
-        texture.region = new TextureRegion(textureRegion, 0, 0, 26, 17);
+        texture.region = new TextureRegion(textureRegion, 0, 0, 18, 20);
         state.set(StateComponent.NPC_BUBBLE_NORMAL);
 
 
@@ -64,8 +64,8 @@ public class BubbleEntity extends Entity {
 
     private void createAnimation(AnimationComponent animation, TextureAtlas textureAtlas) {
         animation.animations.put(StateComponent.NPC_BUBBLE_NORMAL, new Animation(0, textureAtlas.findRegion("npc_bubble")));
-        animation.animations.put(StateComponent.NPC_BUBBLE_SHOW, new Animation(0.12f, textureAtlas.findRegions("npc_bubble")));
-        animation.animations.put(StateComponent.NPC_BUBBLE_HIDE, new Animation(0.12f, textureAtlas.findRegions("npc_bubble"), Animation.PlayMode.REVERSED));
+        animation.animations.put(StateComponent.NPC_BUBBLE_SHOW, new Animation(0.08f, textureAtlas.findRegions("npc_bubble")));
+        animation.animations.put(StateComponent.NPC_BUBBLE_HIDE, new Animation(0.08f, textureAtlas.findRegions("npc_bubble"), Animation.PlayMode.REVERSED));
 
     }
 }
