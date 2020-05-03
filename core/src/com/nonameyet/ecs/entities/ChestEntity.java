@@ -10,24 +10,34 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
+import com.nonameyet.audio.AudioManager;
 import com.nonameyet.b2d.BodyBuilder;
 import com.nonameyet.b2d.LightBuilder;
 import com.nonameyet.ecs.ECSEngine;
 import com.nonameyet.ecs.components.*;
-import com.nonameyet.events.ChestWindowEvent;
+import com.nonameyet.events.ChestEvent;
+import com.nonameyet.input.GameKeyInputListener;
+import com.nonameyet.input.GameKeys;
+import com.nonameyet.input.InputManager;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.utils.Collision;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
-public class ChestEntity extends Entity implements Disposable, PropertyChangeListener {
+public class ChestEntity extends Entity implements Disposable, PropertyChangeListener, GameKeyInputListener {
     private final String TAG = this.getClass().getSimpleName();
 
     private final GameScreen screen;
     private final StateComponent state;
     private final B2dBodyComponent b2dbody;
     private final B2dLightComponent b2dlight;
+
+    private final BubbleEntity bubbleEntity;
+
+    // events
+    private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
     public ChestEntity(final ECSEngine ecsEngine, final Vector2 spawnLocation) {
         this.screen = ecsEngine.getScreen();
@@ -39,6 +49,7 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
         final AnimationComponent animation = ecsEngine.createComponent(AnimationComponent.class);
         final TextureComponent texture = ecsEngine.createComponent(TextureComponent.class);
         b2dbody = ecsEngine.createComponent(B2dBodyComponent.class);
+        TriggerB2dBodyComponent triggerb2dbody = ecsEngine.createComponent(TriggerB2dBodyComponent.class);
         b2dlight = new B2dLightComponent(screen);
         final TypeComponent type = ecsEngine.createComponent(TypeComponent.class);
         final StateComponent state = ecsEngine.createComponent(StateComponent.class);
@@ -54,13 +65,22 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
 
         texture.region = new TextureRegion(textureRegion, 0, 0, 19, 16);
 
-        b2dbody.body = BodyBuilder.staticPointBody(
+        b2dbody.body = BodyBuilder.npcFootRectangleBody(
                 ecsEngine.getScreen().getWorld(),
                 new Vector2(spawnLocation.x, spawnLocation.y),
-                new Vector2(19, 16),
+                new Vector2(19, 30),
+                "CHEST_BODY",
+                Collision.OBJECT);
+
+        triggerb2dbody.trigger = BodyBuilder.triggerBody(
+                ecsEngine.getScreen().getWorld(),
+                texture.region.getRegionHeight(),
+                new Vector2(spawnLocation.x, spawnLocation.y),
+                45,
                 "CHEST",
                 Collision.OBJECT);
-        type.type = TypeComponent.CHEST;
+
+        type.type = TypeComponent.NPC;
         state.set(StateComponent.STATE_CHEST_NORMAL);
 
         createLight();
@@ -69,12 +89,18 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
         entity.add(animation);
         entity.add(texture);
         entity.add(b2dbody);
+        entity.add(triggerb2dbody);
         entity.add(type);
         entity.add(state);
 
         ecsEngine.addEntity(entity);
 
+        bubbleEntity = new BubbleEntity(ecsEngine, entity);
+
         // listeners
+        addPropertyChangeListener(AudioManager.getInstance());
+        addPropertyChangeListener(screen.getPlayerHUD());
+
         screen.getMapMgr().getCollisionSystem().addPropertyChangeListener(this);
     }
 
@@ -98,25 +124,65 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
     public void propertyChange(PropertyChangeEvent evt) {
         Gdx.app.debug(TAG, "Chest --> propertyChange(): " + evt.getPropertyName() + ", getNewValue(): " + evt.getNewValue());
 
-        if (evt.getPropertyName().equals(ChestWindowEvent.NAME)) {
-            chestWindowEvent((ChestWindowEvent) evt.getNewValue());
+        if (evt.getPropertyName().equals(ChestEvent.NAME)) {
+            chestWindowEvent((ChestEvent) evt.getNewValue());
         }
     }
 
-    public void chestWindowEvent(ChestWindowEvent event) {
+    public void chestWindowEvent(ChestEvent event) {
 
         switch (event) {
-            case CHEST_OPENED:
-                state.set(StateComponent.STATE_CHEST_OPEN);
+            case SHOW_BUBBLE:
+                bubbleEntity.state.set(StateComponent.NPC_BUBBLE_SHOW);
+                InputManager.getInstance().addInputListener(this);
                 break;
-            case CHEST_CLOSED:
-                state.set(StateComponent.STATE_CHEST_CLOSE);
+            case HIDE_BUBBLE:
+                if (state.get() == StateComponent.STATE_CHEST_OPEN) {
+                    state.set(StateComponent.STATE_CHEST_CLOSE);
+                    changes.firePropertyChange(ChestEvent.NAME, null, ChestEvent.CHEST_CLOSED);
+                }
+                if (bubbleEntity.state.get() == StateComponent.NPC_BUBBLE_SHOW)
+                    bubbleEntity.state.set(StateComponent.NPC_BUBBLE_HIDE);
+
+                InputManager.getInstance().removeInputListener(this);
                 break;
         }
     }
 
     @Override
+    public void keyPressed(InputManager inputManager, GameKeys key) {
+        switch (key) {
+            case SELECT:
+                state.set(StateComponent.STATE_CHEST_OPEN);
+                bubbleEntity.state.set(StateComponent.NPC_BUBBLE_HIDE);
+                changes.firePropertyChange(ChestEvent.NAME, null, ChestEvent.CHEST_OPENED);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void keyReleased(InputManager inputManager, GameKeys key) {
+
+    }
+
+    @Override
     public void dispose() {
         screen.getMapMgr().getCollisionSystem().removePropertyChangeListener(this);
+
+        removePropertyChangeListener(AudioManager.getInstance());
+        removePropertyChangeListener(screen.getPlayerHUD());
     }
+
+    public void addPropertyChangeListener(
+            PropertyChangeListener p) {
+        changes.addPropertyChangeListener(p);
+    }
+
+    public void removePropertyChangeListener(
+            PropertyChangeListener p) {
+        changes.removePropertyChangeListener(p);
+    }
+
 }

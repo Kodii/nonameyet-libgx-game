@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
+import com.nonameyet.ecs.components.B2dBodyComponent;
 import com.nonameyet.ecs.components.TextureComponent;
 import com.nonameyet.ecs.components.TransformComponent;
 import com.nonameyet.ecs.components.TypeComponent;
@@ -92,8 +93,8 @@ public class RenderingSystem extends SortedIteratingSystem {
         for (Entity entity : renderQueue) {
             TypeComponent type = typeCmpMapper.get(entity);
             if (type != null && type.type == TypeComponent.PLAYER) {
-                TransformComponent transform = transformCmpMapper.get(entity);
-                playerY = transform.position.y;
+                B2dBodyComponent b2dBody = b2dbodyCmpMapper.get(entity);
+                playerY = b2dBody.body.getPosition().y;
                 break;
             }
         }
@@ -102,14 +103,17 @@ public class RenderingSystem extends SortedIteratingSystem {
             TypeComponent type = typeCmpMapper.get(entity);
             if (type != null && type.type != TypeComponent.PLAYER) {
                 TransformComponent transform = transformCmpMapper.get(entity);
+                B2dBodyComponent b2dBody = b2dbodyCmpMapper.get(entity);
 
-                if (transform.position.y > playerY)
+                if (type.type == TypeComponent.NPC) {
+                }
+
+                if (b2dBody.body.getPosition().y > playerY)
                     transform.position.z = 1;
 
-                if (transform.position.y < playerY)
+                if (b2dBody.body.getPosition().y < playerY)
                     transform.position.z = -1;
             }
-
         }
     }
 

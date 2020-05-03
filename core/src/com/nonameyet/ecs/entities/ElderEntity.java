@@ -139,10 +139,10 @@ public class ElderEntity extends Entity implements Disposable, PropertyChangeLis
 
     private void showDialogMark(ElderEvent event) {
         switch (event) {
-            case SHOW_DIALOG_MARK:
+            case SHOW_BUBBLE:
                 bubbleEntity.state.set(StateComponent.NPC_BUBBLE_SHOW);
                 break;
-            case HIDE_DIALOG_MARK:
+            case HIDE_BUBBLE:
                 bubbleEntity.state.set(StateComponent.NPC_BUBBLE_HIDE);
                 break;
             default:

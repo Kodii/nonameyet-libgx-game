@@ -45,14 +45,14 @@ public class AnvilEntity {
 
         texture.region = new TextureRegion(textureRegion, 0, 0, 30, 27);
 
-        b2dbody.body = BodyBuilder.staticPointBody(
+        b2dbody.body = BodyBuilder.npcFootRectangleBody(
                 ecsEngine.getScreen().getWorld(),
                 new Vector2(spawnLocation.x, spawnLocation.y),
                 new Vector2(30, 27),
                 "ANVIL",
                 Collision.OBJECT
         );
-        type.type = TypeComponent.OTHER;
+        type.type = TypeComponent.NPC;
         state.set(StateComponent.STATE_ANVIL);
 
         createLight();

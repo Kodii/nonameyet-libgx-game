@@ -11,7 +11,7 @@ public class BodyBuilder {
 
         return body(world,
                 new Vector2(position.x, position.y),
-                new Vector2(size.x, (size.y / 8)),
+                new Vector2(size.x, (size.y / 6)),
                 BodyDef.BodyType.DynamicBody,
                 userData,
                 categoryBits);
@@ -21,7 +21,7 @@ public class BodyBuilder {
 
         return body(world,
                 new Vector2(position.x, position.y),
-                new Vector2(size.x, (size.y / 8)),
+                new Vector2(size.x, (size.y / 6)),
                 BodyDef.BodyType.StaticBody,
                 userData,
                 categoryBits);

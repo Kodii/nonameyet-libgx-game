@@ -5,7 +5,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
-import com.nonameyet.events.ChestWindowEvent;
+import com.nonameyet.events.ChestEvent;
 import com.nonameyet.events.DayTimeEvent;
 import com.nonameyet.preferences.Preferences;
 
@@ -31,14 +31,14 @@ public class AudioManager implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         Gdx.app.debug(TAG, "AudioManager --> propertyChange(): " + evt.getPropertyName() + ", getNewValue(): " + evt.getNewValue());
 
-        if (evt.getPropertyName().equals(ChestWindowEvent.NAME)) {
-            chestWindowEvent((ChestWindowEvent) evt.getNewValue());
+        if (evt.getPropertyName().equals(ChestEvent.NAME)) {
+            chestWindowEvent((ChestEvent) evt.getNewValue());
         } else if (evt.getPropertyName().equals(DayTimeEvent.NAME)) {
             lightsEvent((DayTimeEvent) evt.getNewValue());
         }
     }
 
-    public void chestWindowEvent(ChestWindowEvent event) {
+    public void chestWindowEvent(ChestEvent event) {
 
         switch (event) {
             case CHEST_OPENED:

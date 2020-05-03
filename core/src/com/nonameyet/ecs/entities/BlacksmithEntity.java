@@ -16,13 +16,17 @@ import com.nonameyet.b2d.LightBuilder;
 import com.nonameyet.ecs.ECSEngine;
 import com.nonameyet.ecs.components.*;
 import com.nonameyet.events.BlacksmithEvent;
+import com.nonameyet.input.GameKeyInputListener;
+import com.nonameyet.input.GameKeys;
+import com.nonameyet.input.InputManager;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.utils.Collision;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
-public class BlacksmithEntity extends Entity implements Disposable, PropertyChangeListener {
+public class BlacksmithEntity extends Entity implements Disposable, PropertyChangeListener, GameKeyInputListener {
     private final String TAG = this.getClass().getSimpleName();
 
     private final GameScreen screen;
@@ -31,6 +35,9 @@ public class BlacksmithEntity extends Entity implements Disposable, PropertyChan
     private final B2dLightComponent b2dlight;
 
     private final BubbleEntity bubbleEntity;
+
+    // events
+    private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
     public BlacksmithEntity(ECSEngine ecsEngine, Vector2 spawnLocation) {
         this.screen = ecsEngine.getScreen();
@@ -140,15 +147,35 @@ public class BlacksmithEntity extends Entity implements Disposable, PropertyChan
 
     private void showDialogMark(BlacksmithEvent event) {
         switch (event) {
-            case SHOW_DIALOG_MARK:
+            case SHOW_BUBBLE:
                 bubbleEntity.state.set(StateComponent.NPC_BUBBLE_SHOW);
+                InputManager.getInstance().addInputListener(this);
                 break;
-            case HIDE_DIALOG_MARK:
+            case HIDE_BUBBLE:
                 bubbleEntity.state.set(StateComponent.NPC_BUBBLE_HIDE);
+                changes.firePropertyChange(BlacksmithEvent.NAME, null, BlacksmithEvent.BLACKSMITH_CLOSED);
+                InputManager.getInstance().removeInputListener(this);
                 break;
             default:
                 break;
         }
+    }
+
+
+    @Override
+    public void keyPressed(InputManager inputManager, GameKeys key) {
+        switch (key) {
+            case SELECT:
+                changes.firePropertyChange(BlacksmithEvent.NAME, null, BlacksmithEvent.BLACKSMITH_OPENED);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void keyReleased(InputManager inputManager, GameKeys key) {
+
     }
 
     @Override

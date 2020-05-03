@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
-import com.nonameyet.events.ChestWindowEvent;
+import com.nonameyet.events.ChestEvent;
 import com.nonameyet.events.StatusEvent;
 import com.nonameyet.preferences.PlayerPref;
 import com.nonameyet.screens.GameScreen;
@@ -118,14 +118,14 @@ public class PlayerHUD implements Screen, PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         Gdx.app.debug(TAG, "GUI --> propertyChange(): " + evt.getPropertyName() + ", getNewValue(): " + evt.getNewValue());
 
-        if (evt.getPropertyName().equals(ChestWindowEvent.NAME)) {
-            chestWindowEvent((ChestWindowEvent) evt.getNewValue());
+        if (evt.getPropertyName().equals(ChestEvent.NAME)) {
+            chestWindowEvent((ChestEvent) evt.getNewValue());
         } else if (evt.getPropertyName().equals(StatusEvent.NAME)) {
             statusEvent((StatusEvent) evt.getNewValue());
         }
     }
 
-    public void chestWindowEvent(ChestWindowEvent event) {
+    public void chestWindowEvent(ChestEvent event) {
 
         switch (event) {
             case CHEST_OPENED:
