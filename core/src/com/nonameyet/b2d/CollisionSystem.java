@@ -5,6 +5,8 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.nonameyet.events.BlacksmithEvent;
 import com.nonameyet.events.ChestEvent;
 import com.nonameyet.events.ElderEvent;
+import com.nonameyet.maps.MapFactory;
+import com.nonameyet.maps.MapManager;
 import com.nonameyet.screens.GameScreen;
 
 import java.beans.PropertyChangeListener;
@@ -13,15 +15,15 @@ import java.beans.PropertyChangeSupport;
 public class CollisionSystem implements ContactListener {
     private final String TAG = this.getClass().getSimpleName();
 
-//    private final GameScreen screen;
-//    private final MapManager mapMgr;
+    private final GameScreen screen;
+    private final MapManager mapMgr;
 
     // events
     private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
     public CollisionSystem(GameScreen screen) {
-//        this.screen = screen;
-//        this.mapMgr = screen.getMapMgr();
+        this.screen = screen;
+        this.mapMgr = screen.getMapMgr();
     }
 
     @Override
@@ -30,6 +32,8 @@ public class CollisionSystem implements ContactListener {
         final Fixture fb = contact.getFixtureB();
 
         Gdx.app.debug("CONTACT", "START " + fa.getBody().getUserData() + " has hit " + fb.getBody().getUserData());
+
+        beginPortalContact(fa, fb);
 
         if (fa.getBody().getUserData().equals("PLAYER"))
             beginCollision(fb);
@@ -54,16 +58,16 @@ public class CollisionSystem implements ContactListener {
         }
     }
 
-//    private void beginPortalContact(Fixture fixtureA, Fixture fixtureB) {
-//        if (fixtureA.getBody().getUserData().equals("PORTAL") || fixtureB.getBody().getUserData().equals("PORTAL")) {
-//
-//            if (mapMgr.getCurrentMapType() == MapFactory.MapType.TOWN)
-//                mapMgr.setCurrentMapType(MapFactory.MapType.TOP_WORLD);
-//            else mapMgr.setCurrentMapType(MapFactory.MapType.TOWN);
-//
-//            mapMgr.setMapChanged(true);
-//        }
-//    }
+    private void beginPortalContact(Fixture fixtureA, Fixture fixtureB) {
+        if (fixtureA.getBody().getUserData().equals("PORTAL") || fixtureB.getBody().getUserData().equals("PORTAL")) {
+
+            if (mapMgr.getCurrentMapType() == MapFactory.MapType.SPAWN)
+                mapMgr.setCurrentMapType(MapFactory.MapType.FIRST);
+            else mapMgr.setCurrentMapType(MapFactory.MapType.SPAWN);
+
+            mapMgr.setMapChanged(true);
+        }
+    }
 
     private void beginChestContact(Fixture fixture) {
         changes.firePropertyChange(ChestEvent.NAME, null, ChestEvent.SHOW_BUBBLE);

@@ -81,7 +81,7 @@ abstract class Map implements Disposable {
         }
 
         MapGroupLayer npcGroup = (MapGroupLayer) currentTiledMap.getLayers().get("npc");
-        if (lightsGroup != null) {
+        if (npcGroup != null) {
             npcSpawnLayer = npcGroup.getLayers().get(NPC_SPAWN_LAYER);
             if (npcSpawnLayer == null) {
                 Gdx.app.debug(TAG, "No npc spawn layer!");

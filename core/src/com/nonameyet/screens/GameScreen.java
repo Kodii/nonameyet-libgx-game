@@ -36,6 +36,8 @@ public class GameScreen extends AbstractScreen {
 
     // ecs
     ECSEngine ecsEngine;
+    public PhysicsSystem physicsSystem;
+    public PhysicsDebugSystem physicsDebugSystem;
 
     private PlayerHUD playerHUD;
 
@@ -63,9 +65,13 @@ public class GameScreen extends AbstractScreen {
             mapRenderer = new OrthogonalTiledMapRenderer(mapMgr.getCurrentTiledMap(), 1 / PPM);
         }
 
-        ecsEngine.addSystem(new PhysicsSystem(world));
+        physicsSystem = new PhysicsSystem(world);
+        ecsEngine.addSystem(physicsSystem);
+
         ecsEngine.addSystem(new RenderingSystem(this));
-        ecsEngine.addSystem(new PhysicsDebugSystem(world, camera));
+
+        physicsDebugSystem = new PhysicsDebugSystem(world, camera);
+        ecsEngine.addSystem(physicsSystem);
 
         mapMgr.createEntites();
     }
@@ -99,6 +105,13 @@ public class GameScreen extends AbstractScreen {
         if (mapMgr.isMapChanged()) {
             mapMgr.loadMap(mapMgr.getCurrentMapType());
             mapRenderer.setMap(mapMgr.getCurrentTiledMap());
+
+            physicsSystem = new PhysicsSystem(world);
+            ecsEngine.addSystem(physicsSystem);
+            physicsDebugSystem = new PhysicsDebugSystem(world, camera);
+            ecsEngine.addSystem(physicsDebugSystem);
+
+            mapMgr.createEntites();
         }
         //render our game maps
         mapRenderer.setView(camera);

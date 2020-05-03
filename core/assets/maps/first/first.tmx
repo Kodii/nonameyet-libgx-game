@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-up" compressionlevel="0" width="800" height="1200" tilewidth="1" tileheight="1" infinite="0" nextlayerid="38" nextobjectid="149">
+ <imagelayer id="2" name="background">
+  <image source="first.png" width="800" height="1200"/>
+ </imagelayer>
+ <objectgroup id="36" name="MAP_COLLISION_LAYER">
+  <object id="94" x="355.073" y="1191.45" width="15.0842" height="8.53446"/>
+  <object id="95" x="358.646" y="1147.98" width="8.1375" height="43.4662"/>
+  <object id="96" x="354.478" y="1130.52" width="16.275" height="17.4659"/>
+  <object id="97" x="429.303" y="1125.36" width="16.275" height="22.6262"/>
+  <object id="98" x="433.471" y="1148.38" width="7.3436" height="39.2982"/>
+  <object id="99" x="430.097" y="1187.88" width="15.0842" height="11.7101"/>
+  <object id="100" x="445.628" y="1195" width="354.511" height="5"/>
+  <object id="101" x="795" y="0" width="5" height="1200"/>
+  <object id="102" x="0" y="0" width="800" height="5"/>
+  <object id="103" x="0" y="0" width="5" height="1200"/>
+  <object id="104" x="0" y="1195" width="357.486" height="5"/>
+ </objectgroup>
+ <objectgroup id="37" name="MAP_PORTAL_LAYER">
+  <object id="93" x="370.157" y="1192.64" width="59.5427" height="7.14513"/>
+ </objectgroup>
+ <objectgroup id="16" name="PLAYER_SPAWN_LAYER">
+  <object id="56" name="spawn" x="400" y="1164.29">
+   <point/>
+  </object>
+ </objectgroup>
+ <group id="26" name="lights">
+  <objectgroup id="35" name="TORCHES_SPAWN_LAYER">
+   <object id="105" x="362.644" y="1141.84">
+    <point/>
+   </object>
+   <object id="106" x="437.786" y="1141.14">
+    <point/>
+   </object>
+   <object id="117" x="360.228" y="1085.6">
+    <point/>
+   </object>
+   <object id="118" x="364.441" y="1017.48">
+    <point/>
+   </object>
+   <object id="119" x="356.014" y="948.669">
+    <point/>
+   </object>
+   <object id="120" x="367.952" y="874.236">
+    <point/>
+   </object>
+   <object id="121" x="346.886" y="810.336">
+    <point/>
+   </object>
+   <object id="122" x="357.419" y="732.392">
+    <point/>
+   </object>
+   <object id="123" x="344.779" y="646.022">
+    <point/>
+   </object>
+   <object id="124" x="358.823" y="565.269">
+    <point/>
+   </object>
+   <object id="125" x="349.695" y="495.05">
+    <point/>
+   </object>
+   <object id="126" x="360.93" y="415.701">
+    <point/>
+   </object>
+   <object id="128" x="351.801" y="338.459">
+    <point/>
+   </object>
+   <object id="130" x="366.547" y="259.111">
+    <point/>
+   </object>
+   <object id="131" x="352.503" y="164.314">
+    <point/>
+   </object>
+   <object id="132" x="355.312" y="73.7308">
+    <point/>
+   </object>
+   <object id="134" x="443.789" y="1076.47">
+    <point/>
+   </object>
+   <object id="135" x="433.958" y="1005.55">
+    <point/>
+   </object>
+   <object id="136" x="439.576" y="938.136">
+    <point/>
+   </object>
+   <object id="137" x="440.278" y="855.979">
+    <point/>
+   </object>
+   <object id="138" x="424.128" y="791.377">
+    <point/>
+   </object>
+   <object id="139" x="431.852" y="719.051">
+    <point/>
+   </object>
+   <object id="140" x="426.936" y="640.404">
+    <point/>
+   </object>
+   <object id="141" x="430.447" y="558.247">
+    <point/>
+   </object>
+   <object id="142" x="424.128" y="489.432">
+    <point/>
+   </object>
+   <object id="143" x="427.639" y="409.381">
+    <point/>
+   </object>
+   <object id="144" x="426.936" y="335.651">
+    <point/>
+   </object>
+   <object id="145" x="435.363" y="259.813">
+    <point/>
+   </object>
+   <object id="146" x="430.447" y="161.506">
+    <point/>
+   </object>
+   <object id="147" x="438.874" y="73.7308">
+    <point/>
+   </object>
+  </objectgroup>
+ </group>
+</map>

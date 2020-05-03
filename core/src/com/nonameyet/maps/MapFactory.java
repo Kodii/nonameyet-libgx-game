@@ -9,7 +9,8 @@ public class MapFactory {
     public enum MapType {
         TOP_WORLD,
         TOWN,
-        SPAWN
+        SPAWN,
+        FIRST
     }
 
     static Map getMap(GameScreen screen, MapType mapType) {
@@ -24,6 +25,9 @@ public class MapFactory {
                 break;
             case SPAWN:
                 map = new SpawnMap(screen);
+                break;
+            case FIRST:
+                map = new FirstMap(screen);
                 break;
             default:
                 break;

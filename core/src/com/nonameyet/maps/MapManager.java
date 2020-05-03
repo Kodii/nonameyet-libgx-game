@@ -31,6 +31,8 @@ public class MapManager implements Disposable, PropertyChangeListener {
 
     private CollisionSystem collisionSystem;
 
+    DayTimeEvent lastDayTimeEvent;
+
     public MapManager(GameScreen screen) {
         this.screen = screen;
 
@@ -38,9 +40,14 @@ public class MapManager implements Disposable, PropertyChangeListener {
     }
 
     public void loadMap(MapFactory.MapType mapType) {
+        screen.getEcsEngine().removeAllEntities();
+        screen.getEcsEngine().removeSystem(screen.physicsSystem);
+        screen.getEcsEngine().removeSystem(screen.physicsDebugSystem);
 
         if (screen.getWorld() != null)
             screen.getWorld().dispose();
+
+//        if (screen.getWorld() == null)
         screen.setWorld(new World(new Vector2(0, 0), true));
 
         screen.setRayHandler(new RayHandler(screen.getWorld(), 256, 144));
@@ -62,10 +69,16 @@ public class MapManager implements Disposable, PropertyChangeListener {
         collisionSystem = new CollisionSystem(screen);
         screen.getWorld().setContactListener(collisionSystem);
 
+        if (lastDayTimeEvent != null)
+            changeDayState(lastDayTimeEvent);
+
         mapChanged = false;
+
+        System.out.println("ZMIANA MAPY!!!!!!");
     }
 
     public void createEntites() {
+
         // ecs scenery
         for (MapObject object : currentMap.collisionLayer.getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
@@ -148,6 +161,7 @@ public class MapManager implements Disposable, PropertyChangeListener {
     }
 
     private void changeDayState(DayTimeEvent event) {
+        lastDayTimeEvent = event;
 
         switch (event) {
 

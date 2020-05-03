@@ -3,11 +3,11 @@ package com.nonameyet.maps;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.screens.GameScreen;
 
-class SpawnMap extends Map {
+class FirstMap extends Map {
     private final String TAG = this.getClass().getSimpleName();
 
-    public SpawnMap(GameScreen screen) {
-        super(screen, MapFactory.MapType.SPAWN, AssetName.MAP_SPAWN_TMX);
+    public FirstMap(GameScreen screen) {
+        super(screen, MapFactory.MapType.FIRST, AssetName.MAP_FIRST_TMX);
     }
 
     @Override
