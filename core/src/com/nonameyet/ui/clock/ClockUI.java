@@ -91,6 +91,10 @@ public class ClockUI extends Label implements Disposable {
         }
     }
 
+    public void manualPropertyChangeEvent() {
+        currentStateOfDay = null;
+    }
+
     @Override
     public void act(float delta) {
         input();

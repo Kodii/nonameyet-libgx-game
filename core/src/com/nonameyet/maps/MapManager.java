@@ -31,8 +31,6 @@ public class MapManager implements Disposable, PropertyChangeListener {
 
     private CollisionSystem collisionSystem;
 
-    DayTimeEvent lastDayTimeEvent;
-
     public MapManager(GameScreen screen) {
         this.screen = screen;
 
@@ -47,7 +45,6 @@ public class MapManager implements Disposable, PropertyChangeListener {
         if (screen.getWorld() != null)
             screen.getWorld().dispose();
 
-//        if (screen.getWorld() == null)
         screen.setWorld(new World(new Vector2(0, 0), true));
 
         screen.setRayHandler(new RayHandler(screen.getWorld(), 256, 144));
@@ -69,12 +66,7 @@ public class MapManager implements Disposable, PropertyChangeListener {
         collisionSystem = new CollisionSystem(screen);
         screen.getWorld().setContactListener(collisionSystem);
 
-        if (lastDayTimeEvent != null)
-            changeDayState(lastDayTimeEvent);
-
         mapChanged = false;
-
-        System.out.println("ZMIANA MAPY!!!!!!");
     }
 
     public void createEntites() {
@@ -123,7 +115,6 @@ public class MapManager implements Disposable, PropertyChangeListener {
                     default:
                         break;
                 }
-
             }
         }
 
@@ -146,9 +137,11 @@ public class MapManager implements Disposable, PropertyChangeListener {
                     default:
                         break;
                 }
-
             }
         }
+
+        screen.getPlayerHUD().getClockUI().manualPropertyChangeEvent();
+
     }
 
     @Override
@@ -161,7 +154,6 @@ public class MapManager implements Disposable, PropertyChangeListener {
     }
 
     private void changeDayState(DayTimeEvent event) {
-        lastDayTimeEvent = event;
 
         switch (event) {
 

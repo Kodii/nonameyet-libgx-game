@@ -15,6 +15,7 @@ import com.nonameyet.utils.Constants;
 public class ChestInventoryUI extends Window {
     private final String TAG = this.getClass().getSimpleName();
     private static final WindowStyle windowStyle;
+    private static final Texture texture;
     private static final BitmapFont bitmapFont;
 
     static {
@@ -24,20 +25,20 @@ public class ChestInventoryUI extends Window {
         bitmapFont = generator.generateFont(parameter);
         generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
-        Texture texture = Assets.manager.get(AssetName.CHEST_WINDOW.getAssetName());
+        texture = Assets.manager.get(AssetName.CHEST_WINDOW.getAssetName());
         windowStyle = new WindowStyle(bitmapFont, Color.WHITE, new TextureRegionDrawable(texture));
     }
 
     public ChestInventoryUI() {
         super("", windowStyle);
 
-        this.setSize(this.getWidth() * (AbstractScreen.VIEWPORT.physicalWidth / Constants.CAMERA_PIXELS_WIDTH),
-                this.getHeight() * (AbstractScreen.VIEWPORT.physicalHeight / Constants.CAMERA_PIXELS_HEIGHT));
+        this.setSize(texture.getWidth() * (AbstractScreen.VIEWPORT.physicalWidth / Constants.CAMERA_PIXELS_WIDTH),
+                texture.getHeight() * (AbstractScreen.VIEWPORT.physicalHeight / Constants.CAMERA_PIXELS_HEIGHT));
         this.setVisible(false);
         this.setMovable(true);
         this.setPosition((AbstractScreen.VIEWPORT.physicalWidth / 2) - this.getWidth() / 2, (AbstractScreen.VIEWPORT.physicalHeight / 2) - this.getHeight() / 2);
 
-        this.padTop(50);
+        this.padTop(30);
 
 //        this.debug();
     }
