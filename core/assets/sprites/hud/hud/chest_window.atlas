@@ -1,0 +1,26 @@
+chest_window.png
+size: 178,139
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+close_off
+  rotate: false
+  xy: 0, 0
+  size: 11, 13
+  orig: 11, 13
+  offset: 0, 0
+  index: 0
+close_on
+  rotate: false
+  xy: 11, 0
+  size: 11, 13
+  orig: 11, 13
+  offset: 0, 0
+  index: 0
+bg
+  rotate: false
+  xy: 22, 0
+  size: 156, 139
+  orig: 156, 139
+  offset: 0, 0
+  index: 0

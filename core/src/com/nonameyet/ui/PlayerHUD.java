@@ -94,8 +94,6 @@ public class PlayerHUD implements Screen, PropertyChangeListener {
 
     @Override
     public void pause() {
-//        Gdx.app.debug(TAG, "currentTime: " + clockUI.getTotalTime());
-//        PlayerPref.setCurrentTime(clockUI.getTotalTime());
     }
 
     @Override

@@ -42,7 +42,7 @@ public class Assets implements Disposable {
 
         // hud
         manager.load(AssetName.CAMERA_FRAME.getAssetName(), Texture.class);
-        manager.load(AssetName.CHEST_WINDOW.getAssetName(), Texture.class);
+        manager.load(AssetName.CHEST_WINDOW.getAssetName(), TextureAtlas.class);
         manager.load(AssetName.LIFE.getAssetName(), Texture.class);
 
         // sound effects
