@@ -35,8 +35,6 @@ public class ClockUI extends Label implements Disposable {
         labelStyle.fontColor = Color.WHITE;
     }
 
-    private final GameScreen screen;
-
     private static final String FORMAT = "%02d:%02d";
     private float totalTime = 0;
     private float rateOfTime = 1;
@@ -49,11 +47,9 @@ public class ClockUI extends Label implements Disposable {
 
     public ClockUI(GameScreen screen, CharSequence text) {
         super(text, labelStyle);
-        this.screen = screen;
         init();
 
         addPropertyChangeListener(AudioManager.getInstance());
-//        addPropertyChangeListener(screen.getMapMgr());
     }
 
     private void init() {
@@ -164,6 +160,5 @@ public class ClockUI extends Label implements Disposable {
     @Override
     public void dispose() {
         removePropertyChangeListener(AudioManager.getInstance());
-//        removePropertyChangeListener(screen.getMapMgr());
     }
 }

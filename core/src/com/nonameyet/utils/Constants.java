@@ -18,5 +18,4 @@ public class Constants {
     // number of pixels in aseprite to fill camera hud
     public static final float CAMERA_PIXELS_WIDTH = 512;
     public static final float CAMERA_PIXELS_HEIGHT = 288;
-
 }

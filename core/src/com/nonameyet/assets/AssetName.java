@@ -27,6 +27,7 @@ public enum AssetName {
     // hud
     CAMERA_FRAME("sprites/hud/camera_frame/camera_frame.png"),
     CHEST_WINDOW("sprites/hud/hud/chest_window.atlas"),
+    STATS_WINDOW("sprites/hud/hud/stats_window.atlas"),
     LIFE("sprites/hud/life/life.png"),
     SLOT("sprites/hud/slot/slot.png"),
     SLOT_HIGHLIGHT("sprites/hud/slot/slot_highlight.png"),

@@ -7,7 +7,9 @@ public enum GameKeys {
     DOWN(Input.Keys.S),
     LEFT(Input.Keys.A),
     RIGHT(Input.Keys.D),
-    SELECT(Input.Keys.F);
+    SELECT(Input.Keys.F),
+
+    STATS(Input.Keys.C);
 
     final int[] keyCode;
 

@@ -23,10 +23,10 @@ public class GameScreen extends AbstractScreen {
 
     private MapManager mapMgr;
 
-    private OrthogonalTiledMapRenderer mapRenderer = null;
+    private OrthogonalTiledMapRenderer mapRenderer;
 
-    private OrthographicCamera camera = null;
-    protected OrthographicCamera hudCamera = null;
+    private OrthographicCamera camera;
+    protected OrthographicCamera hudCamera;
 
     //Box2d
     private World world;
@@ -82,10 +82,10 @@ public class GameScreen extends AbstractScreen {
 
         //get the current size
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
+        camera.setToOrtho(false, 16, 9);
 
         hudCamera = new OrthographicCamera();
-        hudCamera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
+        hudCamera.setToOrtho(false, 16, 9);
     }
 
     private void createInputMultiplexer() {

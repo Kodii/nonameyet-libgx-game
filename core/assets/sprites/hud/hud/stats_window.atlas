@@ -1,18 +1,18 @@
-chest_window.png
-size: 178,139
+stats_window.png
+size: 133,138
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 closeoff
   rotate: false
-  xy: 0, 126
+  xy: 0, 125
   size: 11, 13
   orig: 11, 13
   offset: 0, 0
   index: -1
 closeon
   rotate: false
-  xy: 11, 126
+  xy: 11, 125
   size: 11, 13
   orig: 11, 13
   offset: 0, 0
@@ -20,7 +20,7 @@ closeon
 bg
   rotate: false
   xy: 22, 0
-  size: 156, 139
-  orig: 156, 139
+  size: 111, 138
+  orig: 111, 138
   offset: 0, 0
   index: -1

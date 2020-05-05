@@ -60,6 +60,7 @@ public class PlayerCameraSystem extends IteratingSystem {
 
         // Move camera after player as normal
         //attach our gamecam to our players.x coordinate
+
         screen.getCamera().position.x = position.x;
         screen.getCamera().position.y = position.y;
 
@@ -87,5 +88,10 @@ public class PlayerCameraSystem extends IteratingSystem {
         } else if (cameraTop >= mapTop) {
             screen.getCamera().position.y = mapTop - cameraHalfHeight;
         }
+
+        float x = (float) Math.round(screen.getCamera().position.x * 100) / 100;
+        float y = (float) Math.round(screen.getCamera().position.y * 100) / 100;
+        screen.getCamera().position.x = x;
+        screen.getCamera().position.y = y;
     }
 }
