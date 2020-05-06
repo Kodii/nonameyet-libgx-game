@@ -28,8 +28,16 @@ public class PlayerCameraSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         Vector2 position = b2dbodyCmpMapper.get(entity).body.getPosition();
-        gameCamera.update();
+
+
+        // Move camera after player as normal
+        //attach our gamecam to our players.x coordinate with latency
+//        gameCamera.position.x = position.x;
+//        gameCamera.position.y = position.y;
+
         cameraCornerBounds(position);
+        gameCamera.update();
+
 
     }
 
@@ -47,13 +55,13 @@ public class PlayerCameraSystem extends IteratingSystem {
 
         // These values likely need to be scaled according to your world coordinates.
         // The left boundary of the map (x)
-        int mapLeft = 0;
+        float mapLeft = 0;
         // The right boundary of the map (x + width)
-        int mapRight = (int) (0 + (mapWidth / PPM));
+        float mapRight = 0 + (mapWidth / PPM);
         // The bottom boundary of the map (y)
-        int mapBottom = 0;
+        float mapBottom = 0;
         // The top boundary of the map (y + height)
-        int mapTop = (int) (0 + (mapHeight / PPM));
+        float mapTop = 0 + (mapHeight / PPM);
         // The camera dimensions, halved
         float cameraHalfWidth = screen.getCamera().viewportWidth * .5f;
         float cameraHalfHeight = screen.getCamera().viewportHeight * .5f;
@@ -61,8 +69,10 @@ public class PlayerCameraSystem extends IteratingSystem {
         // Move camera after player as normal
         //attach our gamecam to our players.x coordinate
 
-        screen.getCamera().position.x = position.x;
-        screen.getCamera().position.y = position.y;
+//        screen.getCamera().position.x = position.x;
+//        screen.getCamera().position.y = position.y;
+        gameCamera.position.x = gameCamera.position.x + (position.x - gameCamera.position.x) * 0.08f;
+        gameCamera.position.y = gameCamera.position.y + (position.y - gameCamera.position.y) * 0.08f;
 
         float cameraLeft = screen.getCamera().position.x - cameraHalfWidth;
         float cameraRight = screen.getCamera().position.x + cameraHalfWidth;
@@ -89,9 +99,9 @@ public class PlayerCameraSystem extends IteratingSystem {
             screen.getCamera().position.y = mapTop - cameraHalfHeight;
         }
 
-        float x = (float) Math.round(screen.getCamera().position.x * 100) / 100;
-        float y = (float) Math.round(screen.getCamera().position.y * 100) / 100;
-        screen.getCamera().position.x = x;
-        screen.getCamera().position.y = y;
+//        float x = (float) Math.round(screen.getCamera().position.x * 100) / 100;
+//        float y = (float) Math.round(screen.getCamera().position.y * 100) / 100;
+//        screen.getCamera().position.x = x;
+//        screen.getCamera().position.y = y;
     }
 }

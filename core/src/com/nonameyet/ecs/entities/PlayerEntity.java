@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
 import com.nonameyet.b2d.BodyBuilder;
@@ -43,18 +44,18 @@ public class PlayerEntity extends Entity {
         // create the data for the components and add them to the components
         position.position.set(spawnLocation.x, spawnLocation.y, 0);
 
-        TextureAtlas textureAtlas = Assets.manager.get(AssetName.PLAYER_ATLAS.getAssetName());
+        TextureAtlas textureAtlas = Assets.manager.get(AssetName.PLAYER2_ATLAS.getAssetName());
         TextureRegion textureRegion = textureAtlas.findRegion("player_idle_right");
 
 
         createRunAnimation(animation, textureAtlas);
 
-        texture.region = new TextureRegion(textureRegion, 0, 0, 22, 38);
+        texture.region = new TextureRegion(textureRegion, 0, 0, 22, 39);
 
         b2dbody.body = BodyBuilder.playerFootBody(
                 ecsEngine.getScreen().getWorld(),
                 new Vector2(spawnLocation.x, spawnLocation.y),
-                new Vector2(14, 38),
+                new Vector2(14, 39),
                 "PLAYER",
                 Collision.PLAYER);
         b2dbody.body.setLinearDamping(20f);
@@ -81,15 +82,22 @@ public class PlayerEntity extends Entity {
     private void createRunAnimation(AnimationComponent animation, TextureAtlas textureAtlas) {
         float frameDuration = 0.17f;
 
-        animation.animations.put(StateComponent.STATE_STANDING_DOWN, new Animation(0, textureAtlas.findRegion("player_idle_left")));
-        animation.animations.put(StateComponent.STATE_STANDING_LEFT, new Animation(0, textureAtlas.findRegion("player_idle_left")));
-        animation.animations.put(StateComponent.STATE_STANDING_UP, new Animation(0, textureAtlas.findRegion("player_idle_right")));
-        animation.animations.put(StateComponent.STATE_STANDING_RIGHT, new Animation(0, textureAtlas.findRegion("player_idle_right")));
+        TextureAtlas.AtlasRegion player_idle_right = textureAtlas.findRegion("player_idle_right");
+        animation.animations.put(StateComponent.STATE_STANDING_UP, new Animation(0, player_idle_right));
+        animation.animations.put(StateComponent.STATE_STANDING_RIGHT, new Animation(0, player_idle_right));
 
-        animation.animations.put(StateComponent.STATE_RUNNING_DOWN, new Animation(frameDuration, textureAtlas.findRegions("player_run_left"), Animation.PlayMode.LOOP));
-        animation.animations.put(StateComponent.STATE_RUNNING_LEFT, new Animation(frameDuration, textureAtlas.findRegions("player_run_left"), Animation.PlayMode.LOOP));
-        animation.animations.put(StateComponent.STATE_RUNNING_RIGHT, new Animation(frameDuration, textureAtlas.findRegions("player_run_right"), Animation.PlayMode.LOOP));
-        animation.animations.put(StateComponent.STATE_RUNNING_UP, new Animation(frameDuration, textureAtlas.findRegions("player_run_right"), Animation.PlayMode.LOOP));
+        TextureAtlas.AtlasRegion player_idle_left = textureAtlas.findRegion("player_idle_left");
+        animation.animations.put(StateComponent.STATE_STANDING_DOWN, new Animation(0, player_idle_left));
+        animation.animations.put(StateComponent.STATE_STANDING_LEFT, new Animation(0, player_idle_left));
+
+        Array<TextureAtlas.AtlasRegion> player_run_right = textureAtlas.findRegions("player_run_right");
+        animation.animations.put(StateComponent.STATE_RUNNING_RIGHT, new Animation(frameDuration, player_run_right, Animation.PlayMode.LOOP));
+        animation.animations.put(StateComponent.STATE_RUNNING_UP, new Animation(frameDuration, player_run_right, Animation.PlayMode.LOOP));
+
+        Array<TextureAtlas.AtlasRegion> player_run_left = textureAtlas.findRegions("player_run_left");
+        animation.animations.put(StateComponent.STATE_RUNNING_DOWN, new Animation(frameDuration, player_run_left, Animation.PlayMode.LOOP));
+        animation.animations.put(StateComponent.STATE_RUNNING_LEFT, new Animation(frameDuration, player_run_left, Animation.PlayMode.LOOP));
+
     }
 
     private void createLight() {

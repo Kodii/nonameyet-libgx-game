@@ -39,8 +39,7 @@ public class MapManager implements Disposable, PropertyChangeListener {
 
     public void loadMap(MapFactory.MapType mapType) {
         screen.getEcsEngine().removeAllEntities();
-        screen.getEcsEngine().removeSystem(screen.physicsSystem);
-        screen.getEcsEngine().removeSystem(screen.physicsDebugSystem);
+        screen.removeSystems();
 
         if (screen.getWorld() != null)
             screen.getWorld().dispose();
@@ -67,6 +66,10 @@ public class MapManager implements Disposable, PropertyChangeListener {
         screen.getWorld().setContactListener(collisionSystem);
 
         mapChanged = false;
+    }
+
+    private void removeSystems() {
+
     }
 
     public void createEntites() {

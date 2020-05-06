@@ -46,10 +46,6 @@ public class PlayerHUD implements Screen, PropertyChangeListener, GameKeyInputLi
 
         //setup the HUD viewport using a new camera seperate from gamecam
         viewport = new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), this.camera);
-        System.out.println("^&%&^%&^");
-        System.out.println(camera.viewportWidth);
-        System.out.println(camera.viewportHeight);
-        System.out.println("^&%&^%&^");
 
         stage = new Stage(viewport);
 
@@ -94,6 +90,8 @@ public class PlayerHUD implements Screen, PropertyChangeListener, GameKeyInputLi
 
     @Override
     public void render(float delta) {
+        camera.update();
+
         lifeUI.handleInput(delta);
 
         lifeUI.renderLifes();

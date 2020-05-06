@@ -11,6 +11,7 @@ import com.nonameyet.NoNameYet;
 import com.nonameyet.ecs.ECSEngine;
 import com.nonameyet.ecs.systems.PhysicsDebugSystem;
 import com.nonameyet.ecs.systems.PhysicsSystem;
+import com.nonameyet.ecs.systems.PlayerCameraSystem;
 import com.nonameyet.ecs.systems.RenderingSystem;
 import com.nonameyet.input.InputManager;
 import com.nonameyet.maps.MapManager;
@@ -36,8 +37,10 @@ public class GameScreen extends AbstractScreen {
 
     // ecs
     ECSEngine ecsEngine;
+    private RenderingSystem renderingSystem;
     public PhysicsSystem physicsSystem;
     public PhysicsDebugSystem physicsDebugSystem;
+    private PlayerCameraSystem playerCameraSystem;
 
     private PlayerHUD playerHUD;
 
@@ -47,6 +50,7 @@ public class GameScreen extends AbstractScreen {
 
     @Override
     public void show() {
+
         // 1. cams
         createCameras();
 
@@ -59,20 +63,14 @@ public class GameScreen extends AbstractScreen {
         // 4. //create a ECS engine
         ecsEngine = new ECSEngine(this);
 
-        // 5. create map with ecs components (Player, Npc, Torch, Chest)
+        // 5. create map
         mapMgr = new MapManager(this);
         if (mapRenderer == null) {
             mapRenderer = new OrthogonalTiledMapRenderer(mapMgr.getCurrentTiledMap(), 1 / PPM);
         }
 
-        physicsSystem = new PhysicsSystem(world);
-        ecsEngine.addSystem(physicsSystem);
-
-        ecsEngine.addSystem(new RenderingSystem(this));
-
-        physicsDebugSystem = new PhysicsDebugSystem(world, camera);
-        ecsEngine.addSystem(physicsSystem);
-
+        // 6. create system & ecs components (Player, Npc, Torch, Chest)
+        this.createSystems();
         mapMgr.createEntites();
     }
 
@@ -82,7 +80,6 @@ public class GameScreen extends AbstractScreen {
 
         //get the current size
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 16, 9);
 
         hudCamera = new OrthographicCamera();
         hudCamera.setToOrtho(false, 16, 9);
@@ -95,6 +92,24 @@ public class GameScreen extends AbstractScreen {
         Gdx.input.setInputProcessor(multiplexer);
     }
 
+    private void createSystems() {
+        renderingSystem = new RenderingSystem(this);
+        physicsSystem = new PhysicsSystem(world);
+        physicsDebugSystem = new PhysicsDebugSystem(world, camera);
+        playerCameraSystem = new PlayerCameraSystem(this);
+        ecsEngine.addSystem(physicsSystem);
+//        ecsEngine.addSystem(physicsDebugSystem);
+        ecsEngine.addSystem(renderingSystem);
+        ecsEngine.addSystem(playerCameraSystem);
+    }
+
+    public void removeSystems() {
+        ecsEngine.removeSystem(renderingSystem);
+        ecsEngine.removeSystem(physicsSystem);
+        ecsEngine.removeSystem(physicsDebugSystem);
+        ecsEngine.removeSystem(playerCameraSystem);
+    }
+
 
     @Override
     public void render(float delta) {
@@ -103,13 +118,11 @@ public class GameScreen extends AbstractScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (mapMgr.isMapChanged()) {
+
             mapMgr.loadMap(mapMgr.getCurrentMapType());
             mapRenderer.setMap(mapMgr.getCurrentTiledMap());
 
-            physicsSystem = new PhysicsSystem(world);
-            ecsEngine.addSystem(physicsSystem);
-            physicsDebugSystem = new PhysicsDebugSystem(world, camera);
-            ecsEngine.addSystem(physicsDebugSystem);
+            this.createSystems();
 
             mapMgr.createEntites();
         }
@@ -128,8 +141,7 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void resize(int width, int height) {
         setupViewport(16, 9, TAG);
-        camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
-        playerHUD.resize((int) VIEWPORT.physicalWidth, (int) VIEWPORT.physicalHeight);
+        camera.setToOrtho(false, VIEWPORT.virtualWidth, VIEWPORT.virtualHeight);
     }
 
     @Override

@@ -52,7 +52,6 @@ public class RenderingSystem extends SortedIteratingSystem {
         renderQueue.sort(comparator);
 
         // update camera and sprite batch
-        cam.update();
         batch.setProjectionMatrix(cam.combined);
         batch.enableBlending();
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);

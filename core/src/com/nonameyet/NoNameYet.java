@@ -3,10 +3,11 @@ package com.nonameyet;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Cursor;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
-import com.nonameyet.preferences.PlayerPref;
 import com.nonameyet.preferences.Preferences;
 import com.nonameyet.screens.ScreenType;
 
@@ -24,6 +25,13 @@ public class NoNameYet extends Game {
     public void create() {
         Gdx.graphics.setWindowedMode(Preferences.getResolutionWidth(), Preferences.getResolutionHeight());
         Gdx.graphics.setVSync(Preferences.isVsync());
+
+        Pixmap pixmap = new Pixmap(Gdx.files.internal("sprites/cursor2.png"));
+        int xHotspot = pixmap.getWidth() / 2;
+        int yHotspot = pixmap.getHeight() / 2;
+        Cursor cursor = Gdx.graphics.newCursor(pixmap, xHotspot, yHotspot);
+        Gdx.graphics.setCursor(cursor);
+        pixmap.dispose();
 
         screenCache = new EnumMap<>(ScreenType.class);
 

@@ -70,7 +70,6 @@ public class StatsUI extends Window {
         this.padTop(28);
         this.padLeft(10);
 
-
 //        this.debug();
     }
 }

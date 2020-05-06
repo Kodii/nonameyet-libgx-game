@@ -20,7 +20,6 @@ public class ECSEngine extends PooledEngine {
         this.addSystem(new AnimationSystem());
         this.addSystem(new LightSystem());
         this.addSystem(new PlayerControlSystem());
-        this.addSystem(new PlayerCameraSystem(screen));
     }
 
     public GameScreen getScreen() {

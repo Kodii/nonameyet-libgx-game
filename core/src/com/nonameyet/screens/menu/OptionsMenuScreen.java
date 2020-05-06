@@ -232,10 +232,16 @@ public class OptionsMenuScreen extends AbstractMenuScreen {
 
         switch (String.valueOf(Preferences.getResolutionWidth()).concat("x").concat(String.valueOf(Preferences.getResolutionHeight()))) {
             case "1280x720":
+                Preferences.setResolutionWidth(1366);
+                Preferences.setResolutionHeight(768);
+                updateResolutionText(resolutionButton, Preferences.getResolutionWidth(), Preferences.getResolutionHeight());
+                break;
+            case "1366x768":
                 Preferences.setResolutionWidth(1600);
                 Preferences.setResolutionHeight(900);
                 updateResolutionText(resolutionButton, Preferences.getResolutionWidth(), Preferences.getResolutionHeight());
                 break;
+
             case "1600x900":
                 Preferences.setResolutionWidth(1920);
                 Preferences.setResolutionHeight(1080);
@@ -462,6 +468,9 @@ public class OptionsMenuScreen extends AbstractMenuScreen {
         switch (String.valueOf(resolutionWidth).concat("x").concat(String.valueOf(resolutionHeight))) {
             case "1280x720":
                 textButton.setText("1280x720");
+                break;
+            case "1366x768":
+                textButton.setText("1366x768");
                 break;
             case "1600x900":
                 textButton.setText("1600x900");

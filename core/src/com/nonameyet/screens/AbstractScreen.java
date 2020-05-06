@@ -2,6 +2,7 @@ package com.nonameyet.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.nonameyet.NoNameYet;
 
 public class AbstractScreen implements Screen {
