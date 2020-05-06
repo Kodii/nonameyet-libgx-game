@@ -80,19 +80,25 @@ public class PlayerEntity extends Entity {
     }
 
     private void createRunAnimation(AnimationComponent animation, TextureAtlas textureAtlas) {
-        float frameDuration = 0.17f;
+        float frameDuration = 0.14f;
+
+        TextureAtlas.AtlasRegion player_idle_up = textureAtlas.findRegion("player_idle_up");
+        animation.animations.put(StateComponent.STATE_STANDING_UP, new Animation(0, player_idle_up));
 
         TextureAtlas.AtlasRegion player_idle_right = textureAtlas.findRegion("player_idle_right");
-        animation.animations.put(StateComponent.STATE_STANDING_UP, new Animation(0, player_idle_right));
         animation.animations.put(StateComponent.STATE_STANDING_RIGHT, new Animation(0, player_idle_right));
 
+        TextureAtlas.AtlasRegion player_idle_down = textureAtlas.findRegion("player_idle_down");
+        animation.animations.put(StateComponent.STATE_STANDING_DOWN, new Animation(0, player_idle_down));
+
         TextureAtlas.AtlasRegion player_idle_left = textureAtlas.findRegion("player_idle_left");
-        animation.animations.put(StateComponent.STATE_STANDING_DOWN, new Animation(0, player_idle_left));
         animation.animations.put(StateComponent.STATE_STANDING_LEFT, new Animation(0, player_idle_left));
+
+        Array<TextureAtlas.AtlasRegion> player_run_up = textureAtlas.findRegions("player_run_up");
+        animation.animations.put(StateComponent.STATE_RUNNING_UP, new Animation(frameDuration, player_run_up, Animation.PlayMode.LOOP));
 
         Array<TextureAtlas.AtlasRegion> player_run_right = textureAtlas.findRegions("player_run_right");
         animation.animations.put(StateComponent.STATE_RUNNING_RIGHT, new Animation(frameDuration, player_run_right, Animation.PlayMode.LOOP));
-        animation.animations.put(StateComponent.STATE_RUNNING_UP, new Animation(frameDuration, player_run_right, Animation.PlayMode.LOOP));
 
         Array<TextureAtlas.AtlasRegion> player_run_left = textureAtlas.findRegions("player_run_left");
         animation.animations.put(StateComponent.STATE_RUNNING_DOWN, new Animation(frameDuration, player_run_left, Animation.PlayMode.LOOP));

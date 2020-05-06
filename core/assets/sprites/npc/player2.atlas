@@ -1,5 +1,5 @@
 player2-Sheet.png
-size: 176,39
+size: 506,39
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -31,31 +31,136 @@ player_run_right
   orig: 22, 39
   offset: 0, 0
   index: 2
-player_idle_left
+player_run_right
   rotate: false
   xy: 88, 0
   size: 22, 39
   orig: 22, 39
   offset: 0, 0
-  index: 0
-player_run_left
+  index: 3
+player_run_right
   rotate: false
   xy: 110, 0
+  size: 22, 39
+  orig: 22, 39
+  offset: 0, 0
+  index: 4
+player_run_right
+  rotate: false
+  xy: 132, 0
+  size: 22, 39
+  orig: 22, 39
+  offset: 0, 0
+  index: 5
+player_idle_left
+  rotate: false
+  xy: 154, 0
   size: 22, 39
   orig: 22, 39
   offset: 0, 0
   index: 0
 player_run_left
   rotate: false
-  xy: 132, 0
+  xy: 176, 0
+  size: 22, 39
+  orig: 22, 39
+  offset: 0, 0
+  index: 0
+player_run_left
+  rotate: false
+  xy: 198, 0
   size: 22, 39
   orig: 22, 39
   offset: 0, 0
   index: 1
 player_run_left
   rotate: false
-  xy: 154, 0
+  xy: 220, 0
   size: 22, 39
   orig: 22, 39
   offset: 0, 0
   index: 2
+player_run_left
+  rotate: false
+  xy: 242, 0
+  size: 22, 39
+  orig: 22, 39
+  offset: 0, 0
+  index: 3
+player_run_left
+  rotate: false
+  xy: 264, 0
+  size: 22, 39
+  orig: 22, 39
+  offset: 0, 0
+  index: 4
+player_run_left
+  rotate: false
+  xy: 286, 0
+  size: 22, 39
+  orig: 22, 39
+  offset: 0, 0
+  index: 5
+player_idle_up
+  rotate: false
+  xy: 308, 0
+  size: 22, 39
+  orig: 22, 39
+  offset: 0, 0
+  index: 0
+player_run_up
+  rotate: false
+  xy: 330, 0
+  size: 22, 39
+  orig: 22, 39
+  offset: 0, 0
+  index: 0
+player_run_up
+  rotate: false
+  xy: 352, 0
+  size: 22, 39
+  orig: 22, 39
+  offset: 0, 0
+  index: 1
+player_run_up
+  rotate: false
+  xy: 374, 0
+  size: 22, 39
+  orig: 22, 39
+  offset: 0, 0
+  index: 2
+player_run_up
+  rotate: false
+  xy: 396, 0
+  size: 22, 39
+  orig: 22, 39
+  offset: 0, 0
+  index: 3
+player_run_up
+  rotate: false
+  xy: 418, 0
+  size: 22, 39
+  orig: 22, 39
+  offset: 0, 0
+  index: 4
+player_run_up
+  rotate: false
+  xy: 440, 0
+  size: 22, 39
+  orig: 22, 39
+  offset: 0, 0
+  index: 5
+player_idle_down
+  rotate: false
+  xy: 462, 0
+  size: 22, 39
+  orig: 22, 39
+  offset: 0, 0
+  index: 0
+player_run_down
+  rotate: false
+  xy: 484, 0
+  size: 22, 39
+  orig: 22, 39
+  offset: 0, 0
+  index: 0
