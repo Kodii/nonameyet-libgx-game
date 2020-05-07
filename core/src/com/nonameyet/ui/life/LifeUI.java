@@ -32,8 +32,8 @@ public class LifeUI implements Disposable {
     private int hpVal = 3;
     private int hpCurrentMax = 4;
 
-    private static float hudRatioWidth = AbstractScreen.VIEWPORT.physicalHeight / Constants.CAMERA_PIXELS_HEIGHT;
-    private static float hudRatioHeight = AbstractScreen.VIEWPORT.physicalWidth / Constants.CAMERA_PIXELS_HEIGHT;
+    private static float hudRatioHeight = AbstractScreen.VIEWPORT.physicalHeight / Constants.CAMERA_PIXELS_HEIGHT;
+    private static float hudRatioWidth = AbstractScreen.VIEWPORT.physicalWidth / Constants.CAMERA_PIXELS_WIDTH;
 
     // events
     private PropertyChangeSupport changes = new PropertyChangeSupport(this);

@@ -29,16 +29,9 @@ public class PlayerCameraSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         Vector2 position = b2dbodyCmpMapper.get(entity).body.getPosition();
 
-
-        // Move camera after player as normal
-        //attach our gamecam to our players.x coordinate with latency
-//        gameCamera.position.x = position.x;
-//        gameCamera.position.y = position.y;
-
         cameraCornerBounds(position);
+
         gameCamera.update();
-
-
     }
 
     public void cameraCornerBounds(Vector2 position) {
