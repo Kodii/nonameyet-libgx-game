@@ -42,7 +42,7 @@ public class ChestInventoryUI extends Window {
     }
 
     public ChestInventoryUI() {
-        super("Inventory", windowStyle);
+        super("", windowStyle);
 
         final ImageButton closeButton = new ImageButton(closeButtonStyle);
         closeButton.addListener(new ClickListener() {
@@ -55,7 +55,7 @@ public class ChestInventoryUI extends Window {
         closeButton.getImage().setScale(hudRatio);
 
 
-        getTitleTable().add(closeButton).padRight(5 * hudRatio).padTop(3 * hudRatio);
+        getTitleTable().add(closeButton).padRight(22 * hudRatio).padTop(20 * hudRatio);
 
         setClip(false);
         setTransform(true);
