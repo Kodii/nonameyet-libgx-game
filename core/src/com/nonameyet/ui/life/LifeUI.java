@@ -32,6 +32,9 @@ public class LifeUI implements Disposable {
     private int hpVal = 3;
     private int hpCurrentMax = 4;
 
+    private static float hudRatioWidth = AbstractScreen.VIEWPORT.physicalHeight / Constants.CAMERA_PIXELS_HEIGHT;
+    private static float hudRatioHeight = AbstractScreen.VIEWPORT.physicalWidth / Constants.CAMERA_PIXELS_HEIGHT;
+
     // events
     private PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
@@ -50,8 +53,8 @@ public class LifeUI implements Disposable {
     private Image addLifeEmpty() {
         Image lifeEmpty;
         lifeEmpty = new Image(textureLifeEmpty);
-        lifeEmpty.setSize(textureLifeEmpty.getRegionWidth() * (AbstractScreen.VIEWPORT.physicalWidth / Constants.CAMERA_PIXELS_WIDTH),
-                textureLifeEmpty.getRegionHeight() * (AbstractScreen.VIEWPORT.physicalHeight / Constants.CAMERA_PIXELS_HEIGHT));
+        lifeEmpty.setSize(textureLifeEmpty.getRegionWidth() * hudRatioWidth,
+                textureLifeEmpty.getRegionHeight() * hudRatioHeight);
 
         return lifeEmpty;
     }
@@ -59,8 +62,8 @@ public class LifeUI implements Disposable {
     private Image addLifeFull() {
         Image lifeFull;
         lifeFull = new Image(textureLifeFull);
-        lifeFull.setSize(textureLifeFull.getRegionWidth() * (AbstractScreen.VIEWPORT.physicalWidth / Constants.CAMERA_PIXELS_WIDTH),
-                textureLifeFull.getRegionHeight() * (AbstractScreen.VIEWPORT.physicalHeight / Constants.CAMERA_PIXELS_HEIGHT));
+        lifeFull.setSize(textureLifeFull.getRegionWidth() * hudRatioWidth,
+                textureLifeFull.getRegionHeight() * hudRatioHeight);
         return lifeFull;
     }
 
@@ -96,22 +99,19 @@ public class LifeUI implements Disposable {
     public void renderLifes() {
         Array<Actor> actors = stage.getActors();
 
-        float ppi_width = AbstractScreen.VIEWPORT.physicalWidth / Constants.CAMERA_PIXELS_WIDTH;
-        float ppi_height = AbstractScreen.VIEWPORT.physicalHeight / Constants.CAMERA_PIXELS_HEIGHT;
-
         for (int i = 0; i < hpCurrentMax; i++) {
             Image lifeFull = addLifeFull();
             Image lifeEmpty = addLifeEmpty();
 
             // add full lifes
             if (i < hpVal) {
-                lifePosition(ppi_width, ppi_height, i, lifeFull, lifeFull.getPrefHeight(), LIFE_FULL);
+                lifePosition(hudRatioWidth, hudRatioHeight, i, lifeFull, lifeFull.getPrefHeight(), LIFE_FULL);
                 compareLifeActors(actors, lifeFull);
             }
 
             // add empty lifes
             if (i >= hpVal && i <= hpCurrentMax) {
-                lifePosition(ppi_width, ppi_height, i, lifeEmpty, lifeFull.getPrefHeight(), LIFE_EMPTY);
+                lifePosition(hudRatioWidth, hudRatioHeight, i, lifeEmpty, lifeFull.getPrefHeight(), LIFE_EMPTY);
                 compareLifeActors(actors, lifeEmpty);
             }
         }

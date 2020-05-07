@@ -23,7 +23,8 @@ public class ChestInventoryUI extends Window {
     private static final ImageButton.ImageButtonStyle closeButtonStyle;
     private static final BitmapFont bitmapFont;
 
-    private static float hudRatio = AbstractScreen.VIEWPORT.physicalHeight / Constants.CAMERA_PIXELS_HEIGHT;
+    private static float hudRatioWidth = AbstractScreen.VIEWPORT.physicalWidth / Constants.CAMERA_PIXELS_WIDTH;
+    private static float hudRatioHeight = AbstractScreen.VIEWPORT.physicalHeight / Constants.CAMERA_PIXELS_HEIGHT;
 
     static {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(AssetName.PIXEL_FONT.getAssetName()));
@@ -52,17 +53,17 @@ public class ChestInventoryUI extends Window {
             }
         });
 
-        closeButton.getImage().setScale(hudRatio);
+        closeButton.getImage().setScale(hudRatioWidth);
 
 
-        getTitleTable().add(closeButton).padRight(22 * hudRatio).padTop(20 * hudRatio);
+        getTitleTable().add(closeButton).padRight(22 * hudRatioWidth).padTop(20 * hudRatioHeight);
 
         setClip(false);
         setTransform(true);
 
 
-        this.setSize(region.getRegionWidth() * hudRatio,
-                region.getRegionHeight() * hudRatio);
+        this.setSize(region.getRegionWidth() * hudRatioWidth,
+                region.getRegionHeight() * hudRatioHeight);
         this.setVisible(false);
         this.setMovable(true);
         this.setPosition((AbstractScreen.VIEWPORT.physicalWidth / 2) - this.getWidth() / 2, (AbstractScreen.VIEWPORT.physicalHeight / 2) - this.getHeight() / 2);
