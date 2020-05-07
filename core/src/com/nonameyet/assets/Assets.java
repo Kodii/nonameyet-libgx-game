@@ -1,13 +1,16 @@
 package com.nonameyet.assets;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.ParticleEffectLoader;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Disposable;
+import com.nonameyet.ecs.components.ParticleEffectComponent;
 
 public class Assets implements Disposable {
 
@@ -53,6 +56,14 @@ public class Assets implements Disposable {
         // music
         manager.load(AssetName.TOWN_NIGHT_MUSIC.getAssetName(), Music.class);
         manager.load(AssetName.TOWN_DAY_MUSIC.getAssetName(), Music.class);
+
+        // particle effects
+        manager.load(AssetName.PARTICLE_SPRITE_ATLAS.getAssetName(), TextureAtlas.class);
+        final ParticleEffectLoader.ParticleEffectParameter peParameter = new ParticleEffectLoader.ParticleEffectParameter();
+        peParameter.atlasFile = AssetName.PARTICLE_SPRITE_ATLAS.getAssetName();
+        for (ParticleEffectComponent.ParticleEffectType type : ParticleEffectComponent.ParticleEffectType.values()) {
+            manager.load(type.getEffectFilePath(), ParticleEffect.class, peParameter);
+        }
     }
 
     @Override

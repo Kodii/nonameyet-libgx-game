@@ -8,10 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
-import com.nonameyet.ecs.components.B2dBodyComponent;
-import com.nonameyet.ecs.components.TextureComponent;
-import com.nonameyet.ecs.components.TransformComponent;
-import com.nonameyet.ecs.components.TypeComponent;
+import com.nonameyet.ecs.components.*;
 import com.nonameyet.screens.GameScreen;
 
 import java.util.Comparator;
@@ -80,6 +77,16 @@ public class RenderingSystem extends SortedIteratingSystem {
                     width, height,
                     1 / PPM, 1 / PPM, 0);
         }
+
+
+        for (Entity entity : renderQueue) {
+            // render particle effects
+            ParticleEffectComponent particleEffectCmp = particleEffectCmpMapper.get(entity);
+            if (particleEffectCmp != null && particleEffectCmp.effect != null) {
+                particleEffectCmp.effect.draw(batch);
+            }
+        }
+        batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
         batch.end();
         renderQueue.clear();

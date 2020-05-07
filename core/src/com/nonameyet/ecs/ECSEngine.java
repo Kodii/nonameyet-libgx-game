@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.nonameyet.ecs.entities.*;
 import com.nonameyet.ecs.systems.AnimationSystem;
 import com.nonameyet.ecs.systems.LightSystem;
-import com.nonameyet.ecs.systems.PlayerCameraSystem;
+import com.nonameyet.ecs.systems.ParticleEffectSystem;
 import com.nonameyet.ecs.systems.PlayerControlSystem;
 import com.nonameyet.screens.GameScreen;
 
@@ -20,6 +20,7 @@ public class ECSEngine extends PooledEngine {
         this.addSystem(new AnimationSystem());
         this.addSystem(new LightSystem());
         this.addSystem(new PlayerControlSystem());
+        this.addSystem(new ParticleEffectSystem());
     }
 
     public GameScreen getScreen() {

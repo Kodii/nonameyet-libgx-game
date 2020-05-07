@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
@@ -44,6 +43,7 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
         b2dlight = new B2dLightComponent(screen);
         final TypeComponent type = ecsEngine.createComponent(TypeComponent.class);
         state = ecsEngine.createComponent(StateComponent.class);
+        final ParticleEffectComponent particleEffect = ecsEngine.createComponent(ParticleEffectComponent.class);
 
 
         // create the data for the components and add them to the components
@@ -68,6 +68,9 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
 
         createLight();
 
+        particleEffect.effectType = ParticleEffectComponent.ParticleEffectType.TORCH;
+        particleEffect.scalling = 0.005f;
+        particleEffect.effectPosition.set(b2dbody.body.getPosition());
 
         entity.add(position);
         entity.add(animation);
@@ -76,6 +79,7 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
         entity.add(type);
         entity.add(state);
         entity.add(b2dlight);
+        entity.add(particleEffect);
 
         ecsEngine.addEntity(entity);
 
@@ -85,10 +89,11 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
 
     private void createAnimation(TextureAtlas textureAtlas) {
         animation.animations.put(StateComponent.STATE_TORCH_OFF, new Animation(0, textureAtlas.findRegion("torch")));
+        animation.animations.put(StateComponent.STATE_TORCH_ON, new Animation(0, textureAtlas.findRegion("torch")));
 
-        Array<TextureAtlas.AtlasRegion> torchRegions = textureAtlas.findRegions("torch");
-        torchRegions.removeIndex(0);
-        animation.animations.put(StateComponent.STATE_TORCH_ON, new Animation(0.1f, torchRegions, Animation.PlayMode.LOOP_PINGPONG));
+//        Array<TextureAtlas.AtlasRegion> torchRegions = textureAtlas.findRegions("torch");
+//        torchRegions.removeIndex(0);
+//        animation.animations.put(StateComponent.STATE_TORCH_ON, new Animation(0.1f, torchRegions, Animation.PlayMode.LOOP_PINGPONG));
 
     }
 

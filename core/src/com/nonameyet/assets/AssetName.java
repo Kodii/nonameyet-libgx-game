@@ -39,7 +39,10 @@ public enum AssetName {
     CHEST_CLOSE_EFFECT("sound/effects/chest/chest-close.ogg"),
     // music
     TOWN_NIGHT_MUSIC("sound/music/town-night.mp3"),
-    TOWN_DAY_MUSIC("sound/music/town-day.mp3");
+    TOWN_DAY_MUSIC("sound/music/town-day.mp3"),
+
+    // particle
+    PARTICLE_SPRITE_ATLAS("particles/particle.atlas");
 
 
     private String assetName;
