@@ -1,0 +1,12 @@
+sword.png
+size: 30,7
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+apple
+  rotate: false
+  xy: 0, 0
+  size: 30, 7
+  orig: 30, 7
+  offset: 0, 0
+  index: -1

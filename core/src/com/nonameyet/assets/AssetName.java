@@ -12,23 +12,25 @@ public enum AssetName {
     MAP_FIRST_TMX("maps/first/first.tmx"),
 
     // sprites
-    PLAYER_PNG("from_web/sprites/characters/Rogue.png"),
-    PLAYER_ATLAS("sprites/npc/player.atlas"),
-    PLAYER2_ATLAS("sprites/npc/player2.atlas"),
-
     PLAYER_WITHOUT_ARM_ATLAS("sprites/npc/player/player-without-arm.atlas"),
     ARM_ATLAS("sprites/npc/player/arm.atlas"),
 
-
     ELDER_ATLAS("sprites/npc/elder.atlas"),
+
     CHEST_ATLAS("sprites/items/chests/chest.atlas"),
+
     TORCH_ATLAS("sprites/items/torch/torch.atlas"),
+
     // blacksmith
     BLACKSMITH_ATLAS("sprites/npc/blacksmith.atlas"),
     OWEN_ATLAS("sprites/items/blacksmith/owen.atlas"),
     ANVIL_ATLAS("sprites/items/blacksmith/anvil.atlas"),
 
     NPC_BUBBLE("sprites/npc/npc_bubble/npc_bubble.atlas"),
+
+    // movable items
+    APPLE_ATLAS("sprites/items/movable/apple.atlas"),
+    SWORD_ATLAS("sprites/items/movable/sword.atlas"),
 
     // hud
     CAMERA_FRAME("sprites/hud/camera_frame/camera_frame.png"),
@@ -37,7 +39,6 @@ public enum AssetName {
     LIFE("sprites/hud/life/life.png"),
     SLOT("sprites/hud/slot/slot.png"),
     SLOT_HIGHLIGHT("sprites/hud/slot/slot_highlight.png"),
-
 
     // sound effects
     CHEST_OPEN_EFFECT("sound/effects/chest/chest-open.ogg"),

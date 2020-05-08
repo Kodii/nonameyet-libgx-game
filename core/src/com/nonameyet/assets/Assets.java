@@ -30,13 +30,9 @@ public class Assets implements Disposable {
         manager.load(AssetName.MAP_FIRST_TMX.getAssetName(), TiledMap.class);
 
         // sprites
-        manager.load(AssetName.PLAYER_PNG.getAssetName(), Texture.class);
-
         manager.load(AssetName.PLAYER_WITHOUT_ARM_ATLAS.getAssetName(), TextureAtlas.class);
         manager.load(AssetName.ARM_ATLAS.getAssetName(), TextureAtlas.class);
 
-        manager.load(AssetName.PLAYER_ATLAS.getAssetName(), TextureAtlas.class);
-        manager.load(AssetName.PLAYER2_ATLAS.getAssetName(), TextureAtlas.class);
         manager.load(AssetName.ELDER_ATLAS.getAssetName(), TextureAtlas.class);
         manager.load(AssetName.CHEST_ATLAS.getAssetName(), TextureAtlas.class);
         manager.load(AssetName.TORCH_ATLAS.getAssetName(), TextureAtlas.class);
@@ -47,6 +43,10 @@ public class Assets implements Disposable {
         manager.load(AssetName.ANVIL_ATLAS.getAssetName(), TextureAtlas.class);
 
         manager.load(AssetName.NPC_BUBBLE.getAssetName(), TextureAtlas.class);
+
+        // movable
+        manager.load(AssetName.APPLE_ATLAS.getAssetName(), TextureAtlas.class);
+        manager.load(AssetName.SWORD_ATLAS.getAssetName(), TextureAtlas.class);
 
         // hud
         manager.load(AssetName.CAMERA_FRAME.getAssetName(), Texture.class);

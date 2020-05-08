@@ -12,6 +12,9 @@ public class TypeComponent implements Component, Pool.Poolable {
     public static final int PLAYER = 100;
     public static final int ARM_PLAYER = 101;
     public static final int NPC = 120;
+
+    public static final int SOCKET_ITEM = 150;
+
     public static final int ENEMY = 300;
     public static final int SCENERY = 200;
     public static final int PORTAL = 210;

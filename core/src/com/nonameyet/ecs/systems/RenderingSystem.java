@@ -9,12 +9,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
 import com.nonameyet.ecs.components.*;
+import com.nonameyet.ecs.entities.humans.ArmEntity;
+import com.nonameyet.ecs.entities.items.SocketPositionMapper;
 import com.nonameyet.screens.GameScreen;
 
 import java.util.Comparator;
 
 import static com.nonameyet.ecs.ComponentMappers.*;
 import static com.nonameyet.utils.Constants.PPM;
+import static com.nonameyet.utils.Constants.PPM_MOVABLE_ITEMS;
 
 public class RenderingSystem extends SortedIteratingSystem {
 
@@ -60,38 +63,73 @@ public class RenderingSystem extends SortedIteratingSystem {
         for (Entity entity : renderQueue) {
             TextureComponent texture = textureCmpMapper.get(entity);
             TransformComponent transform = transformCmpMapper.get(entity);
-//            SubTextureComponent subTexture = subTextureCmpMapper.get(entity);
-//            SubTransformComponent subTransform = subTransformCmpMapper.get(entity);
 
             if (texture.region == null || transform.isHidden) {
                 continue;
             }
 
-            float width = texture.region.getRegionWidth();
-            float height = texture.region.getRegionHeight();
-            float originX = width / 2;
-            float originY = height / 2;
+            TypeComponent type = typeCmpMapper.get(entity);
+            if (type != null) {
+                if (type.type == TypeComponent.SOCKET_ITEM) {
+                    continue;
+                }
 
-            batch.draw(texture.region,
-                    transform.position.x - originX, transform.position.y - originY,
-                    originX, originY,
-                    width, height,
-                    1 / PPM, 1 / PPM, 0);
+                if (type.type == TypeComponent.ARM_PLAYER) {
+                    renderSocketItem((ArmEntity) entity);
+                    render(texture, transform);
+                    continue;
+                }
+            }
 
-//            // sub texture
-//            if (subTexture != null) {
-//                float subWidth = subTexture.region.getRegionWidth();
-//                float subHeight = subTexture.region.getRegionHeight();
-//                float subOriginX = subWidth / 2;
-//                float subOriginY = subHeight / 2;
-//                batch.draw(subTexture.region,
-//                        subTransform.position.x - subOriginX, subTransform.position.y - subOriginY,
-//                        subOriginX, subOriginY,
-//                        subWidth, subHeight,
-//                        1 / PPM, 1 / PPM, 0);
-//            }
+            render(texture, transform);
         }
 
+        renderParticleEffects();
+
+        batch.end();
+        renderQueue.clear();
+    }
+
+    private void renderSocketItem(ArmEntity entity) {
+        TransformComponent parentTransformCmp = transformCmpMapper.get(entity);
+
+        Entity itemEntity = entity.socketCmp.itemEntity;
+        TransformComponent transformCmp = transformCmpMapper.get(itemEntity);
+        TextureComponent textureCmp = textureCmpMapper.get(itemEntity);
+
+        SocketPositionMapper.transformSocketItem(transformCmp, entity);
+
+        float width = textureCmp.region.getRegionWidth();
+        float height = textureCmp.region.getRegionHeight();
+        float originX = width / 2;
+        float originY = height / 2;
+
+        System.out.println("1:" + transformCmp.position.x);
+        System.out.println("2:" + originX);
+        batch.draw(textureCmp.region,
+                (transformCmp.position.x - originX) + (originX / PPM_MOVABLE_ITEMS), (transformCmp.position.y - originY) + (originY / PPM_MOVABLE_ITEMS),
+                originX, originY,
+                width, height,
+                transformCmp.scale.x / PPM, transformCmp.scale.y / PPM,
+                transformCmp.rotation);
+    }
+
+
+    private void render(TextureComponent texture, TransformComponent transform) {
+        float width = texture.region.getRegionWidth();
+        float height = texture.region.getRegionHeight();
+        float originX = width / 2;
+        float originY = height / 2;
+
+        batch.draw(texture.region,
+                transform.position.x - originX, transform.position.y - originY,
+                originX, originY,
+                width, height,
+                transform.scale.x / PPM, transform.scale.y / PPM,
+                transform.rotation);
+    }
+
+    private void renderParticleEffects() {
         // render particle effects
         for (Entity entity : renderQueue) {
             ParticleEffectComponent particleEffectCmp = particleEffectCmpMapper.get(entity);
@@ -100,9 +138,6 @@ public class RenderingSystem extends SortedIteratingSystem {
             }
         }
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-        batch.end();
-        renderQueue.clear();
     }
 
     private void changePositionsDependPlayerPosition(Array<Entity> renderQueue) {
@@ -120,7 +155,7 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         for (Entity entity : renderQueue) {
             TypeComponent type = typeCmpMapper.get(entity);
-            if (type != null && type.type != TypeComponent.PLAYER) {
+            if (type != null && type.type != TypeComponent.PLAYER && type.type != TypeComponent.SOCKET_ITEM) {
                 TransformComponent transform = transformCmpMapper.get(entity);
                 B2dBodyComponent b2dBody = b2dbodyCmpMapper.get(entity);
 

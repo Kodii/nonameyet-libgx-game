@@ -1,11 +1,14 @@
 package com.nonameyet.ecs.components;
 
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Pool;
 
-import javax.swing.text.html.parser.Entity;
+public class SocketComponent implements Component, Pool.Poolable {
+    public Entity itemEntity;
 
-public class SocketComponent {
-
-    Entity itemEntity;
-    Vector2 playerPosition;
+    @Override
+    public void reset() {
+        itemEntity = null;
+    }
 }

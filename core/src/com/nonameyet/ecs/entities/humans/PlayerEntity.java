@@ -35,9 +35,9 @@ public class PlayerEntity extends Entity {
 
         // Create the Entity and all the components that will go in the entity
 
-        final PlayerComponent playerCml = ecsEngine.createComponent(PlayerComponent.class);
-        playerCml.speed = 4;
-        this.add(playerCml);
+        final PlayerComponent playerCmp = ecsEngine.createComponent(PlayerComponent.class);
+        playerCmp.speed = 4;
+        this.add(playerCmp);
 
         final TypeComponent typeCmp = ecsEngine.createComponent(TypeComponent.class);
         typeCmp.type = TypeComponent.PLAYER;
@@ -72,7 +72,7 @@ public class PlayerEntity extends Entity {
         TextureRegion textureRegion = textureAtlas.findRegion("player_idle_down");
 
         final TransformComponent transformCmp = ecsEngine.createComponent(TransformComponent.class);
-        transformCmp.position.set(spawnLocation.x, spawnLocation.y, 0);
+        transformCmp.position.set(spawnLocation.x, spawnLocation.y, 2);
         this.add(transformCmp);
 
         final TextureComponent textureCmp = ecsEngine.createComponent(TextureComponent.class);

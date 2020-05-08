@@ -11,20 +11,19 @@ import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
 import com.nonameyet.ecs.ECSEngine;
 import com.nonameyet.ecs.components.*;
-import com.nonameyet.screens.GameScreen;
+import com.nonameyet.ecs.entities.items.ItemsCreator;
 
 public class ArmEntity extends Entity {
     private final String TAG = this.getClass().getSimpleName();
 
-    private final GameScreen screen;
     private final ECSEngine ecsEngine;
 
     public final StateComponent stateCmp;
     public TransformComponent transformCmp;
+    public final SocketComponent socketCmp;
 
     public ArmEntity(final ECSEngine ecsEngine, final Vector2 spawnLocation) {
         this.ecsEngine = ecsEngine;
-        this.screen = ecsEngine.getScreen();
 
         createArmComponent(spawnLocation);
 
@@ -36,6 +35,10 @@ public class ArmEntity extends Entity {
         stateCmp.set(StateComponent.STATE_STANDING_DOWN);
         this.add(stateCmp);
 
+        socketCmp = ecsEngine.createComponent(SocketComponent.class);
+        socketCmp.itemEntity = ItemsCreator.createApple(ecsEngine, spawnLocation);
+        this.add(socketCmp);
+
         this.ecsEngine.addEntity(this);
 
     }
@@ -45,7 +48,7 @@ public class ArmEntity extends Entity {
         TextureRegion textureRegion = textureAtlas.findRegion("player_idle_down");
 
         transformCmp = ecsEngine.createComponent(TransformComponent.class);
-        transformCmp.position.set(spawnLocation.x, spawnLocation.y, 2);
+        transformCmp.position.set(spawnLocation.x, spawnLocation.y, 0);
         this.add(transformCmp);
 
         final AnimationComponent animationCmp = ecsEngine.createComponent(AnimationComponent.class);
