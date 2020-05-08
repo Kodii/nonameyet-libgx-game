@@ -1,7 +1,6 @@
 package com.nonameyet.maps;
 
 import com.badlogic.gdx.Gdx;
-import com.nonameyet.screens.GameScreen;
 
 public class MapFactory {
     private static final String TAG = MapFactory.class.getSimpleName();
@@ -13,21 +12,21 @@ public class MapFactory {
         FIRST
     }
 
-    static Map getMap(GameScreen screen, MapType mapType) {
+    static Map getMap(MapType mapType) {
         Map map = null;
         Gdx.app.debug(TAG, "Loading map: " + mapType + " !");
         switch (mapType) {
             case TOP_WORLD:
-                map = new TopWorldMap(screen);
+                map = new TopWorldMap();
                 break;
             case TOWN:
-                map = new TownMap(screen);
+                map = new TownMap();
                 break;
             case SPAWN:
-                map = new SpawnMap(screen);
+                map = new SpawnMap();
                 break;
             case FIRST:
-                map = new FirstMap(screen);
+                map = new FirstMap();
                 break;
             default:
                 break;

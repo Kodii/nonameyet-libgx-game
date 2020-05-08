@@ -42,7 +42,8 @@ public enum AssetName {
     TOWN_DAY_MUSIC("sound/music/town-day.mp3"),
 
     // particle
-    PARTICLE_SPRITE_ATLAS("particles/particle.atlas");
+    PARTICLE_SPRITE_ATLAS("particles/particle.atlas"),
+    PARTICLE_FOG("particles/rain.party");
 
 
     private String assetName;

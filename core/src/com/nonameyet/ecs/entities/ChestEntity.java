@@ -43,8 +43,6 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
         this.screen = ecsEngine.getScreen();
 
         // Create the Entity and all the components that will go in the entity
-        final Entity entity = ecsEngine.createEntity();
-
         final TransformComponent position = ecsEngine.createComponent(TransformComponent.class);
         final AnimationComponent animation = ecsEngine.createComponent(AnimationComponent.class);
         final TextureComponent texture = ecsEngine.createComponent(TextureComponent.class);
@@ -85,17 +83,17 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
 
         createLight();
 
-        entity.add(position);
-        entity.add(animation);
-        entity.add(texture);
-        entity.add(b2dbody);
-        entity.add(triggerb2dbody);
-        entity.add(type);
-        entity.add(state);
+        this.add(position);
+        this.add(animation);
+        this.add(texture);
+        this.add(b2dbody);
+        this.add(triggerb2dbody);
+        this.add(type);
+        this.add(state);
 
-        ecsEngine.addEntity(entity);
+        ecsEngine.addEntity(this);
 
-        bubbleEntity = new BubbleEntity(ecsEngine, entity);
+        bubbleEntity = new BubbleEntity(ecsEngine, this);
 
         // listeners
         addPropertyChangeListener(AudioManager.getInstance());

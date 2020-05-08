@@ -14,9 +14,8 @@ import static com.nonameyet.utils.Constants.PPM;
 public class SceneryEntity extends Entity {
 
     public SceneryEntity(ECSEngine ecsEngine, Rectangle rect) {
-        // Create the Entity and all the components that will go in the entity
-        final Entity entity = ecsEngine.createEntity();
 
+        // Create the Entity and all the components that will go in the entity
         B2dBodyComponent b2dbody = ecsEngine.createComponent(B2dBodyComponent.class);
         final TypeComponent type = ecsEngine.createComponent(TypeComponent.class);
 
@@ -29,8 +28,8 @@ public class SceneryEntity extends Entity {
 
         type.type = TypeComponent.SCENERY;
 
-        entity.add(b2dbody);
-        entity.add(type);
+        this.add(b2dbody);
+        this.add(type);
     }
 
 }

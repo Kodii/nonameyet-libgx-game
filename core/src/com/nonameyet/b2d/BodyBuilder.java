@@ -62,9 +62,6 @@ public class BodyBuilder {
     }
 
     private static Body body(World world, Vector2 position, Vector2 size, BodyDef.BodyType bodyType, String userData, short categoryBits) {
-        float x = size.x / PPM;
-        float y = size.y / PPM;
-
         BodyDef bdef = new BodyDef();
         bdef.position.set(position.x, position.y);
 
@@ -74,7 +71,7 @@ public class BodyBuilder {
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(x / 2, y / 2);
+        shape.setAsBox(size.x / PPM / 2, size.y / PPM / 2);
 
         fdef.filter.categoryBits = categoryBits;
 

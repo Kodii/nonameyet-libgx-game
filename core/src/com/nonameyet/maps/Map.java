@@ -7,7 +7,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
-import com.nonameyet.screens.GameScreen;
 
 abstract class Map implements Disposable {
     private final String TAG = this.getClass().getSimpleName();
@@ -38,7 +37,7 @@ abstract class Map implements Disposable {
     protected TiledMap currentTiledMap = null;
     protected MapFactory.MapType currentMapType;
 
-    public Map(GameScreen screen, MapFactory.MapType mapType, AssetName mapTmx) {
+    public Map(MapFactory.MapType mapType, AssetName mapTmx) {
         Gdx.app.debug(TAG, "Create a new map: " + mapType);
 
         currentTiledMap = Assets.manager.get(mapTmx.getAssetName());

@@ -56,7 +56,7 @@ public class ChestInventoryUI extends Window {
         closeButton.getImage().setScale(hudRatioWidth);
 
 
-        getTitleTable().add(closeButton).padRight(22 * hudRatioWidth).padTop(20 * hudRatioHeight);
+        getTitleTable().add(closeButton).padRight(27 * hudRatioWidth).padTop(26 * hudRatioHeight);
 
         setClip(false);
         setTransform(true);

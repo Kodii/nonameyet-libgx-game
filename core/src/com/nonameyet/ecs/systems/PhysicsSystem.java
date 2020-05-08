@@ -13,11 +13,11 @@ import com.nonameyet.ecs.components.TransformComponent;
 import com.nonameyet.ecs.components.TypeComponent;
 
 import static com.nonameyet.ecs.ComponentMappers.*;
+import static com.nonameyet.utils.Constants.FIXED_TIME_STEP;
 import static com.nonameyet.utils.Constants.PPM;
 
 public class PhysicsSystem extends IteratingSystem {
 
-    private static final float MAX_STEP_TIME = 1 / 60f;
     private static float accumulator = 0f;
 
     private World world;
@@ -35,9 +35,9 @@ public class PhysicsSystem extends IteratingSystem {
         super.update(deltaTime);
         float frameTime = Math.min(deltaTime, 0.25f);
         accumulator += frameTime;
-        if (accumulator >= MAX_STEP_TIME) {
-            world.step(MAX_STEP_TIME, 6, 2);
-            accumulator -= MAX_STEP_TIME;
+        if (accumulator >= FIXED_TIME_STEP) {
+            world.step(FIXED_TIME_STEP, 6, 2);
+            accumulator -= FIXED_TIME_STEP;
 
             //Entity Queue
             for (Entity entity : bodiesQueue) {

@@ -64,6 +64,7 @@ public class Assets implements Disposable {
         for (ParticleEffectComponent.ParticleEffectType type : ParticleEffectComponent.ParticleEffectType.values()) {
             manager.load(type.getEffectFilePath(), ParticleEffect.class, peParameter);
         }
+        manager.load(AssetName.PARTICLE_FOG.getAssetName(), ParticleEffect.class, peParameter);
     }
 
     @Override

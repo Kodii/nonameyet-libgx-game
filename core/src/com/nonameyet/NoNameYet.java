@@ -29,7 +29,7 @@ public class NoNameYet extends Game {
         Pixmap pixmap = new Pixmap(Gdx.files.internal("sprites/cursor2.png"));
         int xHotspot = pixmap.getWidth() / 2;
         int yHotspot = pixmap.getHeight() / 2;
-        Cursor cursor = Gdx.graphics.newCursor(pixmap, xHotspot, yHotspot);
+        Cursor cursor = Gdx.graphics.newCursor(pixmap, 0, 0);
         Gdx.graphics.setCursor(cursor);
         pixmap.dispose();
 

@@ -4,12 +4,12 @@ import box2dLight.Light;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.nonameyet.b2d.CollisionSystem;
 import com.nonameyet.events.DayTimeEvent;
@@ -52,7 +52,7 @@ public class MapManager implements Disposable, PropertyChangeListener {
         Light.setGlobalContactFilter(Collision.lightsFilter());
         RayHandler.useDiffuseLight(true);
 
-        Map map = MapFactory.getMap(screen, mapType);
+        Map map = MapFactory.getMap(mapType);
 
         if (map == null) {
             Gdx.app.debug(TAG, "Map does not exist!");
@@ -68,47 +68,82 @@ public class MapManager implements Disposable, PropertyChangeListener {
         mapChanged = false;
     }
 
-    private void removeSystems() {
+    public void createEntites() {
+        createScenery();
+
+        createPortals();
+
+        createPlayer();
+
+        createChest();
+
+        createTorches();
+
+        createNpcs();
+
+        createBlacksmithArea();
+
+        screen.getPlayerHUD().getClockUI().manualPropertyChangeEvent();
 
     }
 
-    public void createEntites() {
-
+    private void createScenery() {
         // ecs scenery
-        for (MapObject object : currentMap.collisionLayer.getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+        Array.ArrayIterator<RectangleMapObject> rectangleMapObjects = new Array.ArrayIterator<>(currentMap.collisionLayer.getObjects().getByType(RectangleMapObject.class));
+        while (rectangleMapObjects.hasNext()) {
+            RectangleMapObject object = rectangleMapObjects.next();
+            Rectangle rect = object.getRectangle();
             screen.getEcsEngine().createScenery(rect);
         }
+    }
 
+    private void createPortals() {
         // ecs portal
-        for (MapObject object : currentMap.portalLayer.getObjects().getByType(RectangleMapObject.class)) {
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+        Array.ArrayIterator<RectangleMapObject> rectangleMapObjects = new Array.ArrayIterator<>(currentMap.portalLayer.getObjects().getByType(RectangleMapObject.class));
+        while (rectangleMapObjects.hasNext()) {
+            RectangleMapObject object = rectangleMapObjects.next();
+            Rectangle rect = object.getRectangle();
             screen.getEcsEngine().createPortal(rect);
         }
+    }
 
+    private void createPlayer() {
         // ecs player
         if (currentMap.playerSpawnLayer != null) {
             Rectangle playerPositionPoint = currentMap.playerSpawnLayer.getObjects().getByType(RectangleMapObject.class).get(0).getRectangle();
             screen.getEcsEngine().createPlayer(new Vector2(playerPositionPoint.getX() / PPM, playerPositionPoint.getY() / PPM));
         }
+    }
+
+    private void createChest() {
         // ecs chest
         if (currentMap.chestSpawnLayer != null) {
             Rectangle chestPositionPoint = currentMap.chestSpawnLayer.getObjects().getByType(RectangleMapObject.class).get(0).getRectangle();
             screen.getEcsEngine().createChest(new Vector2(chestPositionPoint.getX() / PPM, chestPositionPoint.getY() / PPM));
         }
+    }
 
+    private void createTorches() {
         // ecs torches
         if (currentMap.torchesSpawnLayer != null) {
-            for (MapObject object : currentMap.torchesSpawnLayer.getObjects().getByType(RectangleMapObject.class)) {
-                Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            Array.ArrayIterator<RectangleMapObject> rectangleMapObjects = new Array.ArrayIterator<>(currentMap.torchesSpawnLayer.getObjects().getByType(RectangleMapObject.class));
+            while (rectangleMapObjects.hasNext()) {
+                RectangleMapObject object = rectangleMapObjects.next();
+                Rectangle rect = object.getRectangle();
                 screen.getEcsEngine().createTorch(new Vector2(rect.getX() / PPM, rect.getY() / PPM));
             }
         }
+    }
 
+    private void createNpcs() {
         // ecs npcs
         if (currentMap.npcSpawnLayer != null) {
-            for (MapObject object : currentMap.npcSpawnLayer.getObjects().getByType(RectangleMapObject.class)) {
-                Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            Array.ArrayIterator<RectangleMapObject> rectangleMapObjects = new Array.ArrayIterator<>(currentMap.npcSpawnLayer.getObjects().getByType(RectangleMapObject.class));
+            while (rectangleMapObjects.hasNext()) {
+                RectangleMapObject object = rectangleMapObjects.next();
+                Rectangle rect = object.getRectangle();
                 Vector2 position = new Vector2(rect.getX() / PPM, rect.getY() / PPM);
 
                 switch (object.getName()) {
@@ -120,11 +155,16 @@ public class MapManager implements Disposable, PropertyChangeListener {
                 }
             }
         }
+    }
 
+    private void createBlacksmithArea() {
         // ecs blacksmith
         if (currentMap.blacksmithSpawnLayer != null) {
-            for (MapObject object : currentMap.blacksmithSpawnLayer.getObjects().getByType(RectangleMapObject.class)) {
-                Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            Array.ArrayIterator<RectangleMapObject> rectangleMapObjects = new Array.ArrayIterator<>(currentMap.blacksmithSpawnLayer.getObjects().getByType(RectangleMapObject.class));
+            while (rectangleMapObjects.hasNext()) {
+                RectangleMapObject object = rectangleMapObjects.next();
+                Rectangle rect = object.getRectangle();
                 Vector2 position = new Vector2(rect.getX() / PPM, rect.getY() / PPM);
 
                 switch (object.getName()) {
@@ -142,9 +182,6 @@ public class MapManager implements Disposable, PropertyChangeListener {
                 }
             }
         }
-
-        screen.getPlayerHUD().getClockUI().manualPropertyChangeEvent();
-
     }
 
     @Override

@@ -98,7 +98,7 @@ public class GameScreen extends AbstractScreen {
         physicsDebugSystem = new PhysicsDebugSystem(world, camera);
         playerCameraSystem = new PlayerCameraSystem(this);
         ecsEngine.addSystem(physicsSystem);
-//        ecsEngine.addSystem(physicsDebugSystem);
+        ecsEngine.addSystem(physicsDebugSystem);
         ecsEngine.addSystem(renderingSystem);
         ecsEngine.addSystem(playerCameraSystem);
     }

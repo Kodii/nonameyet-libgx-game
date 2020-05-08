@@ -15,7 +15,7 @@ import com.nonameyet.ecs.components.*;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.utils.Collision;
 
-public class AnvilEntity {
+public class AnvilEntity extends Entity {
     private final GameScreen screen;
 
     private final B2dBodyComponent b2dbody;
@@ -25,8 +25,6 @@ public class AnvilEntity {
         this.screen = ecsEngine.getScreen();
 
         // Create the Entity and all the components that will go in the entity
-        final Entity entity = ecsEngine.createEntity();
-
         final TransformComponent position = ecsEngine.createComponent(TransformComponent.class);
         final AnimationComponent animation = ecsEngine.createComponent(AnimationComponent.class);
         final TextureComponent texture = ecsEngine.createComponent(TextureComponent.class);
@@ -58,15 +56,15 @@ public class AnvilEntity {
         createLight();
 
 
-        entity.add(position);
-        entity.add(animation);
-        entity.add(texture);
-        entity.add(b2dbody);
-        entity.add(type);
-        entity.add(state);
-        entity.add(b2dlight);
+        this.add(position);
+        this.add(animation);
+        this.add(texture);
+        this.add(b2dbody);
+        this.add(type);
+        this.add(state);
+        this.add(b2dlight);
 
-        ecsEngine.addEntity(entity);
+        ecsEngine.addEntity(this);
     }
 
     private void createRunAnimation(AnimationComponent animation, TextureAtlas textureAtlas) {

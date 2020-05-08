@@ -14,22 +14,22 @@ import static com.nonameyet.utils.Constants.PPM;
 public class PortalEntity extends Entity {
 
     public PortalEntity(ECSEngine ecsEngine, Rectangle rect) {
-        // Create the Entity and all the components that will go in the entity
-        final Entity entity = ecsEngine.createEntity();
 
+        // Create the Entity and all the components that will go in the entity
         B2dBodyComponent b2dbody = ecsEngine.createComponent(B2dBodyComponent.class);
         final TypeComponent type = ecsEngine.createComponent(TypeComponent.class);
 
+        // create the data for the components and add them to the components
         b2dbody.body = BodyBuilder.staticRectangleBody(
                 ecsEngine.getScreen().getWorld(),
-                new Vector2((rect.getX() + rect.getWidth() / 2) / PPM, (rect.getY() + rect.getHeight() / 2) / PPM),
+                new Vector2((rect.getX() + (rect.getWidth() / 2)) / PPM, (rect.getY() + (rect.getHeight() / 2)) / PPM),
                 new Vector2(rect.getWidth(), rect.getHeight()),
                 "PORTAL",
                 Collision.OBSTACLE);
 
         type.type = TypeComponent.PORTAL;
 
-        entity.add(b2dbody);
-        entity.add(type);
+        this.add(b2dbody);
+        this.add(type);
     }
 }

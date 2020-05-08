@@ -37,8 +37,6 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
         this.screen = ecsEngine.getScreen();
 
         // Create the Entity and all the components that will go in the entity
-//        final Entity entity = ecsEngine.createEntity();
-
         final TransformComponent position = ecsEngine.createComponent(TransformComponent.class);
         animation = ecsEngine.createComponent(AnimationComponent.class);
         final TextureComponent texture = ecsEngine.createComponent(TextureComponent.class);
@@ -140,7 +138,7 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
     private void enableParticleEffect() {
         final ParticleEffectComponent particleEffect = ecsEngine.createComponent(ParticleEffectComponent.class);
         particleEffect.effectType = ParticleEffectComponent.ParticleEffectType.TORCH;
-        particleEffect.scalling = 0.003f;
+        particleEffect.scalling = 0.04f;
         particleEffect.effectPosition.set(b2dbody.body.getPosition());
         this.add(particleEffect);
     }
