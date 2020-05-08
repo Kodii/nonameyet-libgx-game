@@ -19,7 +19,4 @@ public class ComponentMappers {
     public static ComponentMapper<NpcComponent> npcCmpMapper = ComponentMapper.getFor(NpcComponent.class);
     public static ComponentMapper<ParticleEffectComponent> particleEffectCmpMapper = ComponentMapper.getFor(ParticleEffectComponent.class);
 
-    public static ComponentMapper<SubAnimationComponent> subAnimationCmpMapper = ComponentMapper.getFor(SubAnimationComponent.class);
-    public static ComponentMapper<SubTextureComponent> subTextureCmpMapper = ComponentMapper.getFor(SubTextureComponent.class);
-
 }

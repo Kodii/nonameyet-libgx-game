@@ -59,8 +59,9 @@ public class RenderingSystem extends SortedIteratingSystem {
         // loop through each entity in our render queue
         for (Entity entity : renderQueue) {
             TextureComponent texture = textureCmpMapper.get(entity);
-            SubTextureComponent subTexture = subTextureCmpMapper.get(entity);
             TransformComponent transform = transformCmpMapper.get(entity);
+//            SubTextureComponent subTexture = subTextureCmpMapper.get(entity);
+//            SubTransformComponent subTransform = subTransformCmpMapper.get(entity);
 
             if (texture.region == null || transform.isHidden) {
                 continue;
@@ -77,18 +78,18 @@ public class RenderingSystem extends SortedIteratingSystem {
                     width, height,
                     1 / PPM, 1 / PPM, 0);
 
-            // sub texture
-            if (subTexture != null) {
-                float subWidth = subTexture.region.getRegionWidth();
-                float subHeight = subTexture.region.getRegionHeight();
-                float subOriginX = subWidth / 2;
-                float subOriginY = subHeight / 2;
-                batch.draw(subTexture.region,
-                        transform.position.x - subOriginX, transform.position.y - subOriginY,
-                        subOriginX, subOriginY,
-                        subWidth, subHeight,
-                        1 / PPM, 1 / PPM, 0);
-            }
+//            // sub texture
+//            if (subTexture != null) {
+//                float subWidth = subTexture.region.getRegionWidth();
+//                float subHeight = subTexture.region.getRegionHeight();
+//                float subOriginX = subWidth / 2;
+//                float subOriginY = subHeight / 2;
+//                batch.draw(subTexture.region,
+//                        subTransform.position.x - subOriginX, subTransform.position.y - subOriginY,
+//                        subOriginX, subOriginY,
+//                        subWidth, subHeight,
+//                        1 / PPM, 1 / PPM, 0);
+//            }
         }
 
         // render particle effects
@@ -123,14 +124,13 @@ public class RenderingSystem extends SortedIteratingSystem {
                 TransformComponent transform = transformCmpMapper.get(entity);
                 B2dBodyComponent b2dBody = b2dbodyCmpMapper.get(entity);
 
-                if (type.type == TypeComponent.NPC) {
+                if (b2dBody != null) {
+                    if (b2dBody.body.getPosition().y > playerY)
+                        transform.position.z = 3;
+
+                    if (b2dBody.body.getPosition().y < playerY)
+                        transform.position.z = -3;
                 }
-
-                if (b2dBody.body.getPosition().y > playerY)
-                    transform.position.z = 1;
-
-                if (b2dBody.body.getPosition().y < playerY)
-                    transform.position.z = -1;
             }
         }
     }
