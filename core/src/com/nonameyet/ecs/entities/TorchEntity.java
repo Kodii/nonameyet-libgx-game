@@ -24,17 +24,20 @@ import java.beans.PropertyChangeListener;
 public class TorchEntity extends Entity implements Disposable, PropertyChangeListener {
     private final String TAG = this.getClass().getSimpleName();
 
+    private final GameScreen screen;
+    private final ECSEngine ecsEngine;
+
     final AnimationComponent animation;
     private final B2dBodyComponent b2dbody;
     private final B2dLightComponent b2dlight;
-    private final GameScreen screen;
     private final StateComponent state;
 
     public TorchEntity(ECSEngine ecsEngine, Vector2 spawnLocation) {
+        this.ecsEngine = ecsEngine;
         this.screen = ecsEngine.getScreen();
 
         // Create the Entity and all the components that will go in the entity
-        final Entity entity = ecsEngine.createEntity();
+//        final Entity entity = ecsEngine.createEntity();
 
         final TransformComponent position = ecsEngine.createComponent(TransformComponent.class);
         animation = ecsEngine.createComponent(AnimationComponent.class);
@@ -43,7 +46,6 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
         b2dlight = new B2dLightComponent(screen);
         final TypeComponent type = ecsEngine.createComponent(TypeComponent.class);
         state = ecsEngine.createComponent(StateComponent.class);
-        final ParticleEffectComponent particleEffect = ecsEngine.createComponent(ParticleEffectComponent.class);
 
 
         // create the data for the components and add them to the components
@@ -68,20 +70,15 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
 
         createLight();
 
-        particleEffect.effectType = ParticleEffectComponent.ParticleEffectType.TORCH;
-        particleEffect.scalling = 0.005f;
-        particleEffect.effectPosition.set(b2dbody.body.getPosition());
+        this.add(position);
+        this.add(animation);
+        this.add(texture);
+        this.add(b2dbody);
+        this.add(type);
+        this.add(state);
+        this.add(b2dlight);
 
-        entity.add(position);
-        entity.add(animation);
-        entity.add(texture);
-        entity.add(b2dbody);
-        entity.add(type);
-        entity.add(state);
-        entity.add(b2dlight);
-        entity.add(particleEffect);
-
-        ecsEngine.addEntity(entity);
+        ecsEngine.addEntity(this);
 
         // listeners
         screen.getPlayerHUD().getClockUI().addPropertyChangeListener(this);
@@ -123,14 +120,29 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
         switch (event) {
             case DAWN:
             case AFTERNOON:
+                disableParticleEffect();
                 state.set(StateComponent.STATE_TORCH_OFF);
                 break;
 
             case DUSK:
             case NIGHT:
+                enableParticleEffect();
                 state.set(StateComponent.STATE_TORCH_ON);
                 break;
         }
+    }
+
+
+    private void disableParticleEffect() {
+        this.remove(ParticleEffectComponent.class);
+    }
+
+    private void enableParticleEffect() {
+        final ParticleEffectComponent particleEffect = ecsEngine.createComponent(ParticleEffectComponent.class);
+        particleEffect.effectType = ParticleEffectComponent.ParticleEffectType.TORCH;
+        particleEffect.scalling = 0.003f;
+        particleEffect.effectPosition.set(b2dbody.body.getPosition());
+        this.add(particleEffect);
     }
 
 
