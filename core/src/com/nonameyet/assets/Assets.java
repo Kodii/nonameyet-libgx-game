@@ -31,6 +31,10 @@ public class Assets implements Disposable {
 
         // sprites
         manager.load(AssetName.PLAYER_PNG.getAssetName(), Texture.class);
+
+        manager.load(AssetName.PLAYER_WITHOUT_ARM_ATLAS.getAssetName(), TextureAtlas.class);
+        manager.load(AssetName.ARM_ATLAS.getAssetName(), TextureAtlas.class);
+
         manager.load(AssetName.PLAYER_ATLAS.getAssetName(), TextureAtlas.class);
         manager.load(AssetName.PLAYER2_ATLAS.getAssetName(), TextureAtlas.class);
         manager.load(AssetName.ELDER_ATLAS.getAssetName(), TextureAtlas.class);

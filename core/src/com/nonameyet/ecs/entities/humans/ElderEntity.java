@@ -1,4 +1,4 @@
-package com.nonameyet.ecs.entities;
+package com.nonameyet.ecs.entities.humans;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -15,18 +15,15 @@ import com.nonameyet.b2d.BodyBuilder;
 import com.nonameyet.b2d.LightBuilder;
 import com.nonameyet.ecs.ECSEngine;
 import com.nonameyet.ecs.components.*;
-import com.nonameyet.events.BlacksmithEvent;
-import com.nonameyet.input.GameKeyInputListener;
-import com.nonameyet.input.GameKeys;
-import com.nonameyet.input.InputManager;
+import com.nonameyet.ecs.entities.BubbleEntity;
+import com.nonameyet.events.ElderEvent;
 import com.nonameyet.screens.GameScreen;
 import com.nonameyet.utils.Collision;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 
-public class BlacksmithEntity extends Entity implements Disposable, PropertyChangeListener, GameKeyInputListener {
+public class ElderEntity extends Entity implements Disposable, PropertyChangeListener {
     private final String TAG = this.getClass().getSimpleName();
 
     private final GameScreen screen;
@@ -36,10 +33,7 @@ public class BlacksmithEntity extends Entity implements Disposable, PropertyChan
 
     private final BubbleEntity bubbleEntity;
 
-    // events
-    private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
-
-    public BlacksmithEntity(ECSEngine ecsEngine, Vector2 spawnLocation) {
+    public ElderEntity(ECSEngine ecsEngine, Vector2 spawnLocation) {
         this.screen = ecsEngine.getScreen();
 
         // Create the Entity and all the components that will go in the entity
@@ -56,8 +50,9 @@ public class BlacksmithEntity extends Entity implements Disposable, PropertyChan
         // create the data for the components and add them to the components
         position.position.set(spawnLocation.x, spawnLocation.y, 1);
 
-        TextureAtlas textureAtlas = Assets.manager.get(AssetName.BLACKSMITH_ATLAS.getAssetName());
-        TextureRegion textureRegion = textureAtlas.findRegion("blacksmith");
+        TextureAtlas textureAtlas = Assets.manager.get(AssetName.ELDER_ATLAS.getAssetName());
+        TextureRegion textureRegion = textureAtlas.findRegion("elder");
+
 
         createRunAnimation(animation, textureAtlas);
 
@@ -66,8 +61,8 @@ public class BlacksmithEntity extends Entity implements Disposable, PropertyChan
         b2dbody.body = BodyBuilder.npcFootRectangleBody(
                 ecsEngine.getScreen().getWorld(),
                 new Vector2(spawnLocation.x, spawnLocation.y),
-                new Vector2(26, 40),
-                "BLACKSMITH_BODY",
+                new Vector2(20, 36),
+                "ELDER_BODY",
                 Collision.NPC);
 
         triggerb2dbody.trigger = BodyBuilder.triggerBody(
@@ -75,11 +70,11 @@ public class BlacksmithEntity extends Entity implements Disposable, PropertyChan
                 texture.region.getRegionHeight(),
                 new Vector2(spawnLocation.x, spawnLocation.y),
                 50,
-                "BLACKSMITH",
+                "ELDER",
                 Collision.NPC);
 
         type.type = TypeComponent.NPC;
-        state.set(StateComponent.STATE_BLACKSMITH);
+        state.set(StateComponent.STATE_ELDER);
 
         createLight();
 
@@ -105,29 +100,27 @@ public class BlacksmithEntity extends Entity implements Disposable, PropertyChan
     private void createRunAnimation(AnimationComponent animation, TextureAtlas textureAtlas) {
         float frameDuration = 0.1f;
 
-        TextureAtlas.AtlasRegion first = textureAtlas.findRegion("blacksmith", 0);
-        TextureAtlas.AtlasRegion second = textureAtlas.findRegion("blacksmith", 1);
-        TextureAtlas.AtlasRegion last = textureAtlas.findRegion("blacksmith", 2);
+        TextureAtlas.AtlasRegion first = textureAtlas.findRegion("elder", 0);
+        TextureAtlas.AtlasRegion second = textureAtlas.findRegion("elder", 1);
+        TextureAtlas.AtlasRegion third = textureAtlas.findRegion("elder", 2);
+        TextureAtlas.AtlasRegion last = textureAtlas.findRegion("elder", 3);
 
         Array<TextureRegion> frames = new Array<>();
         for (int i = 0; i < 12; i++) {
             frames.addAll(first);
         }
-
-        frames.addAll(first, second, last);
-
+        frames.addAll(first, second, third, last);
         for (int i = 0; i < 12; i++) {
             frames.addAll(last);
         }
+        frames.addAll(last, third, second, first);
 
-        frames.addAll(last, second, first);
-
-        animation.animations.put(StateComponent.STATE_BLACKSMITH, new Animation(frameDuration, frames, Animation.PlayMode.LOOP));
+        animation.animations.put(StateComponent.STATE_ELDER, new Animation(frameDuration, frames, Animation.PlayMode.LOOP));
 
     }
 
     private void createLight() {
-        b2dlight.distance = 1f;
+        b2dlight.distance = 2f;
 
         b2dlight.light = LightBuilder.pointLight(screen.getRayHandler(), b2dbody.body, Color.valueOf("#e28822"), b2dlight.distance);
         b2dlight.light.setSoft(true);
@@ -136,44 +129,24 @@ public class BlacksmithEntity extends Entity implements Disposable, PropertyChan
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        Gdx.app.debug(TAG, "Blacksmith --> propertyChange(): " + evt.getPropertyName() + ", getNewValue(): " + evt.getNewValue());
+        Gdx.app.debug(TAG, "Elder --> propertyChange(): " + evt.getPropertyName() + ", getNewValue(): " + evt.getNewValue());
 
-        if (evt.getPropertyName().equals(BlacksmithEvent.NAME)) {
-            showDialogMark((BlacksmithEvent) evt.getNewValue());
+        if (evt.getPropertyName().equals(ElderEvent.NAME)) {
+            showDialogMark((ElderEvent) evt.getNewValue());
         }
     }
 
-    private void showDialogMark(BlacksmithEvent event) {
+    private void showDialogMark(ElderEvent event) {
         switch (event) {
             case SHOW_BUBBLE:
                 bubbleEntity.state.set(StateComponent.NPC_BUBBLE_SHOW);
-                InputManager.getInstance().addInputListener(this);
                 break;
             case HIDE_BUBBLE:
                 bubbleEntity.state.set(StateComponent.NPC_BUBBLE_HIDE);
-                changes.firePropertyChange(BlacksmithEvent.NAME, null, BlacksmithEvent.BLACKSMITH_CLOSED);
-                InputManager.getInstance().removeInputListener(this);
                 break;
             default:
                 break;
         }
-    }
-
-
-    @Override
-    public void keyPressed(InputManager inputManager, GameKeys key) {
-        switch (key) {
-            case SELECT:
-                changes.firePropertyChange(BlacksmithEvent.NAME, null, BlacksmithEvent.BLACKSMITH_OPENED);
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public void keyReleased(InputManager inputManager, GameKeys key) {
-
     }
 
     @Override
@@ -181,5 +154,5 @@ public class BlacksmithEntity extends Entity implements Disposable, PropertyChan
         // listeners
         screen.getMapMgr().getCollisionSystem().removePropertyChangeListener(this);
     }
-}
 
+}

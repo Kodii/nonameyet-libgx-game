@@ -59,6 +59,7 @@ public class RenderingSystem extends SortedIteratingSystem {
         // loop through each entity in our render queue
         for (Entity entity : renderQueue) {
             TextureComponent texture = textureCmpMapper.get(entity);
+            SubTextureComponent subTexture = subTextureCmpMapper.get(entity);
             TransformComponent transform = transformCmpMapper.get(entity);
 
             if (texture.region == null || transform.isHidden) {
@@ -67,7 +68,6 @@ public class RenderingSystem extends SortedIteratingSystem {
 
             float width = texture.region.getRegionWidth();
             float height = texture.region.getRegionHeight();
-
             float originX = width / 2;
             float originY = height / 2;
 
@@ -76,11 +76,23 @@ public class RenderingSystem extends SortedIteratingSystem {
                     originX, originY,
                     width, height,
                     1 / PPM, 1 / PPM, 0);
+
+            // sub texture
+            if (subTexture != null) {
+                float subWidth = subTexture.region.getRegionWidth();
+                float subHeight = subTexture.region.getRegionHeight();
+                float subOriginX = subWidth / 2;
+                float subOriginY = subHeight / 2;
+                batch.draw(subTexture.region,
+                        transform.position.x - subOriginX, transform.position.y - subOriginY,
+                        subOriginX, subOriginY,
+                        subWidth, subHeight,
+                        1 / PPM, 1 / PPM, 0);
+            }
         }
 
-
+        // render particle effects
         for (Entity entity : renderQueue) {
-            // render particle effects
             ParticleEffectComponent particleEffectCmp = particleEffectCmpMapper.get(entity);
             if (particleEffectCmp != null && particleEffectCmp.effect != null) {
                 particleEffectCmp.effect.draw(batch);
