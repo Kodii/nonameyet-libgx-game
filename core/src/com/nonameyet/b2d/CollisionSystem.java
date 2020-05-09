@@ -1,7 +1,14 @@
 package com.nonameyet.b2d;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
+import com.nonameyet.ecs.components.TypeComponent;
+import com.nonameyet.ecs.entities.ChestEntity;
+import com.nonameyet.ecs.entities.PortalEntity;
+import com.nonameyet.ecs.entities.humans.BlacksmithEntity;
+import com.nonameyet.ecs.entities.humans.ElderEntity;
+import com.nonameyet.ecs.entities.humans.PlayerEntity;
 import com.nonameyet.events.BlacksmithEvent;
 import com.nonameyet.events.ChestEvent;
 import com.nonameyet.events.ElderEvent;
@@ -33,52 +40,55 @@ public class CollisionSystem implements ContactListener {
 
         Gdx.app.debug("CONTACT", "START " + fa.getBody().getUserData() + " has hit " + fb.getBody().getUserData());
 
-        beginPortalContact(fa, fb);
-
-        if (fa.getBody().getUserData().equals("PLAYER"))
-            beginCollision(fb);
-        else if (fb.getBody().getUserData().equals("PLAYER"))
-            beginCollision(fa);
+        if (fa.getBody().getUserData() instanceof PlayerEntity)
+            beginCollision(fa, fb);
+        else if (fb.getBody().getUserData() instanceof PlayerEntity)
+            beginCollision(fb, fa);
     }
 
-    private void beginCollision(Fixture fixture) {
+    private void beginCollision(Fixture playerFixture, Fixture fixture) {
+        Object userData = fixture.getBody().getUserData();
 
-        switch ((String) fixture.getBody().getUserData()) {
-            case "CHEST":
+        if (userData instanceof PortalEntity) beginPortalContact();
+        if (userData instanceof ChestEntity) beginChestContact();
+        if (userData instanceof BlacksmithEntity) beginBlacksmithContact();
+        if (userData instanceof ElderEntity) beginElderContact();
 
-                beginChestContact(fixture);
-                break;
-            case "BLACKSMITH":
-                beginBlacksmithContact(fixture);
-                break;
-            case "ELDER":
-                beginElderContact(fixture);
-                break;
-            default:
-                break;
+        if (userData instanceof Entity) {
+            TypeComponent typeCmp = ((Entity) userData).getComponent(TypeComponent.class);
+
+            if (typeCmp.type == TypeComponent.ITEM) {
+                typeCmp.type = TypeComponent.SOCKET_ITEM;
+                PlayerEntity playerEntity = (PlayerEntity) playerFixture.getBody().getUserData();
+
+                if (playerEntity.armEntity.socketCmp.itemEntity != null) {
+                    // drop last item
+                    TypeComponent oldEntityType = playerEntity.armEntity.socketCmp.itemEntity.getComponent(TypeComponent.class);
+                    oldEntityType.type = TypeComponent.ITEM;
+                }
+
+                playerEntity.armEntity.socketCmp.itemEntity = (Entity) userData;
+            }
         }
     }
 
-    private void beginPortalContact(Fixture fixtureA, Fixture fixtureB) {
-        if (fixtureA.getBody().getUserData().equals("PORTAL") || fixtureB.getBody().getUserData().equals("PORTAL")) {
+    private void beginPortalContact() {
+        if (mapMgr.getCurrentMapType() == MapFactory.MapType.SPAWN)
+            mapMgr.setCurrentMapType(MapFactory.MapType.FIRST);
+        else mapMgr.setCurrentMapType(MapFactory.MapType.SPAWN);
 
-            if (mapMgr.getCurrentMapType() == MapFactory.MapType.SPAWN)
-                mapMgr.setCurrentMapType(MapFactory.MapType.FIRST);
-            else mapMgr.setCurrentMapType(MapFactory.MapType.SPAWN);
-
-            mapMgr.setMapChanged(true);
-        }
+        mapMgr.setMapChanged(true);
     }
 
-    private void beginChestContact(Fixture fixture) {
+    private void beginChestContact() {
         changes.firePropertyChange(ChestEvent.NAME, null, ChestEvent.SHOW_BUBBLE);
     }
 
-    private void beginBlacksmithContact(Fixture fixture) {
+    private void beginBlacksmithContact() {
         changes.firePropertyChange(BlacksmithEvent.NAME, null, BlacksmithEvent.SHOW_BUBBLE);
     }
 
-    private void beginElderContact(Fixture fixture) {
+    private void beginElderContact() {
         changes.firePropertyChange(ElderEvent.NAME, null, ElderEvent.SHOW_BUBBLE);
     }
 
@@ -89,38 +99,29 @@ public class CollisionSystem implements ContactListener {
 
         Gdx.app.debug("CONTACT", "END " + fa.getBody().getUserData() + " has hit " + fb.getBody().getUserData());
 
-        if (fa.getBody().getUserData().equals("PLAYER"))
+        if (fa.getBody().getUserData() instanceof PlayerEntity)
             endCollision(fb);
-        else if (fb.getBody().getUserData().equals("PLAYER"))
+        else if (fb.getBody().getUserData() instanceof PlayerEntity)
             endCollision(fa);
     }
 
     private void endCollision(Fixture fixture) {
+        Object userData = fixture.getBody().getUserData();
 
-        switch ((String) fixture.getBody().getUserData()) {
-            case "CHEST":
-                endChestContact(fixture);
-                break;
-            case "BLACKSMITH":
-                endBlacksmithContact(fixture);
-                break;
-            case "ELDER":
-                endElderContact(fixture);
-                break;
-            default:
-                break;
-        }
+        if (userData instanceof ChestEntity) endChestContact();
+        if (userData instanceof BlacksmithEntity) endBlacksmithContact();
+        if (userData instanceof ElderEntity) endElderContact();
     }
 
-    private void endChestContact(Fixture fixture) {
+    private void endChestContact() {
         changes.firePropertyChange(ChestEvent.NAME, null, ChestEvent.HIDE_BUBBLE);
     }
 
-    private void endBlacksmithContact(Fixture fixture) {
+    private void endBlacksmithContact() {
         changes.firePropertyChange(BlacksmithEvent.NAME, null, BlacksmithEvent.HIDE_BUBBLE);
     }
 
-    private void endElderContact(Fixture fixture) {
+    private void endElderContact() {
         changes.firePropertyChange(ElderEvent.NAME, null, ElderEvent.HIDE_BUBBLE);
     }
 
