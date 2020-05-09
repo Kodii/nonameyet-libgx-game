@@ -16,8 +16,7 @@ import com.nonameyet.utils.Collision;
 
 public class ItemsCreator {
 
-    public static Entity createSword(final ECSEngine ecsEngine, final Vector2 spawnLocation) {
-
+    public static void createSword(final ECSEngine ecsEngine, final Vector2 spawnLocation) {
         final Entity entity = new Entity();
 
         final TransformComponent transformCmp = ecsEngine.createComponent(TransformComponent.class);
@@ -27,6 +26,7 @@ public class ItemsCreator {
 
         transformCmp.position.set(spawnLocation.x, spawnLocation.y, 1);
         transformCmp.scale.set(0.5f, 0.5f);
+        transformCmp.rotation = -90;
         TextureAtlas textureAtlas = Assets.manager.get(AssetName.SWORD_ATLAS.getAssetName());
         TextureRegion textureRegion = textureAtlas.findRegion("first_sword");
         textureCmp.region = new TextureRegion(textureRegion, 0, 0, textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
@@ -35,9 +35,12 @@ public class ItemsCreator {
                 ecsEngine.getScreen().getWorld(),
                 new Vector2(spawnLocation.x, spawnLocation.y),
                 new Vector2(textureCmp.region.getRegionWidth(), textureCmp.region.getRegionHeight()),
-                "SWORD",
+                entity,
                 Collision.ITEM);
+        b2dBodyCmp.body.setTransform(b2dBodyCmp.body.getPosition(), (float) Math.toRadians(-90));
         b2dBodyCmp.body.setFixedRotation(true);
+
+
         typeCmp.type = TypeComponent.ITEM;
 
         entity.add(transformCmp);
@@ -46,11 +49,9 @@ public class ItemsCreator {
         entity.add(typeCmp);
 
         ecsEngine.addEntity(entity);
-
-        return entity;
     }
 
-    public static Entity createApple(final ECSEngine ecsEngine, final Vector2 spawnLocation) {
+    public static void createApple(final ECSEngine ecsEngine, final Vector2 spawnLocation) {
         final Entity entity = new Entity();
 
         final TransformComponent transformCmp = ecsEngine.createComponent(TransformComponent.class);
@@ -68,7 +69,7 @@ public class ItemsCreator {
                 ecsEngine.getScreen().getWorld(),
                 new Vector2(spawnLocation.x, spawnLocation.y),
                 new Vector2(textureCmp.region.getRegionWidth(), textureCmp.region.getRegionHeight()),
-                "APPLE",
+                entity,
                 Collision.ITEM);
         b2dBodyCmp.body.setFixedRotation(true);
 
@@ -80,8 +81,6 @@ public class ItemsCreator {
         entity.add(typeCmp);
 
         ecsEngine.addEntity(entity);
-
-        return entity;
     }
 
 }

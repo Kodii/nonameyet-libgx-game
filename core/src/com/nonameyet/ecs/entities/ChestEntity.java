@@ -30,66 +30,32 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
     private final String TAG = this.getClass().getSimpleName();
 
     private final GameScreen screen;
-    private final StateComponent state;
-    private final B2dBodyComponent b2dbody;
-    private final B2dLightComponent b2dlight;
+    private final ECSEngine ecsEngine;
+
+    private TextureComponent textureCmp;
+    private StateComponent stateCmp;
+    private B2dBodyComponent b2dBodyCmp;
+    private B2dLightComponent b2dLightCmp;
 
     private final BubbleEntity bubbleEntity;
+
+    private TextureAtlas textureAtlas;
 
     // events
     private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
     public ChestEntity(final ECSEngine ecsEngine, final Vector2 spawnLocation) {
         this.screen = ecsEngine.getScreen();
+        this.ecsEngine = ecsEngine;
 
-        // Create the Entity and all the components that will go in the entity
-        final TransformComponent position = ecsEngine.createComponent(TransformComponent.class);
-        final AnimationComponent animation = ecsEngine.createComponent(AnimationComponent.class);
-        final TextureComponent texture = ecsEngine.createComponent(TextureComponent.class);
-        b2dbody = ecsEngine.createComponent(B2dBodyComponent.class);
-        TriggerB2dBodyComponent triggerb2dbody = ecsEngine.createComponent(TriggerB2dBodyComponent.class);
-        b2dlight = new B2dLightComponent(screen);
-        final TypeComponent type = ecsEngine.createComponent(TypeComponent.class);
-        final StateComponent state = ecsEngine.createComponent(StateComponent.class);
-        this.state = state;
-
-        // create the data for the components and add them to the components
-        position.position.set(spawnLocation.x, spawnLocation.y, 1);
-
-        TextureAtlas textureAtlas = Assets.manager.get(AssetName.CHEST_ATLAS.getAssetName());
-        TextureRegion textureRegion = textureAtlas.findRegion("chest");
-
-        createAnimation(animation, textureAtlas);
-
-        texture.region = new TextureRegion(textureRegion, 0, 0, 18, 20);
-
-        b2dbody.body = BodyBuilder.npcFootRectangleBody(
-                ecsEngine.getScreen().getWorld(),
-                new Vector2(spawnLocation.x, spawnLocation.y),
-                new Vector2(19, 30),
-                "CHEST_BODY",
-                Collision.OBJECT);
-
-        triggerb2dbody.trigger = BodyBuilder.triggerCircleBody(
-                ecsEngine.getScreen().getWorld(),
-                texture.region.getRegionHeight(),
-                new Vector2(spawnLocation.x, spawnLocation.y),
-                45,
-                "CHEST",
-                Collision.OBJECT);
-
-        type.type = TypeComponent.SCENERY_ITEMS;
-        state.set(StateComponent.STATE_CHEST_NORMAL);
-
-        createLight();
-
-        this.add(position);
-        this.add(animation);
-        this.add(texture);
-        this.add(b2dbody);
-        this.add(triggerb2dbody);
-        this.add(type);
-        this.add(state);
+        transformComponent(spawnLocation);
+        textureComponent();
+        animationComponent();
+        b2dBodyComponent(spawnLocation);
+        triggerB2dBodyComponent(spawnLocation);
+        b2dLightComponent();
+        stateComponent();
+        typeComponent();
 
         ecsEngine.addEntity(this);
 
@@ -102,6 +68,67 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
         screen.getMapMgr().getCollisionSystem().addPropertyChangeListener(this);
     }
 
+    private void transformComponent(Vector2 spawnLocation) {
+        final TransformComponent transformCmp = ecsEngine.createComponent(TransformComponent.class);
+        transformCmp.position.set(spawnLocation.x, spawnLocation.y, 1);
+        this.add(transformCmp);
+    }
+
+    private void textureComponent() {
+        textureCmp = ecsEngine.createComponent(TextureComponent.class);
+        textureAtlas = Assets.manager.get(AssetName.CHEST_ATLAS.getAssetName());
+        TextureRegion textureRegion = textureAtlas.findRegion("chest");
+        textureCmp.region = new TextureRegion(textureRegion, 0, 0, 18, 20);
+        this.add(textureCmp);
+    }
+
+    private void animationComponent() {
+        final AnimationComponent animationCmp = ecsEngine.createComponent(AnimationComponent.class);
+        createAnimation(animationCmp, textureAtlas);
+        this.add(animationCmp);
+    }
+
+    private void b2dBodyComponent(Vector2 spawnLocation) {
+        b2dBodyCmp = ecsEngine.createComponent(B2dBodyComponent.class);
+        b2dBodyCmp.body = BodyBuilder.npcFootRectangleBody(
+                ecsEngine.getScreen().getWorld(),
+                new Vector2(spawnLocation.x, spawnLocation.y),
+                new Vector2(19, 30),
+                this,
+                Collision.OBJECT);
+        this.add(b2dBodyCmp);
+    }
+
+    private void triggerB2dBodyComponent(Vector2 spawnLocation) {
+        TriggerB2dBodyComponent triggerB2dBodyCmp = ecsEngine.createComponent(TriggerB2dBodyComponent.class);
+        triggerB2dBodyCmp.trigger = BodyBuilder.triggerCircleBody(
+                ecsEngine.getScreen().getWorld(),
+                textureCmp.region.getRegionHeight(),
+                new Vector2(spawnLocation.x, spawnLocation.y),
+                45,
+                this,
+                Collision.OBJECT);
+        this.add(triggerB2dBodyCmp);
+    }
+
+    private void b2dLightComponent() {
+        b2dLightCmp = new B2dLightComponent(screen);
+        createLight();
+        this.add(b2dLightCmp);
+    }
+
+    private void stateComponent() {
+        stateCmp = ecsEngine.createComponent(StateComponent.class);
+        stateCmp.set(StateComponent.STATE_CHEST_NORMAL);
+        this.add(stateCmp);
+    }
+
+    private void typeComponent() {
+        final TypeComponent typeCmp = ecsEngine.createComponent(TypeComponent.class);
+        typeCmp.type = TypeComponent.SCENERY_ITEMS;
+        this.add(typeCmp);
+    }
+
     private void createAnimation(AnimationComponent animation, TextureAtlas textureAtlas) {
 
         animation.animations.put(StateComponent.STATE_CHEST_NORMAL, new Animation(0, textureAtlas.findRegion("chest")));
@@ -112,10 +139,10 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
 
     private void createLight() {
 
-        b2dlight.distance = 1f;
+        b2dLightCmp.distance = 1f;
 
-        b2dlight.light = LightBuilder.pointLight(screen.getRayHandler(), b2dbody.body, Color.valueOf("#e28822"), b2dlight.distance);
-        b2dlight.light.setSoft(true);
+        b2dLightCmp.light = LightBuilder.pointLight(screen.getRayHandler(), b2dBodyCmp.body, Color.valueOf("#e28822"), b2dLightCmp.distance);
+        b2dLightCmp.light.setSoft(true);
     }
 
     @Override
@@ -131,16 +158,16 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
 
         switch (event) {
             case SHOW_BUBBLE:
-                bubbleEntity.state.set(StateComponent.NPC_BUBBLE_SHOW);
+                bubbleEntity.stateCmp.set(StateComponent.NPC_BUBBLE_SHOW);
                 InputManager.getInstance().addInputListener(this);
                 break;
             case HIDE_BUBBLE:
-                if (state.get() == StateComponent.STATE_CHEST_OPEN) {
-                    state.set(StateComponent.STATE_CHEST_CLOSE);
+                if (stateCmp.get() == StateComponent.STATE_CHEST_OPEN) {
+                    stateCmp.set(StateComponent.STATE_CHEST_CLOSE);
                     changes.firePropertyChange(ChestEvent.NAME, null, ChestEvent.CHEST_CLOSED);
                 }
-                if (bubbleEntity.state.get() == StateComponent.NPC_BUBBLE_SHOW)
-                    bubbleEntity.state.set(StateComponent.NPC_BUBBLE_HIDE);
+                if (bubbleEntity.stateCmp.get() == StateComponent.NPC_BUBBLE_SHOW)
+                    bubbleEntity.stateCmp.set(StateComponent.NPC_BUBBLE_HIDE);
 
                 InputManager.getInstance().removeInputListener(this);
                 break;
@@ -151,8 +178,8 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
     public void keyPressed(InputManager inputManager, GameKeys key) {
         switch (key) {
             case SELECT:
-                state.set(StateComponent.STATE_CHEST_OPEN);
-                bubbleEntity.state.set(StateComponent.NPC_BUBBLE_HIDE);
+                stateCmp.set(StateComponent.STATE_CHEST_OPEN);
+                bubbleEntity.stateCmp.set(StateComponent.NPC_BUBBLE_HIDE);
                 changes.firePropertyChange(ChestEvent.NAME, null, ChestEvent.CHEST_OPENED);
                 break;
             default:

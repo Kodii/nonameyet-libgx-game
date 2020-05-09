@@ -15,21 +15,18 @@ public class PortalEntity extends Entity {
 
     public PortalEntity(ECSEngine ecsEngine, Rectangle rect) {
 
-        // Create the Entity and all the components that will go in the entity
-        B2dBodyComponent b2dbody = ecsEngine.createComponent(B2dBodyComponent.class);
-        final TypeComponent type = ecsEngine.createComponent(TypeComponent.class);
-
-        // create the data for the components and add them to the components
-        b2dbody.body = BodyBuilder.staticRectangleBody(
+        final B2dBodyComponent b2dBodyCmp = ecsEngine.createComponent(B2dBodyComponent.class);
+        b2dBodyCmp.body = BodyBuilder.staticRectangleBody(
                 ecsEngine.getScreen().getWorld(),
                 new Vector2((rect.getX() + (rect.getWidth() / 2)) / PPM, (rect.getY() + (rect.getHeight() / 2)) / PPM),
                 new Vector2(rect.getWidth(), rect.getHeight()),
-                "PORTAL",
+                this,
                 Collision.OBSTACLE);
+        this.add(b2dBodyCmp);
 
-        type.type = TypeComponent.PORTAL;
+        final TypeComponent typeCmp = ecsEngine.createComponent(TypeComponent.class);
+        typeCmp.type = TypeComponent.PORTAL;
+        this.add(typeCmp);
 
-        this.add(b2dbody);
-        this.add(type);
     }
 }

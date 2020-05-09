@@ -17,47 +17,54 @@ import com.nonameyet.screens.GameScreen;
 import static com.nonameyet.utils.Constants.PPM;
 
 public class BubbleEntity extends Entity {
-    private final String TAG = this.getClass().getSimpleName();
-
     private final GameScreen screen;
-    public final StateComponent state;
+    private final ECSEngine ecsEngine;
 
-    private final Entity parentEntity;
+    public StateComponent stateCmp;
+
+    private TextureAtlas textureAtlas;
 
     public BubbleEntity(ECSEngine ecsEngine, Entity parentEntity) {
         this.screen = ecsEngine.getScreen();
-        this.parentEntity = parentEntity;
+        this.ecsEngine = ecsEngine;
 
-        // Create the Entity and all the components that will go in the entity
-        final TransformComponent position = ecsEngine.createComponent(TransformComponent.class);
-        final AnimationComponent animation = ecsEngine.createComponent(AnimationComponent.class);
-        final TextureComponent texture = ecsEngine.createComponent(TextureComponent.class);
-        state = ecsEngine.createComponent(StateComponent.class);
-
-        // create the data for the components and add them to the components
-
-
-        TextureRegion parentRegion = parentEntity.getComponent(TextureComponent.class).region;
-        Vector3 parentPosition = parentEntity.getComponent(TransformComponent.class).position;
-        position.position.set(parentPosition.x + (parentRegion.getRegionWidth() / PPM / 2),
-                parentPosition.y + (parentRegion.getRegionHeight() / PPM) + (5 / PPM),
-                parentPosition.z);
-
-        TextureAtlas textureAtlas = Assets.manager.get(AssetName.NPC_BUBBLE.getAssetName());
-        TextureRegion textureRegion = textureAtlas.findRegion("npc_bubble");
-
-        createAnimation(animation, textureAtlas);
-
-        texture.region = new TextureRegion(textureRegion, 0, 0, 18, 20);
-        state.set(StateComponent.NPC_BUBBLE_NORMAL);
-
-
-        this.add(position);
-        this.add(animation);
-        this.add(texture);
-        this.add(state);
+        transformComponent(parentEntity);
+        textureComponent();
+        animationComponent();
+        stateComponent();
 
         ecsEngine.addEntity(this);
+    }
+
+    private void transformComponent(Entity parentEntity) {
+        TextureRegion parentRegion = parentEntity.getComponent(TextureComponent.class).region;
+        Vector3 parentPosition = parentEntity.getComponent(TransformComponent.class).position;
+
+        final TransformComponent transformCmp = ecsEngine.createComponent(TransformComponent.class);
+        transformCmp.position.set(parentPosition.x + (parentRegion.getRegionWidth() / PPM / 2),
+                parentPosition.y + (parentRegion.getRegionHeight() / PPM) + (5 / PPM),
+                parentPosition.z);
+        this.add(transformCmp);
+    }
+
+    private void textureComponent() {
+        final TextureComponent textureCmp = ecsEngine.createComponent(TextureComponent.class);
+        textureAtlas = Assets.manager.get(AssetName.NPC_BUBBLE.getAssetName());
+        TextureRegion textureRegion = textureAtlas.findRegion("npc_bubble");
+        textureCmp.region = new TextureRegion(textureRegion, 0, 0, 18, 20);
+        this.add(textureCmp);
+    }
+
+    private void animationComponent() {
+        final AnimationComponent animationCmp = ecsEngine.createComponent(AnimationComponent.class);
+        createAnimation(animationCmp, textureAtlas);
+        this.add(animationCmp);
+    }
+
+    private void stateComponent() {
+        stateCmp = ecsEngine.createComponent(StateComponent.class);
+        stateCmp.set(StateComponent.NPC_BUBBLE_NORMAL);
+        this.add(stateCmp);
     }
 
     private void createAnimation(AnimationComponent animation, TextureAtlas textureAtlas) {

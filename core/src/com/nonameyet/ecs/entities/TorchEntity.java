@@ -27,54 +27,24 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
     private final GameScreen screen;
     private final ECSEngine ecsEngine;
 
-    final AnimationComponent animation;
-    private final B2dBodyComponent b2dbody;
-    private final B2dLightComponent b2dlight;
-    private final StateComponent state;
+    private AnimationComponent animationCmp;
+    private B2dBodyComponent b2dBodyCmp;
+    private B2dLightComponent b2dLightCmp;
+    private StateComponent stateCmp;
+
+    private TextureAtlas textureAtlas;
 
     public TorchEntity(ECSEngine ecsEngine, Vector2 spawnLocation) {
-        this.ecsEngine = ecsEngine;
         this.screen = ecsEngine.getScreen();
+        this.ecsEngine = ecsEngine;
 
-        // Create the Entity and all the components that will go in the entity
-        final TransformComponent position = ecsEngine.createComponent(TransformComponent.class);
-        animation = ecsEngine.createComponent(AnimationComponent.class);
-        final TextureComponent texture = ecsEngine.createComponent(TextureComponent.class);
-        b2dbody = ecsEngine.createComponent(B2dBodyComponent.class);
-        b2dlight = new B2dLightComponent(screen);
-        final TypeComponent type = ecsEngine.createComponent(TypeComponent.class);
-        state = ecsEngine.createComponent(StateComponent.class);
-
-
-        // create the data for the components and add them to the components
-        position.position.set(spawnLocation.x, spawnLocation.y, 1);
-
-        TextureAtlas textureAtlas = Assets.manager.get(AssetName.TORCH_ATLAS.getAssetName());
-        TextureRegion textureRegion = textureAtlas.findRegion("torch");
-
-        createAnimation(textureAtlas);
-
-        texture.region = new TextureRegion(textureRegion, 0, 0, 6, 15);
-
-        b2dbody.body = BodyBuilder.staticPointBody(
-                ecsEngine.getScreen().getWorld(),
-                new Vector2(spawnLocation.x, spawnLocation.y),
-                new Vector2(6, 15),
-                "TORCH",
-                Collision.LIGHT);
-
-        type.type = TypeComponent.TORCH;
-        state.set(StateComponent.STATE_TORCH_OFF);
-
-        createLight();
-
-        this.add(position);
-        this.add(animation);
-        this.add(texture);
-        this.add(b2dbody);
-        this.add(type);
-        this.add(state);
-        this.add(b2dlight);
+        transformComponent(spawnLocation);
+        textureComponent();
+        animationComponent();
+        b2dBodyComponent(spawnLocation);
+        b2dLightComponent();
+        stateComponent();
+        typeComponent();
 
         ecsEngine.addEntity(this);
 
@@ -82,9 +52,29 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
         screen.getPlayerHUD().getClockUI().addPropertyChangeListener(this);
     }
 
+    private void transformComponent(Vector2 spawnLocation) {
+        final TransformComponent transformCmp = ecsEngine.createComponent(TransformComponent.class);
+        transformCmp.position.set(spawnLocation.x, spawnLocation.y, 1);
+        this.add(transformCmp);
+    }
+
+    private void textureComponent() {
+        final TextureComponent textureCmp = ecsEngine.createComponent(TextureComponent.class);
+        textureAtlas = Assets.manager.get(AssetName.TORCH_ATLAS.getAssetName());
+        TextureRegion textureRegion = textureAtlas.findRegion("torch");
+        textureCmp.region = new TextureRegion(textureRegion, 0, 0, 6, 15);
+        this.add(textureCmp);
+    }
+
+    private void animationComponent() {
+        animationCmp = ecsEngine.createComponent(AnimationComponent.class);
+        createAnimation(textureAtlas);
+        this.add(animationCmp);
+    }
+
     private void createAnimation(TextureAtlas textureAtlas) {
-        animation.animations.put(StateComponent.STATE_TORCH_OFF, new Animation(0, textureAtlas.findRegion("torch")));
-        animation.animations.put(StateComponent.STATE_TORCH_ON, new Animation(0, textureAtlas.findRegion("torch")));
+        animationCmp.animations.put(StateComponent.STATE_TORCH_OFF, new Animation(0, textureAtlas.findRegion("torch")));
+        animationCmp.animations.put(StateComponent.STATE_TORCH_ON, new Animation(0, textureAtlas.findRegion("torch")));
 
 //        Array<TextureAtlas.AtlasRegion> torchRegions = textureAtlas.findRegions("torch");
 //        torchRegions.removeIndex(0);
@@ -92,17 +82,46 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
 
     }
 
+    private void b2dBodyComponent(Vector2 spawnLocation) {
+        b2dBodyCmp = ecsEngine.createComponent(B2dBodyComponent.class);
+        b2dBodyCmp.body = BodyBuilder.staticPointBody(
+                ecsEngine.getScreen().getWorld(),
+                new Vector2(spawnLocation.x, spawnLocation.y),
+                new Vector2(6, 15),
+                this,
+                Collision.LIGHT);
+        this.add(b2dBodyCmp);
+    }
+
+    private void b2dLightComponent() {
+        b2dLightCmp = new B2dLightComponent(screen);
+        createLight();
+        this.add(b2dLightCmp);
+    }
+
+    private void stateComponent() {
+        stateCmp = ecsEngine.createComponent(StateComponent.class);
+        stateCmp.set(StateComponent.STATE_TORCH_OFF);
+        this.add(stateCmp);
+    }
+
+    private void typeComponent() {
+        final TypeComponent typeCmp = ecsEngine.createComponent(TypeComponent.class);
+        typeCmp.type = TypeComponent.TORCH;
+        this.add(typeCmp);
+    }
+
     private void createLight() {
         float random = (float) (2.6f + Math.random() * (2.9f - 2.3f));
 
-        b2dlight.distance = random;
+        b2dLightCmp.distance = random;
 
-        b2dlight.light = LightBuilder.pointLight(screen.getRayHandler(), b2dbody.body, Color.valueOf("#e28822"), b2dlight.distance);
-        b2dlight.light.setSoft(true);
+        b2dLightCmp.light = LightBuilder.pointLight(screen.getRayHandler(), b2dBodyCmp.body, Color.valueOf("#e28822"), b2dLightCmp.distance);
+        b2dLightCmp.light.setSoft(true);
 
-        b2dlight.callEvery = 0.15f;
-        b2dlight.flSpeed = 2;
-        b2dlight.flDistance = b2dlight.light.getDistance() * 0.1f;
+        b2dLightCmp.callEvery = 0.15f;
+        b2dLightCmp.flSpeed = 2;
+        b2dLightCmp.flDistance = b2dLightCmp.light.getDistance() * 0.1f;
     }
 
     @Override
@@ -119,13 +138,13 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
             case DAWN:
             case AFTERNOON:
                 disableParticleEffect();
-                state.set(StateComponent.STATE_TORCH_OFF);
+                stateCmp.set(StateComponent.STATE_TORCH_OFF);
                 break;
 
             case DUSK:
             case NIGHT:
                 enableParticleEffect();
-                state.set(StateComponent.STATE_TORCH_ON);
+                stateCmp.set(StateComponent.STATE_TORCH_ON);
                 break;
         }
     }
@@ -139,7 +158,7 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
         final ParticleEffectComponent particleEffect = ecsEngine.createComponent(ParticleEffectComponent.class);
         particleEffect.effectType = ParticleEffectComponent.ParticleEffectType.TORCH;
         particleEffect.scalling = 0.04f;
-        particleEffect.effectPosition.set(b2dbody.body.getPosition());
+        particleEffect.effectPosition.set(b2dBodyCmp.body.getPosition());
         this.add(particleEffect);
     }
 

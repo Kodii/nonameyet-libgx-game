@@ -45,6 +45,7 @@ public class CollisionSystem implements ContactListener {
 
         switch ((String) fixture.getBody().getUserData()) {
             case "CHEST":
+
                 beginChestContact(fixture);
                 break;
             case "BLACKSMITH":

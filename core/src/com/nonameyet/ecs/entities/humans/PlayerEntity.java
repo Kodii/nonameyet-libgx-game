@@ -23,67 +23,67 @@ public class PlayerEntity extends Entity {
     private final GameScreen screen;
     private final ECSEngine ecsEngine;
 
-    private final B2dBodyComponent b2dbodyCmp;
-    private B2dLightComponent b2dlightCmp;
-    private final StateComponent stateCmp;
+    private B2dBodyComponent b2dBodyCmp;
 
     public final ArmEntity armEntity;
+
+    private TextureAtlas textureAtlas;
 
     public PlayerEntity(final ECSEngine ecsEngine, final Vector2 spawnLocation) {
         this.ecsEngine = ecsEngine;
         this.screen = ecsEngine.getScreen();
 
-        // Create the Entity and all the components that will go in the entity
-
-        final PlayerComponent playerCmp = ecsEngine.createComponent(PlayerComponent.class);
-        playerCmp.speed = 4;
-        this.add(playerCmp);
-
-        final TypeComponent typeCmp = ecsEngine.createComponent(TypeComponent.class);
-        typeCmp.type = TypeComponent.PLAYER;
-        this.add(typeCmp);
-
-        stateCmp = ecsEngine.createComponent(StateComponent.class);
-        stateCmp.set(StateComponent.STATE_STANDING_DOWN);
-        this.add(stateCmp);
-
-        createPlayerWithoutArmComponent(spawnLocation);
-
-        b2dbodyCmp = ecsEngine.createComponent(B2dBodyComponent.class);
-        b2dbodyCmp.body = BodyBuilder.playerFootBody(
-                ecsEngine.getScreen().getWorld(),
-                new Vector2(spawnLocation.x, spawnLocation.y),
-                new Vector2(20, 39),
-                "PLAYER",
-                Collision.PLAYER);
-        b2dbodyCmp.body.setLinearDamping(20f);
-        this.add(b2dbodyCmp);
-
-        createLight();
+        playerComponent();
+        transformComponent(spawnLocation);
+        textureComponent();
+        animationComponent();
+        b2dBodyComponent(spawnLocation);
+        b2dLightComponent();
+        stateComponent();
+        typeComponent();
 
         armEntity = new ArmEntity(ecsEngine, spawnLocation);
 
         ecsEngine.addEntity(this);
     }
 
-    private void createPlayerWithoutArmComponent(final Vector2 spawnLocation) {
+    private void playerComponent() {
+        final PlayerComponent playerCmp = ecsEngine.createComponent(PlayerComponent.class);
+        playerCmp.speed = 4;
+        this.add(playerCmp);
+    }
 
-        TextureAtlas textureAtlas = Assets.manager.get(AssetName.PLAYER_WITHOUT_ARM_ATLAS.getAssetName());
-        TextureRegion textureRegion = textureAtlas.findRegion("player_idle_down");
+    private void b2dBodyComponent(Vector2 spawnLocation) {
+        b2dBodyCmp = ecsEngine.createComponent(B2dBodyComponent.class);
+        b2dBodyCmp.body = BodyBuilder.playerFootBody(
+                ecsEngine.getScreen().getWorld(),
+                new Vector2(spawnLocation.x, spawnLocation.y),
+                new Vector2(20, 39),
+                this,
+                Collision.PLAYER);
+        b2dBodyCmp.body.setLinearDamping(20f);
+        this.add(b2dBodyCmp);
+    }
 
+    private void transformComponent(Vector2 spawnLocation) {
         final TransformComponent transformCmp = ecsEngine.createComponent(TransformComponent.class);
         transformCmp.position.set(spawnLocation.x, spawnLocation.y, 2);
         this.add(transformCmp);
+    }
 
+    private void textureComponent() {
         final TextureComponent textureCmp = ecsEngine.createComponent(TextureComponent.class);
+        textureAtlas = Assets.manager.get(AssetName.PLAYER_WITHOUT_ARM_ATLAS.getAssetName());
+        TextureRegion textureRegion = textureAtlas.findRegion("player_idle_down");
         textureCmp.region = new TextureRegion(textureRegion, 0, 0, 20, 39);
         this.add(textureCmp);
+    }
 
+    private void animationComponent() {
         final AnimationComponent animationCmp = ecsEngine.createComponent(AnimationComponent.class);
         createRunAnimation(animationCmp.animations, textureAtlas);
         this.add(animationCmp);
     }
-
 
     private void createRunAnimation(IntMap<Animation> animations, TextureAtlas textureAtlas) {
         float frameDuration = 0.14F;
@@ -107,17 +107,28 @@ public class PlayerEntity extends Entity {
         Array<TextureAtlas.AtlasRegion> player_run_left = textureAtlas.findRegions("player_run_left");
         animations.put(StateComponent.STATE_RUNNING_DOWN, new Animation(frameDuration, player_run_left, Animation.PlayMode.LOOP));
         animations.put(StateComponent.STATE_RUNNING_LEFT, new Animation(frameDuration, player_run_left, Animation.PlayMode.LOOP));
-
     }
 
-    private void createLight() {
-        b2dlightCmp = new B2dLightComponent(screen);
+    private void b2dLightComponent() {
+        final B2dLightComponent b2dLightCmp = new B2dLightComponent(screen);
 
-        b2dlightCmp.distance = 1.5f;
-        b2dlightCmp.light = LightBuilder.pointLight(screen.getRayHandler(), b2dbodyCmp.body, Color.valueOf("#e28822"), b2dlightCmp.distance);
-        b2dlightCmp.light.setSoft(true);
-        b2dlightCmp.light.attachToBody(b2dbodyCmp.body);
+        b2dLightCmp.distance = 1.5f;
+        b2dLightCmp.light = LightBuilder.pointLight(screen.getRayHandler(), b2dBodyCmp.body, Color.valueOf("#e28822"), b2dLightCmp.distance);
+        b2dLightCmp.light.setSoft(true);
+        b2dLightCmp.light.attachToBody(b2dBodyCmp.body);
 
-        this.add(b2dlightCmp);
+        this.add(b2dLightCmp);
+    }
+
+    private void stateComponent() {
+        final StateComponent stateCmp = ecsEngine.createComponent(StateComponent.class);
+        stateCmp.set(StateComponent.STATE_STANDING_DOWN);
+        this.add(stateCmp);
+    }
+
+    private void typeComponent() {
+        final TypeComponent typeCmp = ecsEngine.createComponent(TypeComponent.class);
+        typeCmp.type = TypeComponent.PLAYER;
+        this.add(typeCmp);
     }
 }

@@ -17,46 +17,44 @@ public class ArmEntity extends Entity {
 
     private final ECSEngine ecsEngine;
 
-    public final StateComponent stateCmp;
+    public StateComponent stateCmp;
     public TransformComponent transformCmp;
-    public final SocketComponent socketCmp;
+    public SocketComponent socketCmp;
+
+    private TextureAtlas textureAtlas;
 
     public ArmEntity(final ECSEngine ecsEngine, final Vector2 spawnLocation) {
         this.ecsEngine = ecsEngine;
 
-        createArmComponent(spawnLocation);
-
-        final TypeComponent typeCmp = ecsEngine.createComponent(TypeComponent.class);
-        typeCmp.type = TypeComponent.ARM_PLAYER;
-        this.add(typeCmp);
-
-        stateCmp = ecsEngine.createComponent(StateComponent.class);
-        stateCmp.set(StateComponent.STATE_STANDING_DOWN);
-        this.add(stateCmp);
-
-        socketCmp = ecsEngine.createComponent(SocketComponent.class);
-//        socketCmp.itemEntity = ItemsCreator.createSword(ecsEngine, spawnLocation);
-        this.add(socketCmp);
+        transformComponent(spawnLocation);
+        textureComponent();
+        animationComponent(textureAtlas);
+        socketComponent();
+        stateComponent();
+        typeComponent();
 
         this.ecsEngine.addEntity(this);
 
     }
 
-    private void createArmComponent(final Vector2 spawnLocation) {
-        TextureAtlas textureAtlas = Assets.manager.get(AssetName.ARM_ATLAS.getAssetName());
-        TextureRegion textureRegion = textureAtlas.findRegion("player_idle_down");
-
+    private void transformComponent(Vector2 spawnLocation) {
         transformCmp = ecsEngine.createComponent(TransformComponent.class);
         transformCmp.position.set(spawnLocation.x, spawnLocation.y, 0);
         this.add(transformCmp);
+    }
 
+    private void textureComponent() {
+        final TextureComponent textureCmp = ecsEngine.createComponent(TextureComponent.class);
+        textureAtlas = Assets.manager.get(AssetName.ARM_ATLAS.getAssetName());
+        TextureRegion textureRegion = textureAtlas.findRegion("player_idle_down");
+        textureCmp.region = new TextureRegion(textureRegion, 0, 0, 20, 39);
+        this.add(textureCmp);
+    }
+
+    private void animationComponent(TextureAtlas textureAtlas) {
         final AnimationComponent animationCmp = ecsEngine.createComponent(AnimationComponent.class);
         createRunAnimation(animationCmp.animations, textureAtlas);
         this.add(animationCmp);
-
-        final TextureComponent textureCmp = ecsEngine.createComponent(TextureComponent.class);
-        textureCmp.region = new TextureRegion(textureRegion, 0, 0, 20, 39);
-        this.add(textureCmp);
     }
 
     private void createRunAnimation(IntMap<Animation> animations, TextureAtlas textureAtlas) {
@@ -83,4 +81,24 @@ public class ArmEntity extends Entity {
         animations.put(StateComponent.STATE_RUNNING_LEFT, new Animation(frameDuration, player_run_left, Animation.PlayMode.LOOP));
 
     }
+
+    private void socketComponent() {
+        socketCmp = ecsEngine.createComponent(SocketComponent.class);
+//        socketCmp.itemEntity = ItemsCreator.createSword(ecsEngine, spawnLocation);
+        this.add(socketCmp);
+    }
+
+    private void stateComponent() {
+        stateCmp = ecsEngine.createComponent(StateComponent.class);
+        stateCmp.set(StateComponent.STATE_STANDING_DOWN);
+        this.add(stateCmp);
+    }
+
+    private void typeComponent() {
+        final TypeComponent typeCmp = ecsEngine.createComponent(TypeComponent.class);
+        typeCmp.type = TypeComponent.ARM_PLAYER;
+        this.add(typeCmp);
+    }
+
+
 }

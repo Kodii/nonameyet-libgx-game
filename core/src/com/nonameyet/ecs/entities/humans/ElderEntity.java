@@ -27,67 +27,29 @@ public class ElderEntity extends Entity implements Disposable, PropertyChangeLis
     private final String TAG = this.getClass().getSimpleName();
 
     private final GameScreen screen;
+    private final ECSEngine ecsEngine;
 
-    private final B2dBodyComponent b2dbody;
-    private final B2dLightComponent b2dlight;
+    private TextureComponent textureCmp;
+    private B2dBodyComponent b2dBodyCmp;
+    private B2dLightComponent b2dLightCmp;
 
     private final BubbleEntity bubbleEntity;
 
+    private TextureAtlas textureAtlas;
+
     public ElderEntity(ECSEngine ecsEngine, Vector2 spawnLocation) {
         this.screen = ecsEngine.getScreen();
+        this.ecsEngine = ecsEngine;
 
-        // Create the Entity and all the components that will go in the entity
-        final NpcComponent npc = ecsEngine.createComponent(NpcComponent.class);
-        final TransformComponent position = ecsEngine.createComponent(TransformComponent.class);
-        final AnimationComponent animation = ecsEngine.createComponent(AnimationComponent.class);
-        final TextureComponent texture = ecsEngine.createComponent(TextureComponent.class);
-        b2dbody = ecsEngine.createComponent(B2dBodyComponent.class);
-        TriggerB2dBodyComponent triggerb2dbody = ecsEngine.createComponent(TriggerB2dBodyComponent.class);
-        b2dlight = new B2dLightComponent(screen);
-        final TypeComponent type = ecsEngine.createComponent(TypeComponent.class);
-        final StateComponent state = ecsEngine.createComponent(StateComponent.class);
-
-        // create the data for the components and add them to the components
-        position.position.set(spawnLocation.x, spawnLocation.y, 1);
-
-        TextureAtlas textureAtlas = Assets.manager.get(AssetName.ELDER_ATLAS.getAssetName());
-        TextureRegion textureRegion = textureAtlas.findRegion("elder");
-
-
-        createRunAnimation(animation, textureAtlas);
-
-        texture.region = new TextureRegion(textureRegion, 0, 0, 26, 40);
-
-        b2dbody.body = BodyBuilder.npcFootRectangleBody(
-                ecsEngine.getScreen().getWorld(),
-                new Vector2(spawnLocation.x, spawnLocation.y),
-                new Vector2(20, 36),
-                "ELDER_BODY",
-                Collision.NPC);
-
-        triggerb2dbody.trigger = BodyBuilder.triggerCircleBody(
-                ecsEngine.getScreen().getWorld(),
-                texture.region.getRegionHeight(),
-                new Vector2(spawnLocation.x, spawnLocation.y),
-                50,
-                "ELDER",
-                Collision.NPC);
-
-        type.type = TypeComponent.SCENERY_ITEMS;
-        state.set(StateComponent.STATE_ELDER);
-
-        createLight();
-
-
-        this.add(position);
-        this.add(animation);
-        this.add(texture);
-        this.add(b2dbody);
-        this.add(triggerb2dbody);
-        this.add(npc);
-        this.add(type);
-        this.add(state);
-        this.add(b2dlight);
+        npcComponent();
+        transformComponent(spawnLocation);
+        textureComponent();
+        animationComponent();
+        b2dBodyComponent(spawnLocation);
+        triggerB2dBodyComponent(spawnLocation);
+        b2dLightComponent();
+        stateComponent();
+        typeComponent();
 
         ecsEngine.addEntity(this);
 
@@ -97,7 +59,32 @@ public class ElderEntity extends Entity implements Disposable, PropertyChangeLis
         screen.getMapMgr().getCollisionSystem().addPropertyChangeListener(this);
     }
 
-    private void createRunAnimation(AnimationComponent animation, TextureAtlas textureAtlas) {
+    private void npcComponent() {
+        final NpcComponent npcCmp = ecsEngine.createComponent(NpcComponent.class);
+        this.add(npcCmp);
+    }
+
+    private void transformComponent(Vector2 spawnLocation) {
+        final TransformComponent transformCmp = ecsEngine.createComponent(TransformComponent.class);
+        transformCmp.position.set(spawnLocation.x, spawnLocation.y, 1);
+        this.add(transformCmp);
+    }
+
+    private void textureComponent() {
+        textureCmp = ecsEngine.createComponent(TextureComponent.class);
+        textureAtlas = Assets.manager.get(AssetName.ELDER_ATLAS.getAssetName());
+        TextureRegion textureRegion = textureAtlas.findRegion("elder");
+        textureCmp.region = new TextureRegion(textureRegion, 0, 0, 26, 40);
+        this.add(textureCmp);
+    }
+
+    private void animationComponent() {
+        final AnimationComponent animationCmp = ecsEngine.createComponent(AnimationComponent.class);
+        createAnimation(animationCmp, textureAtlas);
+        this.add(animationCmp);
+    }
+
+    private void createAnimation(AnimationComponent animation, TextureAtlas textureAtlas) {
         float frameDuration = 0.1f;
 
         TextureAtlas.AtlasRegion first = textureAtlas.findRegion("elder", 0);
@@ -116,15 +103,55 @@ public class ElderEntity extends Entity implements Disposable, PropertyChangeLis
         frames.addAll(last, third, second, first);
 
         animation.animations.put(StateComponent.STATE_ELDER, new Animation(frameDuration, frames, Animation.PlayMode.LOOP));
+    }
 
+    private void b2dBodyComponent(Vector2 spawnLocation) {
+        b2dBodyCmp = ecsEngine.createComponent(B2dBodyComponent.class);
+        b2dBodyCmp.body = BodyBuilder.npcFootRectangleBody(
+                ecsEngine.getScreen().getWorld(),
+                new Vector2(spawnLocation.x, spawnLocation.y),
+                new Vector2(20, 36),
+                "ELDER_BODY",
+                Collision.NPC);
+        this.add(b2dBodyCmp);
+    }
+
+    private void triggerB2dBodyComponent(Vector2 spawnLocation) {
+        TriggerB2dBodyComponent triggerB2dBodyCmp = ecsEngine.createComponent(TriggerB2dBodyComponent.class);
+        triggerB2dBodyCmp.trigger = BodyBuilder.triggerCircleBody(
+                ecsEngine.getScreen().getWorld(),
+                textureCmp.region.getRegionHeight(),
+                new Vector2(spawnLocation.x, spawnLocation.y),
+                50,
+                this,
+                Collision.NPC);
+        this.add(triggerB2dBodyCmp);
+    }
+
+    private void b2dLightComponent() {
+        b2dLightCmp = new B2dLightComponent(screen);
+        createLight();
+        this.add(b2dLightCmp);
     }
 
     private void createLight() {
-        b2dlight.distance = 2f;
+        b2dLightCmp.distance = 2f;
 
-        b2dlight.light = LightBuilder.pointLight(screen.getRayHandler(), b2dbody.body, Color.valueOf("#e28822"), b2dlight.distance);
-        b2dlight.light.setSoft(true);
-        b2dlight.light.attachToBody(b2dbody.body);
+        b2dLightCmp.light = LightBuilder.pointLight(screen.getRayHandler(), b2dBodyCmp.body, Color.valueOf("#e28822"), b2dLightCmp.distance);
+        b2dLightCmp.light.setSoft(true);
+        b2dLightCmp.light.attachToBody(b2dBodyCmp.body);
+    }
+
+    private void stateComponent() {
+        final StateComponent stateCmp = ecsEngine.createComponent(StateComponent.class);
+        stateCmp.set(StateComponent.STATE_ELDER);
+        this.add(stateCmp);
+    }
+
+    private void typeComponent() {
+        final TypeComponent typeCmp = ecsEngine.createComponent(TypeComponent.class);
+        typeCmp.type = TypeComponent.SCENERY_ITEMS;
+        this.add(typeCmp);
     }
 
     @Override
@@ -139,10 +166,10 @@ public class ElderEntity extends Entity implements Disposable, PropertyChangeLis
     private void showDialogMark(ElderEvent event) {
         switch (event) {
             case SHOW_BUBBLE:
-                bubbleEntity.state.set(StateComponent.NPC_BUBBLE_SHOW);
+                bubbleEntity.stateCmp.set(StateComponent.NPC_BUBBLE_SHOW);
                 break;
             case HIDE_BUBBLE:
-                bubbleEntity.state.set(StateComponent.NPC_BUBBLE_HIDE);
+                bubbleEntity.stateCmp.set(StateComponent.NPC_BUBBLE_HIDE);
                 break;
             default:
                 break;

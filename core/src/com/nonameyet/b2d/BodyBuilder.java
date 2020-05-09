@@ -9,7 +9,7 @@ import static com.nonameyet.utils.Constants.PPM_MOVABLE_ITEMS;
 
 public class BodyBuilder {
 
-    public static Body playerFootBody(World world, Vector2 position, Vector2 size, String userData, short categoryBits) {
+    public static Body playerFootBody(World world, Vector2 position, Vector2 size, Object userData, short categoryBits) {
 
         return body(world,
                 new Vector2(position.x, position.y),
@@ -19,7 +19,7 @@ public class BodyBuilder {
                 categoryBits);
     }
 
-    public static Body npcFootRectangleBody(World world, Vector2 position, Vector2 size, String userData, short categoryBits) {
+    public static Body npcFootRectangleBody(World world, Vector2 position, Vector2 size, Object userData, short categoryBits) {
 
         return body(world,
                 new Vector2(position.x, position.y),
@@ -29,7 +29,7 @@ public class BodyBuilder {
                 categoryBits);
     }
 
-    public static Body staticPointBody(World world, Vector2 position, Vector2 size, String userData, short categoryBits) {
+    public static Body staticPointBody(World world, Vector2 position, Vector2 size, Object userData, short categoryBits) {
 
         return body(
                 world,
@@ -40,7 +40,7 @@ public class BodyBuilder {
                 categoryBits);
     }
 
-    public static Body staticRectangleBody(World world, Vector2 position, Vector2 size, String userData, short categoryBits) {
+    public static Body staticRectangleBody(World world, Vector2 position, Vector2 size, Object userData, short categoryBits) {
 
         return body(
                 world,
@@ -52,7 +52,7 @@ public class BodyBuilder {
 
     }
 
-    private static Body body(World world, Vector2 position, Vector2 size, BodyDef.BodyType bodyType, String userData, short categoryBits) {
+    private static Body body(World world, Vector2 position, Vector2 size, BodyDef.BodyType bodyType, Object userData, short categoryBits) {
         BodyDef bdef = new BodyDef();
         bdef.position.set(position.x, position.y);
 
@@ -74,7 +74,7 @@ public class BodyBuilder {
         return body;
     }
 
-    public static Body triggerCircleBody(World world, int regionHeight, Vector2 position, float radius, String userData, short categoryBits) {
+    public static Body triggerCircleBody(World world, int regionHeight, Vector2 position, float radius, Object userData, short categoryBits) {
 
         return triggerCircle(world,
                 regionHeight,
@@ -85,7 +85,7 @@ public class BodyBuilder {
                 categoryBits);
     }
 
-    private static Body triggerCircle(World world, int regionHeight, Vector2 position, float radius, BodyDef.BodyType bodyType, String userData, short categoryBits) {
+    private static Body triggerCircle(World world, int regionHeight, Vector2 position, float radius, BodyDef.BodyType bodyType, Object userData, short categoryBits) {
         BodyDef bdef = new BodyDef();
         bdef.position.set(position.x, position.y + (regionHeight / PPM / 2));
 
@@ -109,7 +109,7 @@ public class BodyBuilder {
     }
 
 
-    public static Body createWeaponBody(World world, Vector2 position, Vector2 size, String userData, short categoryBits) {
+    public static Body createWeaponBody(World world, Vector2 position, Vector2 size, Object userData, short categoryBits) {
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(position.x, position.y);
@@ -147,7 +147,7 @@ public class BodyBuilder {
         return body;
     }
 
-    public static Body createItemBody(World world, Vector2 position, Vector2 size, String userData, short categoryBits) {
+    public static Body createItemBody(World world, Vector2 position, Vector2 size, Object userData, short categoryBits) {
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(position.x, position.y);
