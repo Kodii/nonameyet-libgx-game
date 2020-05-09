@@ -47,7 +47,7 @@ public class PhysicsSystem extends IteratingSystem {
                 TypeComponent type = typeCmpMapper.get(entity);
                 B2dBodyComponent b2dbody = b2dbodyCmpMapper.get(entity);
 
-                if (type != null && (type.type == TypeComponent.PLAYER)) {
+                if (type != null && type.type == TypeComponent.PLAYER) {
                     playerPosition = b2dbody.body.getPosition();
                 }
             }
@@ -62,7 +62,7 @@ public class PhysicsSystem extends IteratingSystem {
                 Vector2 position = b2dbody.body.getPosition();
 
 
-                if (type != null && (type.type == TypeComponent.PLAYER || type.type == TypeComponent.NPC || type.type == TypeComponent.ENEMY)) {
+                if (type != null && (type.type == TypeComponent.PLAYER || type.type == TypeComponent.SCENERY_ITEMS)) {
                     tfm.position.x = position.x;
                     tfm.position.y = position.y + (texture.region.getRegionHeight() / PPM / 2) - ((texture.region.getRegionHeight() / PPM / 12));
                     tfm.rotation = b2dbody.body.getAngle() * MathUtils.radiansToDegrees;
@@ -75,6 +75,8 @@ public class PhysicsSystem extends IteratingSystem {
                         playerEntity.armEntity.transformCmp.rotation = b2dbody.body.getAngle() * MathUtils.radiansToDegrees;
                     }
 
+                } else if (type != null && type.type == TypeComponent.SOCKET_ITEM) {
+                    b2dbody.body.setTransform(tfm.position.x, tfm.position.y, (float) Math.toRadians(tfm.rotation));
                 } else {
                     tfm.position.x = position.x;
                     tfm.position.y = position.y;

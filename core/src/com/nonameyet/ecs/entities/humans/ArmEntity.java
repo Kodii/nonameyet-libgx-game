@@ -36,7 +36,7 @@ public class ArmEntity extends Entity {
         this.add(stateCmp);
 
         socketCmp = ecsEngine.createComponent(SocketComponent.class);
-        socketCmp.itemEntity = ItemsCreator.createApple(ecsEngine, spawnLocation);
+        socketCmp.itemEntity = ItemsCreator.createSword(ecsEngine, spawnLocation);
         this.add(socketCmp);
 
         this.ecsEngine.addEntity(this);
@@ -61,7 +61,7 @@ public class ArmEntity extends Entity {
     }
 
     private void createRunAnimation(IntMap<Animation> animations, TextureAtlas textureAtlas) {
-        float frameDuration = 0.14f;
+        float frameDuration = 0.14F;
 
         TextureAtlas.AtlasRegion player_idle_up = textureAtlas.findRegion("player_idle_up");
         animations.put(StateComponent.STATE_STANDING_UP, new Animation(0, player_idle_up));

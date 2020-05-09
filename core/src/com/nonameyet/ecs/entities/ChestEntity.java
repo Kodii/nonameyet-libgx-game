@@ -70,7 +70,7 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
                 "CHEST_BODY",
                 Collision.OBJECT);
 
-        triggerb2dbody.trigger = BodyBuilder.triggerBody(
+        triggerb2dbody.trigger = BodyBuilder.triggerCircleBody(
                 ecsEngine.getScreen().getWorld(),
                 texture.region.getRegionHeight(),
                 new Vector2(spawnLocation.x, spawnLocation.y),
@@ -78,7 +78,7 @@ public class ChestEntity extends Entity implements Disposable, PropertyChangeLis
                 "CHEST",
                 Collision.OBJECT);
 
-        type.type = TypeComponent.NPC;
+        type.type = TypeComponent.SCENERY_ITEMS;
         state.set(StateComponent.STATE_CHEST_NORMAL);
 
         createLight();

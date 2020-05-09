@@ -65,7 +65,7 @@ public class ElderEntity extends Entity implements Disposable, PropertyChangeLis
                 "ELDER_BODY",
                 Collision.NPC);
 
-        triggerb2dbody.trigger = BodyBuilder.triggerBody(
+        triggerb2dbody.trigger = BodyBuilder.triggerCircleBody(
                 ecsEngine.getScreen().getWorld(),
                 texture.region.getRegionHeight(),
                 new Vector2(spawnLocation.x, spawnLocation.y),
@@ -73,7 +73,7 @@ public class ElderEntity extends Entity implements Disposable, PropertyChangeLis
                 "ELDER",
                 Collision.NPC);
 
-        type.type = TypeComponent.NPC;
+        type.type = TypeComponent.SCENERY_ITEMS;
         state.set(StateComponent.STATE_ELDER);
 
         createLight();

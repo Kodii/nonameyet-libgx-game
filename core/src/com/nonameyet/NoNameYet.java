@@ -26,17 +26,19 @@ public class NoNameYet extends Game {
         Gdx.graphics.setWindowedMode(Preferences.getResolutionWidth(), Preferences.getResolutionHeight());
         Gdx.graphics.setVSync(Preferences.isVsync());
 
-        Pixmap pixmap = new Pixmap(Gdx.files.internal("sprites/cursor2.png"));
-        int xHotspot = pixmap.getWidth() / 2;
-        int yHotspot = pixmap.getHeight() / 2;
-        Cursor cursor = Gdx.graphics.newCursor(pixmap, 0, 0);
-        Gdx.graphics.setCursor(cursor);
-        pixmap.dispose();
+        createCursor();
 
         screenCache = new EnumMap<>(ScreenType.class);
 
         setScreen(ScreenType.LOADING);
 
+    }
+
+    private void createCursor() {
+        Pixmap pixmap = new Pixmap(Gdx.files.internal("sprites/cursor.png"));
+        Cursor cursor = Gdx.graphics.newCursor(pixmap, 0, 0);
+        Gdx.graphics.setCursor(cursor);
+        pixmap.dispose();
     }
 
     public void setScreen(final ScreenType screenType) {

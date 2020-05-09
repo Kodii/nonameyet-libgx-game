@@ -63,7 +63,7 @@ public class TorchEntity extends Entity implements Disposable, PropertyChangeLis
                 "TORCH",
                 Collision.LIGHT);
 
-        type.type = TypeComponent.TORCH;
+        type.type = TypeComponent.SCENERY_ITEMS;
         state.set(StateComponent.STATE_TORCH_OFF);
 
         createLight();

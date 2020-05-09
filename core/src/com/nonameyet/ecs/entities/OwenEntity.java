@@ -50,7 +50,7 @@ public class OwenEntity extends Entity {
                 "OWEN",
                 Collision.OBJECT
         );
-        type.type = TypeComponent.NPC;
+        type.type = TypeComponent.SCENERY_ITEMS;
         state.set(StateComponent.STATE_OWEN);
 
         createLight();

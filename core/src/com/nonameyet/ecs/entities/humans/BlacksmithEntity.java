@@ -71,7 +71,7 @@ public class BlacksmithEntity extends Entity implements Disposable, PropertyChan
                 "BLACKSMITH_BODY",
                 Collision.NPC);
 
-        triggerb2dbody.trigger = BodyBuilder.triggerBody(
+        triggerb2dbody.trigger = BodyBuilder.triggerCircleBody(
                 ecsEngine.getScreen().getWorld(),
                 texture.region.getRegionHeight(),
                 new Vector2(spawnLocation.x, spawnLocation.y),
@@ -79,7 +79,7 @@ public class BlacksmithEntity extends Entity implements Disposable, PropertyChan
                 "BLACKSMITH",
                 Collision.NPC);
 
-        type.type = TypeComponent.NPC;
+        type.type = TypeComponent.SCENERY_ITEMS;
         state.set(StateComponent.STATE_BLACKSMITH);
 
         createLight();
