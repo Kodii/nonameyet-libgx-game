@@ -17,7 +17,6 @@ import java.util.Comparator;
 
 import static com.nonameyet.ecs.ComponentMappers.*;
 import static com.nonameyet.utils.Constants.PPM;
-import static com.nonameyet.utils.Constants.PPM_MOVABLE_ITEMS;
 
 public class RenderingSystem extends SortedIteratingSystem {
 
@@ -80,7 +79,6 @@ public class RenderingSystem extends SortedIteratingSystem {
                     continue;
                 }
             }
-
             render(texture, transform);
         }
 
@@ -91,23 +89,20 @@ public class RenderingSystem extends SortedIteratingSystem {
     }
 
     private void renderSocketItem(ArmEntity entity) {
-        TransformComponent parentTransformCmp = transformCmpMapper.get(entity);
-
         Entity itemEntity = entity.socketCmp.itemEntity;
+        if (itemEntity == null) return;
         TransformComponent transformCmp = transformCmpMapper.get(itemEntity);
         TextureComponent textureCmp = textureCmpMapper.get(itemEntity);
 
-        SocketPositionMapper.transformSocketItem(transformCmp, entity);
+        SocketPositionMapper.transformSocketItem(entity.socketCmp.itemEntity, entity);
 
         float width = textureCmp.region.getRegionWidth();
         float height = textureCmp.region.getRegionHeight();
         float originX = width / 2;
         float originY = height / 2;
 
-        System.out.println("1:" + transformCmp.position.x);
-        System.out.println("2:" + originX);
         batch.draw(textureCmp.region,
-                (transformCmp.position.x - originX) + (originX / PPM_MOVABLE_ITEMS), (transformCmp.position.y - originY) + (originY / PPM_MOVABLE_ITEMS),
+                (transformCmp.position.x - originX), (transformCmp.position.y - originY),
                 originX, originY,
                 width, height,
                 transformCmp.scale.x / PPM, transformCmp.scale.y / PPM,

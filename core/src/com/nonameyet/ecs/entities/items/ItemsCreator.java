@@ -24,7 +24,7 @@ public class ItemsCreator {
 
         transformCmp.position.set(spawnLocation.x, spawnLocation.y, 1);
         transformCmp.scale.set(0.5f, 0.5f);
-        TextureAtlas textureAtlas = Assets.manager.get(AssetName.APPLE_ATLAS.getAssetName());
+        TextureAtlas textureAtlas = Assets.manager.get(AssetName.SWORD_ATLAS.getAssetName());
         TextureRegion textureRegion = textureAtlas.findRegion("apple");
         textureCmp.region = new TextureRegion(textureRegion, 0, 0, textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
 
