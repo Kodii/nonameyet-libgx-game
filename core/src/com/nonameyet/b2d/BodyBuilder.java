@@ -114,7 +114,7 @@ public class BodyBuilder {
         BodyDef bdef = new BodyDef();
         bdef.position.set(position.x, position.y);
 
-        bdef.type = BodyDef.BodyType.DynamicBody;
+        bdef.type = BodyDef.BodyType.StaticBody;
         Body body = world.createBody(bdef);
         body.setUserData(userData);
 

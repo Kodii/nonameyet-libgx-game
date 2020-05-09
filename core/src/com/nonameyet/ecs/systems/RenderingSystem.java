@@ -17,6 +17,7 @@ import java.util.Comparator;
 
 import static com.nonameyet.ecs.ComponentMappers.*;
 import static com.nonameyet.utils.Constants.PPM;
+import static com.nonameyet.utils.Constants.PPM_MOVABLE_ITEMS;
 
 public class RenderingSystem extends SortedIteratingSystem {
 
@@ -105,7 +106,7 @@ public class RenderingSystem extends SortedIteratingSystem {
                 (transformCmp.position.x - originX), (transformCmp.position.y - originY),
                 originX, originY,
                 width, height,
-                transformCmp.scale.x / PPM, transformCmp.scale.y / PPM,
+                transformCmp.scale.x / PPM_MOVABLE_ITEMS, transformCmp.scale.y / PPM_MOVABLE_ITEMS,
                 transformCmp.rotation);
     }
 

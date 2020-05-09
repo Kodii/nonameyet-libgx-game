@@ -7,6 +7,7 @@ import com.nonameyet.ecs.entities.*;
 import com.nonameyet.ecs.entities.humans.BlacksmithEntity;
 import com.nonameyet.ecs.entities.humans.ElderEntity;
 import com.nonameyet.ecs.entities.humans.PlayerEntity;
+import com.nonameyet.ecs.entities.items.ItemsCreator;
 import com.nonameyet.ecs.systems.AnimationSystem;
 import com.nonameyet.ecs.systems.LightSystem;
 import com.nonameyet.ecs.systems.ParticleEffectSystem;
@@ -64,5 +65,14 @@ public class ECSEngine extends PooledEngine {
 
     public void createOwen(Vector2 position) {
         new OwenEntity(this, position);
+    }
+
+    // movable items
+    public void createFirstSword(Vector2 position) {
+        ItemsCreator.createApple(this, position);
+    }
+
+    public void createApple(Vector2 position) {
+        ItemsCreator.createApple(this, position);
     }
 }

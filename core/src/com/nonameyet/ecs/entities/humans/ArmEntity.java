@@ -11,7 +11,6 @@ import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
 import com.nonameyet.ecs.ECSEngine;
 import com.nonameyet.ecs.components.*;
-import com.nonameyet.ecs.entities.items.ItemsCreator;
 
 public class ArmEntity extends Entity {
     private final String TAG = this.getClass().getSimpleName();
@@ -36,7 +35,7 @@ public class ArmEntity extends Entity {
         this.add(stateCmp);
 
         socketCmp = ecsEngine.createComponent(SocketComponent.class);
-        socketCmp.itemEntity = ItemsCreator.createSword(ecsEngine, spawnLocation);
+//        socketCmp.itemEntity = ItemsCreator.createSword(ecsEngine, spawnLocation);
         this.add(socketCmp);
 
         this.ecsEngine.addEntity(this);
