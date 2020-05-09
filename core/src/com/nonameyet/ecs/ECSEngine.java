@@ -69,7 +69,7 @@ public class ECSEngine extends PooledEngine {
 
     // movable items
     public void createFirstSword(Vector2 position) {
-        ItemsCreator.createApple(this, position);
+        ItemsCreator.createSword(this, position);
     }
 
     public void createApple(Vector2 position) {

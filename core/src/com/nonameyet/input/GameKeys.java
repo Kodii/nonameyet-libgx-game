@@ -9,7 +9,10 @@ public enum GameKeys {
     RIGHT(Input.Keys.D),
     SELECT(Input.Keys.F),
 
-    STATS(Input.Keys.C);
+    STATS(Input.Keys.C),
+
+    DROP_SWORD(Input.Keys.NUM_1),
+    DROP_APPLE(Input.Keys.NUM_2);
 
     final int[] keyCode;
 

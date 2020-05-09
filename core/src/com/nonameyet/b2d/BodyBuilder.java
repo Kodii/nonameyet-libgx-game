@@ -114,7 +114,7 @@ public class BodyBuilder {
         BodyDef bdef = new BodyDef();
         bdef.position.set(position.x, position.y);
 
-        bdef.type = BodyDef.BodyType.StaticBody;
+        bdef.type = BodyDef.BodyType.DynamicBody;
         Body body = world.createBody(bdef);
         body.setUserData(userData);
 
@@ -160,7 +160,7 @@ public class BodyBuilder {
 
         // create circle trigger shape
         CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(size.y * 4 / PPM_MOVABLE_ITEMS);
+        circleShape.setRadius(size.y * 2 / PPM_MOVABLE_ITEMS);
 
         fdef.filter.categoryBits = categoryBits;
         fdef.filter.maskBits = Collision.PLAYER;

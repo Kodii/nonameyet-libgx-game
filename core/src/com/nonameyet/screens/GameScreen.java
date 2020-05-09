@@ -16,6 +16,7 @@ import com.nonameyet.ecs.systems.RenderingSystem;
 import com.nonameyet.input.InputManager;
 import com.nonameyet.maps.MapManager;
 import com.nonameyet.ui.PlayerHUD;
+import com.nonameyet.utils.ItemsDropper;
 
 import static com.nonameyet.utils.Constants.PPM;
 
@@ -44,8 +45,12 @@ public class GameScreen extends AbstractScreen {
 
     private PlayerHUD playerHUD;
 
+    private ItemsDropper itemsDropper;
+
     public GameScreen(NoNameYet game) {
         super(game);
+
+        itemsDropper = new ItemsDropper(this);
     }
 
     @Override

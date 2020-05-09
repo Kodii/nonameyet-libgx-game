@@ -26,6 +26,7 @@ public class ItemsCreator {
         final TypeComponent typeCmp = ecsEngine.createComponent(TypeComponent.class);
 
         transformCmp.position.set(spawnLocation.x, spawnLocation.y, 1);
+        transformCmp.scale.set(0.5f, 0.5f);
         TextureAtlas textureAtlas = Assets.manager.get(AssetName.SWORD_ATLAS.getAssetName());
         TextureRegion textureRegion = textureAtlas.findRegion("first_sword");
         textureCmp.region = new TextureRegion(textureRegion, 0, 0, textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
@@ -67,11 +68,11 @@ public class ItemsCreator {
                 ecsEngine.getScreen().getWorld(),
                 new Vector2(spawnLocation.x, spawnLocation.y),
                 new Vector2(textureCmp.region.getRegionWidth(), textureCmp.region.getRegionHeight()),
-                "SWORD",
+                "APPLE",
                 Collision.ITEM);
         b2dBodyCmp.body.setFixedRotation(true);
 
-        typeCmp.type = TypeComponent.SOCKET_ITEM;
+        typeCmp.type = TypeComponent.ITEM;
 
         entity.add(transformCmp);
         entity.add(textureCmp);

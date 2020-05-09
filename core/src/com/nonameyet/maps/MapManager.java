@@ -4,6 +4,7 @@ import box2dLight.Light;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
@@ -237,6 +238,10 @@ public class MapManager implements Disposable, PropertyChangeListener {
 
     public void setMapChanged(boolean mapChanged) {
         this.mapChanged = mapChanged;
+    }
+
+    public MapLayer getPlayerLayer() {
+        return currentMap.playerSpawnLayer;
     }
 
     @Override
