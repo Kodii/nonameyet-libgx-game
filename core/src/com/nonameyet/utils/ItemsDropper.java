@@ -3,6 +3,8 @@ package com.nonameyet.utils;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.nonameyet.ecs.entities.items.Apple;
+import com.nonameyet.ecs.entities.items.TrainingSword;
 import com.nonameyet.input.GameKeyInputListener;
 import com.nonameyet.input.GameKeys;
 import com.nonameyet.input.InputManager;
@@ -23,13 +25,13 @@ public class ItemsDropper implements GameKeyInputListener {
     public void dropSword() {
         System.out.println("drop sword");
         Rectangle playerPositionPoint = screen.getMapMgr().getPlayerLayer().getObjects().getByType(RectangleMapObject.class).get(0).getRectangle();
-        screen.getEcsEngine().createFirstSword(new Vector2(playerPositionPoint.getX() / PPM, playerPositionPoint.getY() / PPM));
+        new TrainingSword(screen.getEcsEngine(), new Vector2(playerPositionPoint.getX() / PPM, playerPositionPoint.getY() / PPM));
     }
 
     public void dropApple() {
         System.out.println("drop apple");
         Rectangle playerPositionPoint = screen.getMapMgr().getPlayerLayer().getObjects().getByType(RectangleMapObject.class).get(0).getRectangle();
-        screen.getEcsEngine().createApple(new Vector2(playerPositionPoint.getX() / PPM, playerPositionPoint.getY() / PPM));
+        new Apple(screen.getEcsEngine(), new Vector2(playerPositionPoint.getX() / PPM, playerPositionPoint.getY() / PPM));
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.nonameyet.ecs.components.TextureComponent;
 import com.nonameyet.ecs.components.TransformComponent;
 import com.nonameyet.ecs.components.TypeComponent;
 import com.nonameyet.ecs.entities.humans.PlayerEntity;
+import com.nonameyet.ecs.entities.items.ItemEntity;
 
 import static com.nonameyet.ecs.ComponentMappers.*;
 import static com.nonameyet.utils.Constants.FIXED_TIME_STEP;
@@ -61,6 +62,10 @@ public class PhysicsSystem extends IteratingSystem {
                 TextureComponent texture = textureCmpMapper.get(entity);
                 Vector2 position = b2dbody.body.getPosition();
 
+                if (type != null && type.type == TypeComponent.ITEM) {
+                    ((ItemEntity) entity).checkb2dResetFlag();
+                }
+
 
                 if (type != null && (type.type == TypeComponent.PLAYER || type.type == TypeComponent.SCENERY_ITEMS)) {
                     tfm.position.x = position.x;
@@ -81,8 +86,6 @@ public class PhysicsSystem extends IteratingSystem {
                     tfm.position.x = position.x;
                     tfm.position.y = position.y;
                 }
-
-
             }
         }
 

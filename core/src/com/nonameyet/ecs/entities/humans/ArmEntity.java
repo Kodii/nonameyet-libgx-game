@@ -1,6 +1,7 @@
 package com.nonameyet.ecs.entities.humans;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,8 +12,12 @@ import com.nonameyet.assets.AssetName;
 import com.nonameyet.assets.Assets;
 import com.nonameyet.ecs.ECSEngine;
 import com.nonameyet.ecs.components.*;
+import com.nonameyet.ecs.entities.items.ItemEntity;
+import com.nonameyet.input.GameKeyInputListener;
+import com.nonameyet.input.GameKeys;
+import com.nonameyet.input.InputManager;
 
-public class ArmEntity extends Entity {
+public class ArmEntity extends Entity implements GameKeyInputListener {
     private final String TAG = this.getClass().getSimpleName();
 
     private final ECSEngine ecsEngine;
@@ -35,6 +40,7 @@ public class ArmEntity extends Entity {
 
         this.ecsEngine.addEntity(this);
 
+        InputManager.getInstance().addInputListener(this);
     }
 
     private void transformComponent(Vector2 spawnLocation) {
@@ -101,4 +107,27 @@ public class ArmEntity extends Entity {
     }
 
 
+    @Override
+    public void keyPressed(InputManager inputManager, GameKeys key) {
+        switch (key) {
+            case DROP_SOCKET:
+                dropSocket();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void dropSocket() {
+        if (socketCmp.itemEntity != null) {
+            ((ItemEntity) socketCmp.itemEntity).drop();
+            socketCmp.itemEntity = null;
+            Gdx.app.log(TAG, "Socket item successfully dropped");
+        } else Gdx.app.log(TAG, "You don't have socket item");
+    }
+
+    @Override
+    public void keyReleased(InputManager inputManager, GameKeys key) {
+
+    }
 }

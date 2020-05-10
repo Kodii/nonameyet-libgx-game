@@ -8,9 +8,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
+import com.nonameyet.ecs.SocketPositionMapper;
 import com.nonameyet.ecs.components.*;
 import com.nonameyet.ecs.entities.humans.ArmEntity;
-import com.nonameyet.ecs.entities.items.SocketPositionMapper;
 import com.nonameyet.screens.GameScreen;
 
 import java.util.Comparator;

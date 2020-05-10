@@ -1,4 +1,4 @@
-package com.nonameyet.ecs.entities.items;
+package com.nonameyet.ecs;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -14,10 +14,14 @@ import static com.nonameyet.utils.Constants.PPM_MOVABLE_ITEMS;
 public class SocketPositionMapper {
 
     public enum TextureFlip {
-        LEFT, RIGHT, DEFAULT
+        LEFT, RIGHT
     }
 
     private static TextureFlip textureFlip = TextureFlip.RIGHT;
+
+    public static void resetFlip() {
+        textureFlip = TextureFlip.RIGHT;
+    }
 
 
     public static void transformSocketItem(Entity itemEntity, ArmEntity armEntity) {

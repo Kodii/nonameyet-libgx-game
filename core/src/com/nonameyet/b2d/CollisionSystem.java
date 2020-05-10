@@ -1,6 +1,5 @@
 package com.nonameyet.b2d;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
 import com.nonameyet.ecs.components.TypeComponent;
@@ -9,6 +8,7 @@ import com.nonameyet.ecs.entities.PortalEntity;
 import com.nonameyet.ecs.entities.humans.BlacksmithEntity;
 import com.nonameyet.ecs.entities.humans.ElderEntity;
 import com.nonameyet.ecs.entities.humans.PlayerEntity;
+import com.nonameyet.ecs.entities.items.ItemEntity;
 import com.nonameyet.events.BlacksmithEvent;
 import com.nonameyet.events.ChestEvent;
 import com.nonameyet.events.ElderEvent;
@@ -54,20 +54,22 @@ public class CollisionSystem implements ContactListener {
         if (userData instanceof BlacksmithEntity) beginBlacksmithContact();
         if (userData instanceof ElderEntity) beginElderContact();
 
-        if (userData instanceof Entity) {
-            TypeComponent typeCmp = ((Entity) userData).getComponent(TypeComponent.class);
+        if (userData instanceof ItemEntity) {
+            TypeComponent typeCmp = ((ItemEntity) userData).getComponent(TypeComponent.class);
 
             if (typeCmp.type == TypeComponent.ITEM) {
-                typeCmp.type = TypeComponent.SOCKET_ITEM;
-                PlayerEntity playerEntity = (PlayerEntity) playerFixture.getBody().getUserData();
 
+                // drop
+                PlayerEntity playerEntity = (PlayerEntity) playerFixture.getBody().getUserData();
                 if (playerEntity.armEntity.socketCmp.itemEntity != null) {
-                    // drop last item
-                    TypeComponent oldEntityType = playerEntity.armEntity.socketCmp.itemEntity.getComponent(TypeComponent.class);
-                    oldEntityType.type = TypeComponent.ITEM;
+                    ((ItemEntity) playerEntity.armEntity.socketCmp.itemEntity).drop();
                 }
 
-                playerEntity.armEntity.socketCmp.itemEntity = (Entity) userData;
+                // pick up
+                playerEntity.armEntity.socketCmp.itemEntity = null;
+                ((ItemEntity) userData).pickUp();
+                playerEntity.armEntity.socketCmp.itemEntity = (ItemEntity) userData;
+
             }
         }
     }

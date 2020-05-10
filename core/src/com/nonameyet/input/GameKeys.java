@@ -11,6 +11,7 @@ public enum GameKeys {
 
     STATS(Input.Keys.C),
 
+    DROP_SOCKET(Input.Keys.Z),
     DROP_SWORD(Input.Keys.NUM_1),
     DROP_APPLE(Input.Keys.NUM_2);
 
